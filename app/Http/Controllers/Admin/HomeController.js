@@ -3,7 +3,7 @@
 class HomeController {
 
   * index (req, res) {
-    yield res.sendView('master')
+    yield res.sendView('master', { welcome: true })
   }
 
 }

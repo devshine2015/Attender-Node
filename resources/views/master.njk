@@ -22,7 +22,7 @@
       body {
         font-family: 'Rubik', sans-serif;
       }
-    
+
       .fab {
         position: fixed;
         bottom: 25px;
@@ -90,6 +90,14 @@
         {% include '_sidebar' %}
         <div class="content-wrapper">
               {% block content %}{% endblock %}
+              {% if welcome %}
+                <section class="content">
+                  <div class="callout callout-info ">
+                    <h4>Welcome to Attender Admin</h4>
+                    <p>Organising awesome venues requires awesome staff. Attender helps source and manage your team!</p>
+                  </div>
+                </section>
+              {% endif %}
         </div>
         <footer class="main-footer" style="max-height: 100px;text-align: center">
             <strong>Copyright © 2017 <a href="#">Attender</a>.</strong> All rights reserved.
