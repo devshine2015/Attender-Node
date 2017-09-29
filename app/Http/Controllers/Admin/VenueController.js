@@ -31,7 +31,8 @@ module.exports = class VenueController {
   }
 
   * show (req, res) {
-
+    let venue = yield this.getVenue(req)
+    yield res.sendView('venue/select', { venue: venue })
   }
 
   * create (req, res) {

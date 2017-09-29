@@ -35,6 +35,7 @@ const namedMiddleware = {
   guard: 'App/Http/Middleware/JwtGuard',
   admin: 'App/Http/Middleware/AdminGuard',
   nonuser: 'App/Http/Middleware/NonUserGuard',
+  nav: 'App/Http/Middleware/Nav',
 }
 
 /*
