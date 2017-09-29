@@ -29,7 +29,7 @@ let userSchema = mongoose.Schema({
 
   adminToken: String,
 
-  avatar: { type: String, default: 'http://i.pravatar.cc/128?img=67' },
+  avatar: { type: String, default: 'https://randomuser.me/api/portraits/men/71.jpg' },
   isActive: { type: Boolean, default: false },
   rememberToken: String,
   emailToken: String,
