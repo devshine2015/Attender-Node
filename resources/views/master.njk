@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Attender</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/_all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ assets('css/bootstrap-tags-input.css') }}" />
+
+    <style media="screen">
+      body {
+        font-family: 'Rubik', sans-serif;
+      }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-mini skin-purple">
+
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <a href="#" class="logo">
+              <span class="logo-mini"><img src="https://s3.invisionapp-cdn.com/storage.invisionapp.com/boards/files/167578399.png?x-amz-meta-iv=1&x-amz-meta-ck=5522b0361681c43f76891726ed7384f0&AWSAccessKeyId=AKIAJFUMDU3L6GTLUDYA&Expires=1509494400&Signature=M6R4KaG9OH1fbbuEvog%2FRGs9JSw%3D"
+                   class="img-circle" height="32" width="32" alt="Atndr"/></span>
+              <span class="logo-lg"><b>Attender</b></span>
+            </a>
+            <nav class="navbar navbar-static-top" role="navigation">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="http://infyom.com/images/logo/blue_logo_150x150.jpg"
+                                     class="user-image" alt="User Image"/>
+                                <span class="hidden-xs">{{ admin.fullname }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img src="http://infyom.com/images/logo/blue_logo_150x150.jpg"
+                                         class="img-circle" alt="User Image"/>
+                                     <p>
+                                       {{ admin.fullname }}
+                                       <small>Member since {{ ago(admin.createdAt) }} </small>
+                                   </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+        </header>
+        {% include '_sidebar' %}
+        <div class="content-wrapper">
+              {% block content %}{% endblock %}
+        </div>
+        <footer class="main-footer" style="max-height: 100px;text-align: center">
+            <strong>Copyright © 2017 <a href="#">Attender</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
+    <script src="{{ assets('js/bootstrap-tags-input.js') }}"></script>
+
+    <!-- AdminLTE App -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script>
+</html>

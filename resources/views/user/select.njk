@@ -1,0 +1,110 @@
+{% extends "master" %}
+
+{% block content %}
+<section class="content-header">
+  <h1>User Profile</h1>
+</section>
+<section class="content">
+  <div class="row">
+
+
+    <div class="col-lg-12">
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle" src="{{ user.avatar}}" alt="User profile picture">
+          <h3 class="profile-username text-center">{{ user.fullname | title }}</h3>
+          <p class="text-muted text-center">
+            {%  if user.isAdmin %}
+              Administrator
+            {% elif user.isVenue %}
+              Venue
+            {% elif user.isStaff %}
+              Staff
+            {% elif user.isOrganizer %}
+              Organizer
+            {% else %}
+              Profile not yet completed
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            {% if user.hasProfile %}
+              {% if user.isOrganizer %}
+                Organiser Profile
+              {% elif user.isStaff %}
+                Staff Profile
+              {% elif user.isVenue %}
+                {{ user.venueId.name | title }}
+                <span class="text-muted"><small>Joined: {{ ago(user.venueId.createdAt) }}</small></span>
+              {% endif %}
+            {% else %}
+              Incomplete Profile
+            {% endif %}
+          </h3>
+        </div>
+        <div class="box-body">
+          {% if user.isVenue %}
+            <div class="row">
+              <div class="col-lg-6">
+                <img src="{{ user.venueId.image }}" style="height: auto; width: 400px;" alt="VENUE_IMAGE">
+              </div>
+              <div class="col-xs-12 col-lg-6 row">
+                <div class="col-xs-6 col-lg-12">
+                  <strong><i class="fa fa-tags margin-r-5"></i> Services</strong>
+                  <p>
+                    {% for service in user.venueId.services %}
+                      <span class="label label-primary">{{ service | title }}</span>
+                    {% else %}
+                      <span class="label label-danger">N/A</span>
+                    {% endfor %}
+                  </p>
+                </div>
+                <div class="col-xs-6 col-lg-12">
+                  <strong><i class="fa fa-home margin-r-5"></i> Type</strong>
+                  <p>
+                    {% for type in user.venueId.type %}
+                      <span class="label label-success">{{ type | title }}</span>
+                    {% else %}
+                      <span class="label label-danger">N/A</span>
+                    {% endfor %}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-xs-6">
+                <strong><i class="fa fa-user margin-r-5"></i> Manager Name</strong>
+                <p class="text-muted">
+                  {{ user.venueId.managerName }}
+                </p>
+              </div>
+              <div class="col-xs-6 row">
+                <div class="col-xs-12">
+                  <strong><i class="fa fa-clock-o margin-r-5"></i> Opening Hours</strong>
+                </div>
+                <div class="col-xs-6">
+                  <p class="text-muted">Monday - Friday</p>
+                  <p><strong>{{ user.venueId.weekdayStart }} - {{ user.venueId.weekdayEnd }}</strong></p>
+                </div>
+                <div class="col-xs-6">
+                  <p class="text-muted">Saturday - Sunday</p>
+                  <p><strong>{{ user.venueId.weekendStart }} - {{ user.venueId.weekendEnd }}</strong></p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+    </div>
+
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "master" %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="content">
+          <div class="box box-primary box-solid ">
+            <div class="box-header with-border">Edit Venue</div>
+              <div class="box-body">
+                {{ form.open({action: 'Admin/VenueController.update', params: {'id': venue._id} }) }}
+                  {{ csrfField }}
+                    {% include 'venue/form' %}
+                    <div class="box-footer">
+                      <button type="submit" class="btn btn-primary pull-right">Save</button>
+                    </div>
+                {{ form.close() }}
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

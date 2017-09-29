@@ -1,0 +1,110 @@
+<div class="box-body">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" name="name" class="form-control" id="name" required value="{{ venue.name | title }}">
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="managerName">Manager Name</label>
+      <input type="text" name="managerName" class="form-control" id="managerName" required value="{{ venue.managerName }}">
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="numberEmployees">Number of Employees</label>
+      <input type="number" min="0" name="numberEmployees" class="form-control" id="numberEmployees" required value="{{ venue.numberEmployees }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="types">Type</label> <span class="text-muted" id="typesMeta"><small></small></span>
+      <input type="text" class="form-control" id="types" data-role="tagsinput" name="type" value="{{ venue.type }}" required>
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="services">Services</label> <span class="text-muted" id="servicesMeta"><small></small></span>
+      <input type="text" class="form-control" id="services" data-role="tagsinput" name="services" value="{{ venue.services }}" required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <label>Opening Hours</label>
+    </div>
+    <div class="col-sm-6">
+      <div class="bootstrap-timepicker">
+        <div class="form-group">
+          <label class="text-muted">Monday - Friday</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <input name="weekday-start" type="text" class="form-control timepicker" value="{{ venue.weekdayStart }}">
+            </div>
+            <div class="col-xs-6">
+              <input name="weekday-end" type="text" class="form-control timepicker" value="{{ venue.weekdayEnd }}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="bootstrap-timepicker">
+        <div class="form-group">
+          <label class="text-muted">Saturday - Sunday</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <input name="weekend-start" type="text" class="form-control timepicker" value="{{ venue.weekendStart }}">
+            </div>
+            <div class="col-xs-6">
+              <input name="weekend-end" type="text" class="form-control timepicker" value="{{ venue.weekendEnd }}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <label>Assigned User</label>  <span><a id="viewUser" href="" target="_blank">View User</a></span>
+      <select class="form-control" name="user" id="userSelect">
+        {% for user in availableUsers %}
+          <option value="{{user._id}}" {% if venue.user._id == user._id  %} selected {% endif %}>{{ user.fullname | title }}</option>
+        {% endfor %}
+      </select>
+
+    </div>
+
+    <div class="col-sm-6">
+      <label>Location</label>
+      <input type="text" name="locationName" class="form-control" value="{{ venue.locationName }}">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+
+      let user = $('#userSelect').val()
+      $('#viewUser').attr("href", "/users/" + user)
+
+      $('#userSelect').select2()
+      $('#userSelect').on('change', function() {
+        $('#viewUser').attr("href", "/users/" + this.value)
+      })
+
+      $('.timepicker').timepicker({
+        showInputs: false
+      })
+
+      let services = ['alcohol', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel']
+      let types = ['restaurant', 'cafe', 'bar', 'club', 'pub']
+      $('#types').on('beforeItemAdd', function(event) {
+        event.item = event.item.toLowerCase()
+       if (types.indexOf(event.item) < 0) {
+         event.cancel = true
+       }
+      })
+      $('#services').on('beforeItemAdd', function(event) {
+        event.item = event.item.toLowerCase()
+       if (services.indexOf(event.item) < 0) {
+         event.cancel = true
+       }
+      })
+
+    })
+
+</script>
