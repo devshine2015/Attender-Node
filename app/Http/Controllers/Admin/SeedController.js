@@ -421,7 +421,7 @@ module.exports = {
     })
     events.push(event6)
 
-    res.send({ status: true, admin: admin, users: users, venues: venue, staffs: staffs, events: events})
+    res.send({ status: true, admin: admin, users: users, venues: venues, staffs: staffs, events: events})
   }
 
 }
