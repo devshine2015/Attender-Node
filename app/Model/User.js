@@ -29,7 +29,7 @@ let userSchema = mongoose.Schema({
 
   adminToken: String,
 
-  avatar: { type: String, default: 'https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png' },
+  avatar: { type: String, default: 'http://i.pravatar.cc/128?img=67' },
   isActive: { type: Boolean, default: false },
   rememberToken: String,
   emailToken: String,

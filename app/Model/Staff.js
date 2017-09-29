@@ -49,7 +49,7 @@ let staffSchema = mongoose.Schema({
   licenses: [String],
   videos: [String],
 
-  avatar: { type: String, default: 'https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png' },
+  avatar: { type: String, default: 'http://i.pravatar.cc/128?img=67' },
 
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
