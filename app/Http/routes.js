@@ -9,15 +9,21 @@ Route.get('api/events', 'Api/EventController.index')
 
 Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
+  Route.get('conversation/:convo', 'Web/GeneralController.conversation')
 
   // STAFF API MANAGEMENT
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
+  Route.get('/staff-messages', 'Web/StaffController.messages')
+
+  Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
+  Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
 
   // VENUE API MANAGEMENT
   Route.get('venue/notifications', 'Api/VenueController.notifications')
   Route.get('venue/interested', 'Api/VenueController.interested')
   Route.post('venue/:id/interest', 'Api/VenueController.interest')
+  Route.get('venue-messages', 'Web/VenueController.messages')
 
   Route.get('user/profile/venue', 'Api/UserController.getVenueProfile')
   Route.post('user/profile/venue', 'Api/UserController.saveVenueProfile')

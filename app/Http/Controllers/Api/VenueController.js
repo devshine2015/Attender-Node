@@ -1,4 +1,5 @@
 'use strict'
+const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
@@ -79,6 +80,18 @@ class VenueController {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }
   }
+
+  * sendStaffMsg (req, res) {
+    let message = yield Message.create({
+      sender: req.user._id,
+      receiver: req.input('receiver'),
+      message: req.input('message'),
+      staff: req.input('staff', ''),
+      venue: req.user.venueId._id
+    })
+    return res.json({ status: true })
+  }
+
 
 }
 

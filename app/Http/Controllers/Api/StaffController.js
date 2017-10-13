@@ -1,4 +1,5 @@
 'use strict'
+const Message = use('App/Model/Message')
 const Staff = use('App/Model/Staff')
 const Validator = use('Validator')
 const moment = require('moment')
@@ -53,10 +54,18 @@ class StaffController {
       hired: false,
       hiredDate: null
     }
-
-
   }
 
+  * sendVenueMsg (req, res) {
+    let message = yield Message.create({
+      sender: req.user._id,
+      receiver: req.input('receiver'),
+      message: req.input('message'),
+      staff: req.user.staffId._id,
+      venue: req.input('venue', '')
+    })
+    return res.json({ status: true })
+  }
 
 }
 
