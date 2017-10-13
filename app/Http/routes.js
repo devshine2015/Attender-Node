@@ -9,7 +9,7 @@ Route.get('api/events', 'Api/EventController.index')
 
 Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
-  Route.get('conversation/:convo', 'Web/GeneralController.conversation')
+  Route.get('conversation/:convo', 'Api/GeneralController.conversation')
 
   // STAFF API MANAGEMENT
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
