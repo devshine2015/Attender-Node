@@ -22,7 +22,7 @@
               {% for event in events %}
                   <tr>
                       <td>{{ event.name }}</td>
-                      <td><a href="/venues/{{ event.venueId._id }}" target="_blank">{{ event.venueId.name | title }}</a></td>
+                      <td><a href="/manage/venues/{{ event.venueId._id }}" target="_blank">{{ event.venueId.name | title }}</a></td>
                       <td>
                         <span class="label label-primary">{{ readableDate(event.date) }}</span>
                         <span class="label label-primary">{{ event.time.start }} - {{ event.time.end }}</span>
@@ -45,6 +45,6 @@
     </div>
 </div>
 
-<a class="btn bg-purple fab" href="/events/create"><i class="fa fa-plus"></i></a>
+<a class="btn bg-purple fab" href="/manage/events/create"><i class="fa fa-plus"></i></a>
 
 {% endblock %}

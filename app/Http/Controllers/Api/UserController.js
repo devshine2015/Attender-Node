@@ -1,9 +1,19 @@
 'use strict'
+const User = use('App/Model/User')
+const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
 
 class UserController {
+
+  // GENERAL
+
+  * messages (req, res) {
+    let thread = yield Message.find({ $or : [{ sender: req.user._id }, { receiver: req.user._id }] }).sort('-sentAt').distinct().populate('sender', 'receiver')
+    res.json({ thread: thread })
+  }
+
 
   // ORGANIZER
 

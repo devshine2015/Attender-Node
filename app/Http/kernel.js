@@ -36,6 +36,8 @@ const namedMiddleware = {
   admin: 'App/Http/Middleware/AdminGuard',
   nonuser: 'App/Http/Middleware/NonUserGuard',
   nav: 'App/Http/Middleware/Nav',
+  user: 'App/Http/Middleware/UserGuard',
+  profile: 'App/Http/Middleware/ProfileGuard'
 }
 
 /*

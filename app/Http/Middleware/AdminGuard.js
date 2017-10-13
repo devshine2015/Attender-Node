@@ -13,16 +13,16 @@ class AdminGuard {
           request.admin = user
           request.isAuthed = true
           View.global('admin', request.admin)
-          
+
           yield next
         } else {
-          return response.redirect('/login')
+          return response.redirect('/manage/login')
         }
       } else {
-        return response.redirect('/login')
+        return response.redirect('/manage/login')
       }
     } else {
-      return response.redirect('/login')
+      return response.redirect('/manage/login')
     }
 
   }

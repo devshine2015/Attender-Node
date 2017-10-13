@@ -1,0 +1,24 @@
+{% extends "web/master" %}
+
+{% block content %}
+  <section class="content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="box box-primary box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title">Add New Event</h3>
+          </div>
+          <div class="box-body">
+            {{ form.open({action: 'Web/EventController.store' }) }}
+              {{ csrfField }}
+                {% include 'web/event/form' %}
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary pull-right">Add</button>
+                </div>
+            {{ form.close() }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "web/master" %}
+
+{% block content %}
+  <section class="content">
+    <div class="row">
+      {% for event in events %}
+        <div class="col-sm-12">
+          <div id="eb{{event._id}}" class="box {% if event.interested[user.staffId] %} box-primary {% else %} box-default {% endif %}">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{ event.name | title}}</h3>
+              {% if event.venueId %}
+                <button id="ei{{event._id}}" type="button" class="btn btn-primary pull-right" name="button" style="{% if not event.interested[user.staffId] %} display: none; {% endif %}">Interested <i class="fa fa-check-circle"></i></button>
+                <button id="ein{{event._id}}" onclick="eventInterest('{{event._id}}')" type="button" class="btn btn-default pull-right" name="button" style="{% if event.interested[user.staffId] %} display: none; {% endif %}">I'm Interested <i class="fa fa-location-arrow"></i></button>
+              {% endif %}
+            </div>
+            <div class="box-body">
+              <div class="row">
+                <div class="col-lg-6 text-center">
+                  <img src="{{ event.image }}" style="height: auto; width: 350px;" alt="EVENT_IMAGE">
+                </div>
+                <div class="col-xs-12 col-lg-6 row">
+                  {% if event.venueId %}
+                    <div class="col-xs-12">
+                      <p><strong><i class="fa fa-map-signs"></i> </strong> <a href="/venue/{{ event.venueId._id }}" target="_blank">{{ event.venueId.name | title }}</a></p>
+                    </div>
+                  {% endif %}
+                  <div class="col-xs-12">
+                    <p class="text-muted"><strong>{{ readableDate(event.date) }}</strong> {{ event.time.start }} - {{ event.time.end }}</p>
+                  </div>
+                  <div class="col-xs-12">
+                    <p class="text-muted">
+                      {% for int in event.staffInterest %}
+                        <span class="label label-primary">{{ int.quantity }} {{ int.staff | title }}</span>
+                      {% endfor %}
+                    </p>
+                  </div>
+                  <div class="col-xs-12">
+                    <p class="text-muted">{{ event.description }}</p>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else  %}
+        <div class="col-sm-12">
+          <p class="text-muted" style="text-align: center">No events <a href="/events/create">add new?</a></p>
+        </div>
+      {% endfor %}
+      <a class="btn bg-purple fab" href="/events/create"><i class="fa fa-plus"></i></a>
+    </div>
+  </section>
+{% endblock %}

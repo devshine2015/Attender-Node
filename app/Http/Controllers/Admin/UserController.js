@@ -32,7 +32,7 @@ class UserController {
       const user = yield User.create(req.except('password'))
       user.password = yield Hash.make(req.input('password'))
       yield req.with({ message: 'User created successfully' }).flash()
-      res.redirect('/users')
+      res.redirect('/manage/users')
     }
 
   }
@@ -64,11 +64,17 @@ class UserController {
       user.password = yield Hash.make(req.input('password'))
     user.save()
     yield req.with({ message: `User ${req.fullname} updated successfully` }).flash()
-    return res.redirect('/users')
+    return res.redirect('/manage/users')
   }
 
   * destroy (req, res) {
-
+    let user = yield this.getUser(req, res)
+    if(user) {
+      user.remove()
+      res.json({ status: true })
+    } else {
+      res.json({ status: false })
+    }
   }
 
 }

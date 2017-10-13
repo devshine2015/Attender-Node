@@ -28,7 +28,8 @@ let userSchema = mongoose.Schema({
   adminId: String,
 
   adminToken: String,
-
+  webToken: String,
+  
   avatar: { type: String, default: 'https://randomuser.me/api/portraits/men/71.jpg' },
   isActive: { type: Boolean, default: false },
   rememberToken: String,

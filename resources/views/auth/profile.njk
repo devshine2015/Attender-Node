@@ -1,0 +1,38 @@
+{% extends "auth/base" %}
+{% block content %}
+
+<div class="row" style="margin: 5%;">
+  <div class="col-md-6 col-md-offset-3" style="background: white; padding: 20px; color: #666;">
+    <p>Complete Your Profile</p>
+    <div class="progress">
+      <div class="progress-bar progress-bar-primary progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
+    <a id="btnBack" style="display: none;" class="btn btn-default btn-small">Back</a>
+    <strong><p id="profileType" class="login-box-msg"></p></strong>
+
+    <div id="initial">
+      <div style="text-align: center;">
+        <button type="button" id="btnWork" class="btn btn-info" name="button">Looking for work</button>
+        <button type="button" id="btnHire" class="btn btn-default" name="button">Looking to hire</button>
+      </div>
+    </div>
+    <div id="secondary" class="row" style="display:none; text-align: center">
+      <button type="button" id="btnVenue" class="btn btn-info" name="button">Venue/Establishment</button>
+      <button type="button" id="btnOrganiser" class="btn btn-default" name="button">Event Organiser</button>
+    </div>
+    <!-- start venue profile -->
+    {% include "auth/_venue" %}
+    <!-- end venue profile -->
+
+    <!-- start staff profile -->
+    {% include "auth/_staff" %}
+    <!-- end staff profile -->
+
+    <!-- start organiser profile -->
+    {% include "auth/_organiser" %}
+    <!-- end organiser profile -->
+
+  </div>
+</div>
+{% endblock %}

@@ -40,9 +40,9 @@
                       <td>
                         <form class="" action="" method="post">
                           <div class='btn-group'>
-                              <a href="/venues/{{ venue._id }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-                              <a href="/venues/{{ venue._id }}/edit" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-                              <a href="/venues/{{ venue._id }}/delete" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
+                              <a href="/manage/venues/{{ venue._id }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
+                              <a href="/manage/venues/{{ venue._id }}/edit" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
+                              <a href="/manage/venues/{{ venue._id }}/delete" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
                           </div>
                         </form>
                       </td>
@@ -54,6 +54,6 @@
     </div>
 </div>
 
-<a class="btn bg-purple fab" href="/venues/create"><i class="fa fa-plus"></i></a>
+<a class="btn bg-purple fab" href="/manage/venues/create"><i class="fa fa-plus"></i></a>
 
 {% endblock %}

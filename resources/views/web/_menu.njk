@@ -1,0 +1,33 @@
+  <li id="messagenav">
+      <a href="/messages"><i class="fa fa-envelope"></i><span>Messages</span></a>
+  </li>
+
+{% if user.isStaff %}
+  <li id="venuenav">
+      <a href="/venues"><i class="fa fa-map-signs"></i><span>Venues</span></a>
+  </li>
+{% elif user.isVenue %}
+  <li id="staffnav">
+    <a href="/job-seekers"><i class="fa fa-search"></i><span>Job Seekers</span></a>
+
+  </li>
+  <li id="mystaffnav">
+    <a href="/my-staffs"><i class="fa fa-users"></i><span>Staffs</span></a>
+
+  </li>
+{% endif %}
+
+  <li id="eventnav">
+      <a href="/events"><i class="fa fa-calendar-minus-o"></i><span>Events</span></a>
+  </li>
+  <li>
+      <a href="#schedules"><i class="fa fa-calendar"></i><span>Calendar</span></a>
+  </li>
+{% if user.isStaff %}
+  <li>
+      <a href="#earnings"><i class="fa fa-dollar"></i><span>Earnings</span></a>
+  </li>
+{% endif %}
+  <li>
+      <a href="#settings"><i class="fa fa-gear"></i><span>Settings</span></a>
+  </li>

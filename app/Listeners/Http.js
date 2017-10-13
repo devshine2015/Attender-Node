@@ -52,4 +52,47 @@ Http.onStart = function () {
   View.global('ago', (time) => {
     return moment(time).calendar()
   })
+  View.global('from', (time) => {
+    return moment(time).fromNow()
+  })
+
+  View.global('staff_descriptions', [
+    'nightowl', 'mixologist', 'hardworker', 'productive',
+    'proactive', 'professional', 'quick', 'fast', 'manager',
+    'outgoing', 'patient', 'hipster', 'rocker', 'fun', 'active',
+    'positive', 'sporty', 'quirky', 'metalhead', 'raver', 'honest',
+    'vibrant', 'funny', 'artistic', 'strong', 'sophisticated', 'suit',
+    'skilled', 'flexible', 'leader', 'inventive', 'awesome', 'muso',
+    'committed', 'social', 'friendly', 'traditional', 'green',
+  ])
+  View.global('staff_languages',[
+      'English', 'German', 'French', 'Japanese', 'Spanish', 'Portuguese',
+      'Chinese', 'Indian', 'Arabic', 'Korean', 'Thai', 'Filipino',
+      'Indonesian', 'Swedish', 'Finnish', 'Norweigan', 'Vietnamese', 'Greek',
+      'Turkish', 'Russian', 'Nepali', 'Polish', 'Dutch', 'Czech'
+  ])
+  View.global('staff_certificates', [
+      'Driver`s licence',
+      'Responsible Service of Alcohol (RSA)',
+      'Responsible Conduct of Gambling (RCG)',
+      'Diploma of Hospitality Management',
+      'Certificate 2 in Hospitality',
+      'Certificate 3 in Hospitality',
+      'Certificate 4 in Hospitality',
+      'Certificate 3 in Events',
+      'Accredited cocktail course',
+      'Accredited food handling course',
+      'Accredited food safety supervision',
+      'Accredited Barista course',
+      'Relevant Safety Certification',
+      'First Aid Certification',
+      'Working with children',
+      'Police check',
+      'Forklift licence',
+  ])
+  View.global('staff_positions', [
+    'bartender', 'manager', 'waiter / waitress', 'chef / kitchen hand'
+  ])
+  View.global('venue_types', ['cafe', 'restaurant', 'bar', 'club', 'pub'])
+  View.global('venue_services', ['alcohol', 'drinks', 'food', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel'])
 }

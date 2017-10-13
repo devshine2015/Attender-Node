@@ -1,0 +1,40 @@
+{% extends "web/master" %}
+
+{% block content %}
+
+  <section class="content-header">
+    {% if my %}
+      <h1>My Staffs</h1>
+    {% else %}
+      <h1>Job Seekers</h1>
+    {% endif %}
+  </section>
+
+  <section class="content">
+    <div class="row">
+      {% for staff in staffs %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title"> <img src="{{ staff.avatar }}" class="img-circle" style="height: 30px; width: auto;" alt="">&nbsp;&nbsp;{{ staff.fullname | title }}</h3>
+              <div class="box-tools pull-right">
+                <button type="button" onclick="sendMessage('{{staff.user._id}}', '{{ staff.fullname | title }}', '{{ staff._id }}')" class="btn btn-sm btn-primary" name="button"><strong><i class="fa fa-envelope"></i></strong></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <p class="text-muted">{{ staff.rateBadge }}</p>
+              <div>
+                {% for position in staff.position %}
+                  <span class="label label-primary">{{ position | title }}</span>
+                {% endfor %}
+              </div>
+              <hr>
+              <p class="text-muted">{{ staff.bio }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+{% endblock %}

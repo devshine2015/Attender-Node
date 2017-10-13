@@ -1,0 +1,225 @@
+{% extends "web/master" %}
+
+{% block content %}
+  <section class="content-header">
+    <h1>Messages</h1>
+  </section>
+{% verbatim %}
+  <section class="content" id="msgController">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="box box-primary">
+          <div class="box-body">
+            <a href="#" v-for="thread in threads" v-on:click="fetch(thread)" :key="thread._id">
+              <div class="row chat-head">
+                <div class="col-sm-2">
+                  <img v-bind:src="thread.uavatar" alt="USER_IMAGE" class="chat-avatar"/>
+                </div>
+                <div class="col-sm-10">
+                  <label v-cloak>{{ thread.uname }}</label><span class="pull-right text-muted"><small>{{ moment(thread.latest) }}</small></span>
+                  <p style="margin-top: 0px;"><span class="text-muted" v-cloak>{{ thread.message }}</span>
+                  <img v-if="thread.seen && thread.usid != self" v-bind:src="thread.uavatar" class="chat-mini-avatar pull-right" alt="" v-cloak>
+                  <span v-else-if="thread.delivered && thread.usid != self" class="text-green pull-right"><i class="fa fa-check-circle"></i></span v-cloak>
+                  <span v-else class="text-muted pull-right"><i class="fa fa-check-circle-o"></i></span v-cloak>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="box box-primary direct-chat direct-chat-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{ selectedLbl }}</h3>
+              <div class="box-tools pull-right" v-show="selected">
+                <button type="button" class="btn btn-box-tool" v-show="isVenue"><i class="fa fa-user-plus"></i></button>
+                <button type="button" class="btn btn-box-tool"><i class="fa fa-download"></i></button>
+                <button type="button" class="btn btn-box-tool"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <div id="chat-container" class="direct-chat-messages">
+                <div  class="direct-chat-msg" v-bind:class="[(self == message.sender) ? 'right' : ''  ]" v-for="message in messages" :key="message._id" v-cloak>
+                  <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-timestamp" v-bind:class="[(self == message.sender) ? 'pull-right' : 'pull-left']">{{ moment(message.sentAt) }}</span>
+                  </div>
+                  <div class="direct-chat-text" v-bind:class="[(self == message.sender) ? 'pull-right' : 'pull-left']">
+                    {{ message.message }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="box-footer" v-show="selected">
+              <div class="input-group">
+                <input type="text" v-model="message" v-on:keyup.enter="send()" name="message" placeholder="Type Message ..." class="form-control">
+                <span class="input-group-btn">
+                  <button type="submit" v-on:click="send()" class="btn btn-primary btn-flat">Send</button>
+                </span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </section>
+{% endverbatim %}
+  <style media="screen">
+    .chat-head {
+      padding: 5px;
+      border-bottom: 1px solid #eeeeee;
+    }
+    .chat-avatar {
+      height: 50px;
+      width: auto;
+      border-radius: 50%;
+    }
+    .chat-mini-avatar {
+      height: 15px;
+      width: auto;
+      border-radius: 50%;
+    }
+    .direct-chat-text {
+      margin-right: 0px !important;
+      margin-left: 0px !important;
+      max-width: 80%;
+      min-width: 10%;
+      display: inline-block;
+    }
+    .right {
+      margin-right: 0px !important;
+    }
+    #chat-container {
+      overflow-x: hidden;
+    }
+  </style>
+{% endblock %}
+
+{% block messages_scripts %}
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+  <script>
+    {% if user.isStaff %}
+      let url = '/staff-messages/{{user.webToken}}'
+    {% elif user.isVenue %}
+      let url = '/venue-messages/{{user.webToken}}'
+    {% endif %}
+
+    const io = ws('')
+    const client = io.channel('chat')
+    client.connect(console.log)
+    client.joinRoom('{{user._id}}', {}, console.log)
+    client.on('message', function(room, message){
+      console.log('room', room, 'message', message);
+      if (room == "{{ user._id }}") {
+        getMessages().then(function(threads){
+          chatList.$data.threads = threads
+        })
+      }
+      if (message == "refresh-messages") {
+        chatList.refreshContent()
+        chatList.refreshContent()
+      }
+
+    })
+
+    function getMessages() {
+      return new Promise(function (resolve, reject){
+        $.post(url, {}, function(res){
+          if (res.status){
+            resolve(res.threads)
+          } else {
+            reject('SERVER_ERROR')
+          }
+        })
+      })
+    }
+    getMessages().then(function(threads){
+      chatList.$data.threads = threads
+    })
+    let chatList = new Vue({
+      el: '#msgController',
+      data: {
+        threads: [],
+        conversation: '',
+        selected: '',
+        selectedLbl: '',
+        messages: [],
+        message: '',
+        usid: '',
+        currentThread: '',
+        isStaff: {{ user.isStaff | safe }},
+        isVenue: {{ user.isVenue | safe }},
+        self: "{{ user._id }}"
+      },
+      watch: {
+        messages: function(val, oldVal) {
+          let container = this.$el.querySelector("#chat-container")
+          container.scrollTop = container.scrollHeight
+        }
+      },
+      methods: {
+        fetch: function(thread) {
+          if (this.conversation)
+            client.leaveRoom(this.conversation, {}, console.log)
+          this.currentThread = thread._id
+          this.conversation = thread._id
+          this.selected = thread.uselect
+          this.selectedLbl = thread.uname
+          this.usid = thread.usid
+          client.joinRoom(thread._id, {}, console.log)
+          $.post(`/conversation/${thread._id}`, {}, function(res){
+            if (res.status) {
+              chatList.messages = res.messages
+              chatList.refreshContent()
+            }
+          })
+
+        },
+        refreshContent: function(){
+          $.post(`/conversation/${this.currentThread}`, {}, function(res){
+            if (res.status) {
+              chatList.messages = res.messages
+            }
+          })
+        },
+        send: function() {
+          if (this.message) {
+            let url = this.isVenue ? '/new-staff-message' : '/new-venue-message'
+            let payload = {message: this.message, receiver: this.usid}
+            payload[ this.isVenue ? 'staff' : 'venue'] = this.selected
+            $.post(url, payload, function(res){
+              if (res.status) {
+                chatList.message = ''
+                chatList.refreshContent()
+              }
+            })
+          }
+        },
+        moment: function($t) {
+          return moment($t).fromNow()
+        }
+      }
+    })
+
+  </script>
+
+{% endblock %}
+<!--
+<div class="direct-chat-msg">
+  <div class="direct-chat-info clearfix">
+    <span class="direct-chat-timestamp pull-left">23 Jan 2:00 pm</span>
+  </div>
+  <div class="direct-chat-text pull-left">
+    Is this template really for free? That's unbelievable!
+  </div>
+</div>
+
+<div class="direct-chat-msg right">
+  <div class="direct-chat-info clearfix">
+    <span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
+  </div>
+  <div class="direct-chat-text pull-right">
+    You better believe it!
+  </div>
+</div>
+!-->

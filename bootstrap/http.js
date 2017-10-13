@@ -67,7 +67,6 @@ module.exports = function (callback) {
       */
       use(Helpers.makeNameSpace('Http', 'kernel'))
       use(Helpers.makeNameSpace('Http', 'routes'))
-
       /*
       |--------------------------------------------------------------------------
       | Load Websocket Channels And Middleware
@@ -104,6 +103,8 @@ module.exports = function (callback) {
       if (typeof (callback) === 'function') {
         callback()
       }
+
+
     })
     .catch((error) => console.error(error.stack))
 }

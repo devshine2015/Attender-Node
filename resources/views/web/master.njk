@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Attender</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta name="theme-color" content="#555299" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="icon" href="https://s3.invisionapp-cdn.com/storage.invisionapp.com/boards/files/167578399.png?x-amz-meta-iv=1&x-amz-meta-ck=5522b0361681c43f76891726ed7384f0&AWSAccessKeyId=AKIAJFUMDU3L6GTLUDYA&Expires=1509494400&Signature=M6R4KaG9OH1fbbuEvog%2FRGs9JSw%3D">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/_all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.2/sweetalert2.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ assets('css/bootstrap-tags-input.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css">
+    <style media="screen">
+      body {
+        font-family: 'Rubik', sans-serif;
+      }
+
+      .fab {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        height: 50px;
+        width: 50px;
+        border-radius: 25px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 38px;
+        box-shadow: 2px 2px 1px grey;
+      }
+    </style>
+
+</head>
+
+<body class="fixed skin-blue sidebar-mini skin-purple">
+
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <a href="#" class="logo">
+              <span class="logo-mini"><img src="https://s3.invisionapp-cdn.com/storage.invisionapp.com/boards/files/167578399.png?x-amz-meta-iv=1&x-amz-meta-ck=5522b0361681c43f76891726ed7384f0&AWSAccessKeyId=AKIAJFUMDU3L6GTLUDYA&Expires=1509494400&Signature=M6R4KaG9OH1fbbuEvog%2FRGs9JSw%3D"
+                   class="img-circle" height="32" width="32" alt="Atndr"/></span>
+              <span class="logo-lg"><b>Attender</b></span>
+            </a>
+            <nav class="navbar navbar-static-top" role="navigation">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{{ user.avatar }}"
+                                     class="user-image" alt="User Image"/>
+                                <span class="hidden-xs">{{ user.fullname }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img src="{{ user.avatar }}"
+                                         class="img-circle" alt="User Image"/>
+                                     <p>
+                                       {{ user.fullname }}
+                                       <small>Member since {{ ago(user.createdAt) }} </small>
+                                   </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+        </header>
+        {% include 'web/_sidebar' %}
+        <div class="content-wrapper">
+              {% block content %}{% endblock %}
+              {% if welcome %}
+                <section class="content">
+                  <div class="callout callout-info ">
+                    <h4>Welcome to Attender</h4>
+                    <p>Organising awesome venues requires awesome staff. Attender helps source and manage your team!</p>
+                  </div>
+                </section>
+              {% endif %}
+        </div>
+        <footer class="main-footer" style="max-height: 100px;text-align: center">
+            <strong>Copyright © 2017 <a href="#">Attender</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
+    <script src="{{ assets('js/bootstrap-tags-input.js') }}"></script>
+    <script src="https://unpkg.com/adonis-websocket-client@1.0.2/dist/ws.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.2/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
+
+    <script type="text/javascript">
+
+
+      $('.timepicker').timepicker({
+        showInputs: false
+      })
+      $('.datepicker').datepicker({format: "DD M. dd, yyyy", autoclose: true})
+
+      $(function(){
+        let nav = $(location).attr('href')
+        if (nav.includes('user'))
+          $('#usernav').addClass('active')
+        if (nav.includes('venue'))
+          $('#venuenav').addClass('active')
+        if (nav.includes('organiser'))
+          $('#organisernav').addClass('active')
+        if (nav.includes('event'))
+          $('#eventnav').addClass('active')
+        if ((nav.includes('staff') || nav.includes('job-seek'))&& !nav.includes('my-staff'))
+          $('#staffnav').addClass('active')
+        if (nav.includes('my-staff'))
+          $('#mystaffnav').addClass('active')
+        if (nav.includes('message'))
+          $('#messagenav').addClass('active')
+      })
+      let positions = "{{ staff_positions }}".split(',')
+
+      for (let position in positions) {
+        $('#s-' + position ).click(function(){
+          $(this).toggleClass('btn-primary', 'addOrRemove')
+          $(this).toggleClass('btn-default', 'addOrRemove')
+          $('#q-' + position ).toggle('hide')
+        })
+      }
+
+      function venueInterest(venueId) {
+        swal({
+             title: "Are you sure you want to send an interest to this venue?",
+             text: "The venue will be notified",
+             type: "info",
+             showCancelButton: true,
+             confirmButtonText: "Continue",
+             cancelButtonText: "Cancel"
+        }).then(function(){
+          $.post(`/venue/${venueId}/interest`, {}, function(res){
+            if (res.status) {
+              $(`#vin${venueId}`).hide()
+              $(`#vi${venueId}`).show()
+              $(`#vb${venueId}`).toggleClass('box-primary', 'addOrRemove')
+              $(`#vb${venueId}`).toggleClass('box-default', 'addOrRemove')
+            } else {
+              alert(res.messageCode)
+            }
+          })
+        })
+
+      }
+     function eventInterest(eventId) {
+      swal({
+            title: "Are you sure you want to send an interest to this event?",
+            text: "The venue will be notified",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonText: "Continue",
+            cancelButtonText: "Cancel"
+      }).then(function(){
+        $.post(`/event/${eventId}/interest`, {}, function(res){
+          if (res.status) {
+            $(`#ein${eventId}`).hide()
+            $(`#ei${eventId}`).show()
+            $(`#eb${eventId}`).toggleClass('box-primary', 'addOrRemove')
+            $(`#eb${eventId}`).toggleClass('box-default', 'addOrRemove')
+          } else {
+            alert(res.messageCode)
+          }
+        })
+      })
+     }
+     function sendMessage(_id, _fullname, _staff) {
+       swal({
+        title: `Send message to ${_fullname}`,
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Send',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false,
+        preConfirm: function (msg) {
+          return new Promise(function (resolve, reject) {
+            if (msg) {
+              $.post('/new-staff-message', { receiver: _id, message: msg, staff: _staff }, function(res) {
+                if (res.status) {
+                  resolve()
+                }
+              })
+            } else {
+              reject('The message is blank!')
+            }
+          })
+        }
+      }).then(function(msg) {
+        swal({
+          type: 'success',
+          title: 'Successfully Sent!'
+        })
+      })
+     }
+
+     function sendmsg(selected, message) {
+       {% if user.isStaff %}
+          let url = '/new-venue-message'
+       {% elif user.isVenue %}
+         let url = '/new-staff-message'
+       {% endif %}
+     }
+    </script>
+    {% block messages_scripts %}
+
+    {% endblock %}
+  </body>
+</html>

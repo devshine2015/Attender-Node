@@ -3,7 +3,7 @@
 const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
-
+const Staff = use('App/Model/Staff')
 
 let venueSchema = mongoose.Schema({
 
@@ -23,6 +23,7 @@ let venueSchema = mongoose.Schema({
   socialMedia: { type: Mixed, default: {} },
   calendar: { type: Mixed, default: {} },
   interested: { type: Mixed, default: {} },
+  staffs: { type: Mixed, default: {} },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 
@@ -30,6 +31,13 @@ let venueSchema = mongoose.Schema({
   versionKey: false
 });
 
-
+let mystaffs = venueSchema.virtual('myStaffs')
+mystaffs.get(function(){
+  let staffs = []
+  for (let staff in this.interested) {
+      staffs.push(staff)
+  }
+  return staffs
+})
 
 module.exports = mongoose.model('Venue', venueSchema)

@@ -41,10 +41,10 @@ module.exports = class VenueController {
   }
 
   * store (req, res) {
-    let weekDayStart = moment(req.input('weekday-start'), 'HH:mm a'),
-        weekDayEnd = moment(req.input('weekday-end'), 'HH:mm a'),
-        weekEndStart = moment(req.input('weekend-start'), 'HH:mm a'),
-        weekEndEnd = moment(req.input('weekend-end'), 'HH:mm a')
+    let weekDayStart = moment(req.input('weekday-start'), 'HH:mm a').format(),
+        weekDayEnd = moment(req.input('weekday-end'), 'HH:mm a').format(),
+        weekEndStart = moment(req.input('weekend-start'), 'HH:mm a').format(),
+        weekEndEnd = moment(req.input('weekend-end'), 'HH:mm a').format()
     let user = yield User.findOne({ _id: req.input('user') })
     if (user) {
       let openingHours = {
@@ -61,19 +61,19 @@ module.exports = class VenueController {
         user: req.input('user', ''),
         name: req.input('name', ''),
         managerName: req.input('managerName', ''),
-        type: req.input('type', '').split(','),
+        type: req.input('types', ''),
         location: [],
         locationName: req.input('locationName', ''),
         openingHours: openingHours,
         numberEmployees: req.input('numberEmployees', 0),
-        services: req.input('services', '').split(','),
+        services: req.input('services', ''),
         socialMedia: {}
       })
       user.venueId = venue._id
       user.isVenue = true
       user.hasProfile = true
       user.save()
-      return res.redirect('venues')
+      return res.redirect('/manage/venues')
     } else {
       yield this.create(req, res)
     }
@@ -87,7 +87,6 @@ module.exports = class VenueController {
   }
 
   * update (req, res) {
-    console.log(req.all());
     let venue = yield this.getVenue(req)
     let weekDayStart = moment(req.input('weekday-start'), 'HH:mm a').format(),
         weekDayEnd = moment(req.input('weekday-end'), 'HH:mm a').format(),
@@ -108,29 +107,27 @@ module.exports = class VenueController {
     venue.user = user || venue.user._id
     venue.name = req.input('name', venue.name)
     venue.managerName = req.input('managerName', venue.managerName)
-    venue.type = req.input('type', '').split(',') || venue.type
+    venue.type = req.input('types', '') || venue.type
     venue.locationName = req.input('locationName', venue.locationName)
     venue.openingHours = openingHours || venue.openingHours
     venue.numberEmployees = req.input('numberEmployees', 0)
-    venue.services = req.input('services', '').split(',') || venue.services
+    venue.services = req.input('services', '') || venue.services
     venue.save()
     if (user) {
-      if (user.toString() != oldUser._id){
-        let newUser = yield User.findOne({ _id: user })
-        if (newUser) {
-          newUser.hasProfile = true
-          newUser.isVenue = true
-          newUser.venueId = venue._id
-          newUser.save()
-          oldUser.hasProfile = false
-          oldUser.isVenue = false
-          oldUser.venueId = undefined
-          oldUser.save()
-        }
+      let newUser = yield User.findOne({ _id: user })
+      if (newUser) {
+        newUser.hasProfile = true
+        newUser.isVenue = true
+        newUser.venueId = venue._id
+        newUser.save()
+        oldUser.hasProfile = false
+        oldUser.isVenue = false
+        oldUser.venueId = undefined
+        oldUser.save()
       }
     }
 
-    return res.redirect('/venues')
+    return res.redirect('/manage/venues')
   }
 
 }

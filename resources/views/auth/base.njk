@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Attender</title>
+    <meta name="theme-color" content="#555299" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="icon" href="https://s3.invisionapp-cdn.com/storage.invisionapp.com/boards/files/167578399.png?x-amz-meta-iv=1&x-amz-meta-ck=5522b0361681c43f76891726ed7384f0&AWSAccessKeyId=AKIAJFUMDU3L6GTLUDYA&Expires=1509494400&Signature=M6R4KaG9OH1fbbuEvog%2FRGs9JSw%3D">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/_all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="{{ assets('css/bootstrap-tags-input.css') }}" />
+    <link rel="stylesheet" href="https://adminlte.io/themes/AdminLTE/plugins/bootstrap-slider/slider.css">
+    <style media="screen">
+      body {
+        font-family: 'Rubik', sans-serif;
+      }
+    </style>
+</head>
+<body class="hold-transition login-page">
+      {% block content %}
+      {% endblock %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
+  <script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://adminlte.io/themes/AdminLTE/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+  <script src="{{ assets('js/bootstrap-tags-input.js') }}"></script>
+<script>
+    $(function () {
+      $('.timepicker').timepicker({
+        showInputs: false
+      })
+      let hourlyRate = $("input.slider").slider()
+      $('input').iCheck({
+          checkboxClass: 'icheckbox_square-blue',
+          radioClass: 'iradio_square-blue',
+          increaseArea: '20%' // optional
+      });
+      let selects = ['description', 'languages', 'certificates', 'positions', 'vtypes', 'vservices']
+      for (let select of selects) {
+        $('#' + select).select2( (select == 'description') ? {maximumSelectionLength: 3} : {} )
+      }
+      $('.datepicker').datepicker({format: "dd/mm/yyyy", autoclose: true})
+
+      $('#btnBack').click(function() {
+        $('.progress-bar').width("0%")
+        $('#initial').fadeIn()
+        $('#staffProfile').hide()
+        $('#profileType').text('')
+        $('#secondary').hide();
+        $('#btnBack').hide();
+        $('#venueProfile').hide()
+      })
+      $('#btnWork').click(function(){
+        $('.progress-bar').width("40%")
+        $('#btnBack').show();
+        $('#initial').hide();
+        $('#staffProfile').fadeIn();
+        $('#profileType').text('Profile Setup')
+      })
+      $('#btnHire').click(function(){
+        $('.progress-bar').width("30%")
+        $('#btnBack').show();
+        $('#initial').hide();
+        $('#secondary').show();
+      })
+
+      $('#btnVenue').click(function(){
+        $('.progress-bar').width("60%")
+        $('#secondary').hide();
+        $('#venueProfile').show();
+        $('#profileType').text('Venue Setup')
+      })
+
+      $('#btnOrganiser').click(function(){
+        $('.progress-bar').width("60%")
+        $('#secondary').hide();
+        $('#organiserProfile').show();
+        $('#profileType').text('Organiser Setup')
+      })
+
+      // STAFF PROFILE
+
+      let staffProfile = {gender: 'male', availability: {}, rateBadge: '$8/hr - $20/hr', startRate: '$8/hr', endRate: '$20/hr'}
+      let profiles = ['fullname', 'bio', 'gender', 'location', 'description', 'languages', 'certificates', 'positions', 'frequency', 'birthdate']
+      let gender, fullname, location, birthdate, bio, rateBadge, startRate, endRate, distance
+      for (let profile of profiles) {
+        staffProfile[profile] = $('#' + profile).val()
+        $('#' + profile).on('change keyup', function(){
+          staffProfile[profile] = $(this).val()
+        })
+      }
+      let genders = ['male', 'female', 'other']
+      for (let _gender of genders) {
+        $('#sbtn' + _gender).click(function(){
+          $(this).addClass('btn-info')
+          $(this).removeClass('btn-default')
+          staffProfile['gender'] = _gender
+          if(_gender == 'other') {
+            $('#ssOthers').fadeIn()
+          } else {
+            $('#ssOthers').hide()
+          }
+          for (let g of genders) {
+            if (g != _gender ) {
+              $('#sbtn' + g).removeClass('btn-info')
+              $('#sbtn' + g).addClass('btn-default')
+            }
+          }
+        })
+      }
+
+      $('.slider').on('change', function(ev){
+        let rate = $('#hourlyRate').val().split(',')
+        staffProfile['startRate'] = `$${rate[0]}/hr`
+        staffProfile['endRate'] = `$${rate[1]}/hr`
+        staffProfile['rateBadge'] = `$${rate[0]}/hr - $${rate[1]}/hr`
+        $('#hrLabel').text(staffProfile['rateBadge'])
+        staffProfile['distance'] = $('#distance').val() + 'km'
+        $('#distancelbl').text(staffProfile['distance'])
+      })
+      let days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+      let times = ['morning', 'afternoon', 'evening']
+      for (let day of days) {
+        staffProfile['availability'][day] = {}
+        for (let time of times) {
+          staffProfile['availability'][day][time] = false
+        }
+      }
+      for (let day of days) {
+        for (let time of times) {
+          $( '#btn' + time + day ).click(function(){
+            staffProfile['availability'][day][time] = !staffProfile['availability'][day][time]
+            $(this).toggleClass('btn-info', 'addOrRemove')
+            $(this).toggleClass('btn-default', 'addOrRemove')
+          })
+        }
+      }
+      $('#saveStaff').click(function(){
+        $('.progress-bar').width("80%")
+        $('#staffProfile').fadeOut();
+        $('#profileType').text('Saving Profile ...')
+        $.post('/save-staff-profile', staffProfile, function(res){
+          $('.progress-bar').width("100%")
+          $('#profileType').text('Profile Saved!')
+          setTimeout(function() {
+            window.location.href = '/'
+          }, 1500)
+        })
+      })
+
+      // END STAFF PROFILE
+
+      // VENUE PROFILE
+      let venueProfile = {}
+      let venueInputs = ['location', 'name', 'manager_name', 'types', 'number_employee', 'services', 'types', 'weekday_start', 'weekday_end', 'weekend_start', 'weekend_end']
+      for (let input of venueInputs) {
+        venueProfile[input] = $('#v' + input).val()
+        $('#v' + input).on('change keyup', function(){
+          venueProfile[input] = $(this).val()
+        })
+      }
+      $('#saveVenue').click(function(){
+        $('.progress-bar').width("80%")
+        $('#venueProfile').fadeOut();
+        $('#profileType').text('Saving Profile ...')
+        console.log(venueProfile);
+        $.post('/save-venue-profile', venueProfile, function(res){
+          $('.progress-bar').width("100%")
+          $('#profileType').text('Profile Saved!')
+          setTimeout(function() {
+            window.location.href = '/'
+          }, 1500)
+        })
+      })
+
+
+    })
+
+</script>
+
+</body>
+</html>

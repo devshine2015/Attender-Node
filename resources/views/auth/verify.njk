@@ -1,0 +1,23 @@
+{% extends "auth/base" %}
+{% block content %}
+
+  <div class="content row" style="padding: 100px;">
+    <div class="col-md-offset-4 col-md-4 col-xs-8 col-xs-offset-2">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+        <div class="info-box-content">
+          <div class="info-box-text"></div>
+          <span class="info-box-number">Please verify your email</span>
+          <div class="progress">
+            <div class="progress-bar" style="width: 0%"></div>
+          </div>
+          <span class="progress-description">
+            Already verified? <a href="/">Continue</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

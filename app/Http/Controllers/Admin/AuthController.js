@@ -31,7 +31,7 @@ class AuthController {
 
   * login (req, res) {
     if (req.method() == 'GET') {
-      return yield res.sendView('auth/login')
+      return yield res.sendView('auth/login', { isAdmin: true })
     } else {
       const validation = yield Validator.validateAll(req.all(), User.loginRules)
       if (validation.fails()) {
@@ -51,14 +51,14 @@ class AuthController {
           yield req.withAll().andWith({ emailerror: 'Invalid Credentials' }).flash()
         }
       }
-      return yield res.redirect('/')
+      return yield res.redirect('/manage')
     }
   }
 
   * logout (req, res) {
     yield req.session.forget('adminToken')
     yield req.with({ message: 'You have successfully logout' }).flash()
-    yield res.redirect('login')
+    yield res.redirect('/manage/login')
   }
 
   * verification (req, res) {

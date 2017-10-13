@@ -47,7 +47,7 @@ class VenueController {
       let count = yield VenueNotification.find({ opened: false, venueId: venue._id }).count()
       let notifications = yield VenueNotification.find({ venueId: venue._id }).populate('eventId').populate('staffId').populate('venueId').sort('-createdAt')
       res.json({ status: true, messageCode: 'SUCCESS', notifications: notifications, new: count })
-      yield VenueNotification.update({ opened: false }, { opened: true }, { multi: true })
+      yield VenueNotification.update({ opened: false, venueId: venue._id }, { opened: true }, { multi: true })
     } else {
      res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }
@@ -72,11 +72,7 @@ class VenueController {
 
   * interested (req, res) {
     if (req.user.isVenue) {
-      let _staffs = []
-      for (let _staff in req.user.venueId.interested) {
-          _staffs.push(_staff)
-      }
-      let staffs = yield Staff.find({ _id: { $in: _staffs } })
+      let staffs = yield Staff.find({ _id: { $in: req.user.venueId.myStaffs } })
       return res.json({ status: true, messageCode: 'SUCCESS', staffs: staffs })
 
     } else {

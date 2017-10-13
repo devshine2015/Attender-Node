@@ -1,0 +1,304 @@
+<div id="staffProfile" class="row" style="display:none;">
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr>
+    <strong><p class="login-box-msg">Personal Information</p></strong>
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input id="fullname" type="text" class="form-control" placeholder="Full Name" name="" value="">
+    </div>
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="name" rows="8" cols="80" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="description">Describe yourself in 3 words</label>
+      <select id="description" class="form-control select2-multiple" style="width: 100%;" multiple>
+        {% for description in staff_descriptions %}
+          <option value="{{description}}">{{ description | title }}</option>
+        {% endfor %}
+  		</select>
+    </div>
+    <div class="form-group">
+      <label>Birthdate</label>
+      <div class="input-group date" data-provide="datepicker" style="width: 100%;">
+        <div class="input-group-addon" style="display:none;">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <input type="text" class="form-control pull-right" id="birthdate">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Sex</label>
+      <div class="">
+        <button id="sbtnmale" type="button" name="button" class="btn btn-info"><i class="fa fa-mars"></i> Male</button>
+        <button id="sbtnfemale" type="button" name="button" class="btn btn-default"><i class="fa fa-venus"></i> Female</button>
+        <button id="sbtnother" type="button" name="button" class="btn btn-default">Other</button>
+      </div>
+      <div id="ssOthers" style="display:none;">
+        <br>
+        <input type="text" id="gender" class="form-control" placeholder="Specify" name="" value="">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">Languages</label>
+      <select id="languages" class="form-control select2-multiple" style="width: 100%;" multiple>
+        {% for language in staff_languages %}
+          <option value="{{language}}">{{ language | title }}</option>
+        {% endfor %}
+  		</select>
+    </div>
+    <hr>
+    <strong><p class="login-box-msg">Job Description</p></strong>
+    <div class="form-group">
+      <label class="control-label">Positions</label>
+      <select id="positions" class="form-control select2-multiple" style="width: 100%;" multiple>
+        {% for position in staff_positions %}
+          <option value="{{position}}">{{ position | title }}</option>
+        {% endfor %}
+  		</select>
+    </div>
+    <hr>
+    <div class="form-group">
+      <label>Hourly Rate</label> <span id="hrLabel" class="text-muted">$8/hr - $20/hr</span>
+      <input
+          id="hourlyRate"
+          type="text"
+          name="hourlyrate"
+          class="form-control slider"
+          data-provide="slider"
+          data-slider-min="8"
+          data-slider-id="blue"
+          data-slider-max="150"
+          data-slider-step="1"
+          data-slider-value="[8,20]"
+          data-slider-selection="before"
+          data-slider-tooltip="hide"
+      >
+    </div>
+    <div class="form-group">
+      <label>Work Type</label>
+      <select class="form-control" id="frequency" name="">
+        <option>Full Time</option>
+        <option>Part Time</option>
+        <option>Casual</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Work Eligibility</label>
+      <select class="form-control" name="">
+        <option>Citenzenship</option>
+        <option>Working Visa</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="control-label">Licence and Verification</label>
+      <select id="certificates" class="form-control select2-multiple" style="width: 100%;" multiple>
+        {% for certificate in staff_certificates %}
+          <option value="{{certificate}}">{{ certificate }}</option>
+        {% endfor %}
+  		</select>
+    </div>
+    <div class="form-group">
+      <label>Preferred Location</label>
+      <input type="text" id="location" class="form-control" name="" value="">
+    </div>
+
+    <!-- Distance -->
+    <div class="form-group">
+      <label>Distance</label> <span id="distancelbl" class="text-muted">5km</span>
+      <input
+          id="distance"
+          type="text"
+          name="distance"
+          class="form-control slider"
+          data-provide="slider"
+          data-slider-min="5"
+          data-slider-id="blue"
+          data-slider-max="100"
+          data-slider-step="1"
+          data-slider-value="5"
+          data-slider-selection="before"
+          data-slider-tooltip="show"
+      >
+    </div>
+
+    <!-- Availability -->
+    <div class="form-group">
+      <label>Availability</label> <span class="text-muted">(optional)</span>
+      <br>
+      <div  style="text-align: center;">
+        <div class="row">
+          <div class="col-md-3">
+          </div>
+          <div class="col-md-3">
+            <label><small>Morning</small></label>
+          </div>
+          <div class="col-md-3">
+            <label><small>Afternoon</small></label>
+          </div>
+          <div class="col-md-3">
+            <label><small>Evening</small></label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Monday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningmonday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonmonday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningmonday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Tuesday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningtuesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoontuesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningtuesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Wednesday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningwednesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonwednesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningwednesday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Thursday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningthursday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonthursday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningthursday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Friday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningfriday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonfriday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningfriday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Saturday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningsaturday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonsaturday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningsaturday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label><small>Sunday</small></label>
+          </div>
+          <div class="col-md-3">
+            <a id="btnmorningsunday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btnafternoonsunday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+          <div class="col-md-3">
+            <a id="btneveningsunday" class="btn btn-block btn-lg btn-default"></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+    <strong><p class="login-box-msg">Work Experience</p></strong>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Position</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label>Duration</label>
+          <div class="row">
+            <div class="col-lg-6">
+              <input type="text" placeholder="Years" class="form-control" name="" value="">
+            </div>
+            <div class="col-lg-6">
+              <input type="text" placeholder="Months" class="form-control" name="" value="">
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <label>Additional Information</label>
+              <textarea name="" class="form-control" rows="8" cols="80"></textarea>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center">
+          <a href="#" class="btn btn-primary btn-md">Add Experience</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="form-group">
+      <div style="text-align: center">
+        <button id="saveStaff" type="button" class="btn btn-info btn-md" name="button">Save</button>
+        <button type="button" class="btn btn-default btn-md" name="button">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
