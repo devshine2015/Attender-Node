@@ -99,9 +99,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
   <script>
     {% if user.isStaff %}
-      let url = '/staff-messages/{{user.webToken}}'
+      let url = '/staff-messages'
     {% elif user.isVenue %}
-      let url = '/venue-messages/{{user.webToken}}'
+      let url = '/venue-messages'
     {% endif %}
 
     const io = ws('')

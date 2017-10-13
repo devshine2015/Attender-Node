@@ -71,10 +71,10 @@ Route.group('profile', function() {
   Route.get('my-staffs', 'Web/VenueController.myStaffs')
   Route.get('events', 'Web/EventController.index')
 
-  Route.post('/staff-messages/:token*', 'Web/StaffController.messages')
+  Route.post('/staff-messages', 'Web/StaffController.messages')
 
   Route.get('venue/:id', 'Web/VenueController.select')
-  Route.post('/venue-messages/:token*', 'Web/VenueController.messages')
+  Route.post('/venue-messages', 'Web/VenueController.messages')
   Route.post('venue/:id/interest', 'Web/VenueController.interest')
   Route.get('events/create', 'Web/EventController.create')
   Route.post('events/create', 'Web/EventController.store')
