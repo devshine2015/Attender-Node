@@ -9,8 +9,8 @@ class GeneralController {
     let messages = yield Message
                         .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}] })
                         .sort('-sentAt')
-                        .populate('staff', '_id fullname')
-                        .populate('venue', '_id name')
+                        .populate('staff', '_id fullname avatar')
+                        .populate('venue', '_id name image')
 
     return res.json({ status: true, messages: messages })
   }

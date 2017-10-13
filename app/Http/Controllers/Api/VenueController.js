@@ -89,7 +89,7 @@ class VenueController {
       staff: req.input('staff', ''),
       venue: req.user.venueId._id
     })
-    return res.json({ status: true })
+    return res.json({ status: true, thread: message.conversation })
   }
 
 
