@@ -12,14 +12,12 @@ class UserGuard {
         request.user = user
         request.isAuthed = true
         response.viewInstance.global('user', user)
-        // if (!user.verified) {
-        //   return response.redirect('/verify-email')
-        // } else
-        if (!user.hasProfile) {
-          return response.redirect('/profile-setup')
-        } else {
           yield next
-        }
+        // if (!user.hasProfile) {
+        //   return response.redirect('/profile-setup')
+        // } else {
+        //   yield next
+        // }
 
       } else {
         return response.redirect('/login')

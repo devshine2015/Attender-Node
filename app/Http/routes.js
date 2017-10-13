@@ -58,11 +58,6 @@ Route.group('manage', function() {
 
 Route.group('profile', function() {
   Route.get('/', 'Web/GeneralController.index')
-  Route.get('verify-email', 'Web/AuthController.verify')
-  Route.get('profile-setup', 'Web/AuthController.setupProfile')
-  Route.post('profile-setup', 'Web/AuthController.saveProfile')
-  Route.post('save-staff-profile', 'Web/StaffController.save')
-  Route.post('save-venue-profile', 'Web/VenueController.save')
   Route.get('logout', 'Web/AuthController.logout')
 
   Route.post('/conversation/:convo', 'Web/GeneralController.conversation')
@@ -85,8 +80,15 @@ Route.group('profile', function() {
   Route.post('events/create', 'Web/EventController.store')
   Route.post('event/:id/interest', 'Web/EventController.interest')
 
-}).middleware('user')
+}).middleware('user','profile')
 
+Route.group('user', function(){
+  Route.get('verify-email', 'Web/AuthController.verify')
+  Route.get('profile-setup', 'Web/AuthController.setupProfile')
+  Route.post('profile-setup', 'Web/AuthController.saveProfile')
+  Route.post('save-staff-profile', 'Web/StaffController.save')
+  Route.post('save-venue-profile', 'Web/VenueController.save')
+}).middleware('user')
 
 
 Route.group('nonuser', function() {
