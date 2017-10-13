@@ -89,9 +89,34 @@ class VenueController {
       staff: req.input('staff', ''),
       venue: req.user.venueId._id
     })
-    return res.json({ status: true, thread: message.conversation })
+    return res.json({ status: true })
   }
 
+  * sendInitialMsg (req, res) {
+
+    let staff = yield Staff.findOne({ _id: req.input('staff', '') })
+    let message = yield Message.create({
+      sender: req.user._id,
+      receiver: req.input('receiver'),
+      message: req.input('message'),
+      staff: staff._id,
+      venue: req.user.venueId._id
+    })
+    let thread = {
+      _id: message.conversation,
+      latest: message.createdAt,
+      message: message.message,
+      delivered: message.delivered,
+      seen: message.seen,
+      usid: req.input('receiver'),
+      uselect: staff._id,
+      uname: staff.fullname,
+      uavatar: staff.avatar
+    }
+    res.json({ status: true, thread: thread })
+
+
+  }
 
 }
 

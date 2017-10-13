@@ -16,6 +16,7 @@ Route.group('api', function() {
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
   Route.get('/staff-messages', 'Web/StaffController.messages')
 
+  Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
   Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
   Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
 
