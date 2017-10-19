@@ -5,7 +5,8 @@
     <h1>Messages</h1>
   </section>
 {% verbatim %}
-  <section class="content" id="msgController">
+
+  <section class="content" id="msgController" style="display:none">
     <div class="row">
       <div class="col-md-6">
         <div class="box box-primary">
@@ -96,7 +97,6 @@
 
 {% block messages_scripts %}
   <script src="https://unpkg.com/vue"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
   <script>
     {% if user.isStaff %}
       let url = '/staff-messages'
@@ -121,7 +121,6 @@
       }
 
     })
-
     function getMessages() {
       return new Promise(function (resolve, reject){
         $.post(url, {}, function(res){
@@ -157,6 +156,9 @@
           container.scrollTop = container.scrollHeight
         }
       },
+      mounted: function(){
+        $('#msgController').fadeIn()
+      },
       methods: {
         fetch: function(thread) {
           if (this.conversation)
@@ -167,6 +169,7 @@
           this.selectedLbl = thread.uname
           this.usid = thread.usid
           client.joinRoom(thread._id, {}, console.log)
+          client.disconnect()
           $.post(`/conversation/${thread._id}`, {}, function(res){
             if (res.status) {
               chatList.messages = res.messages

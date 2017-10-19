@@ -26,7 +26,7 @@ class EventController {
       _event.venueId.interested[req.user.staffId] = { staffId: req.user.staffId, interestedAt: new Date() }
       _event.venueId.markModified('interested')
       _event.venueId.save()
-      _event.interested[req.user.staffId] = { staffId: req.user.staffId, interestedAt: new Date() }
+      _event.interested[req.user.staffId] = { staffId: req.user.staffId, interestedAt: new Date(), include: true }
       _event.markModified('interested')
       _event.save()
       let notification = yield VenueNotification.create({
@@ -45,8 +45,9 @@ class EventController {
       yield res.sendView('web/event/create')
     }
   }
-  * store (req, res) {
 
+  * store (req, res) {
+    console.log(req.all());
   }
 
 }

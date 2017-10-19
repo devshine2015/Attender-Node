@@ -4,6 +4,7 @@ const Venue = use('App/Model/Venue')
 const Event = use('App/Model/Event')
 
 module.exports = class EventController {
+
   * getEvent (req) {
     return yield Event.findOne({ _id: req.param('id') }).populate('venueId')
   }
@@ -33,5 +34,5 @@ module.exports = class EventController {
   * update (req, res) {
 
   }
-  
+
 }

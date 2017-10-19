@@ -35,7 +35,9 @@ let mystaffs = venueSchema.virtual('myStaffs')
 mystaffs.get(function(){
   let staffs = []
   for (let staff in this.interested) {
-      staffs.push(staff)
+      if (this.interested[staff].include) {
+        staffs.push(staff)
+      }
   }
   return staffs
 })

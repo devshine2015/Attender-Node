@@ -10,17 +10,19 @@ class AuthController {
   * verify (req, res) {
     yield res.sendView('auth/verify')
   }
+
   * setupProfile(req, res) {
     yield res.sendView('auth/profile')
   }
 
   * saveProfile(req, res) {
-
+   console.log(req.all());
   }
 
   * getRegister(req, res) {
     yield res.sendView('auth/register')
   }
+
   * register(req, res) {
     const validation = yield Validator.validateAll(req.all(), User.registerRules)
 
@@ -43,7 +45,6 @@ class AuthController {
     }
     return res.redirect('/login')
   }
-
 
   * login (req, res) {
     if (req.method() == 'GET') {

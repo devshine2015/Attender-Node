@@ -55,7 +55,12 @@ Http.onStart = function () {
   View.global('from', (time) => {
     return moment(time).fromNow()
   })
-
+  View.global('until', (time) => {
+    return moment(time).toNow(true)
+  })
+  View.global('trial', (time) => {
+    return moment(time).format('DD MMM')
+  })
   View.global('staff_descriptions', [
     'nightowl', 'mixologist', 'hardworker', 'productive',
     'proactive', 'professional', 'quick', 'fast', 'manager',

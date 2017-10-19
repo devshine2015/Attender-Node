@@ -28,7 +28,6 @@ class AuthController {
     return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })
   }
 
-
   * login (req, res) {
     if (req.method() == 'GET') {
       return yield res.sendView('auth/login', { isAdmin: true })

@@ -11,14 +11,34 @@ Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
   Route.get('conversation/:convo', 'Api/GeneralController.conversation')
 
+  // MESSAGING API MANAGEMENT
+  Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
+  Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
+  Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
+
   // STAFF API MANAGEMENT
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
   Route.get('/staff-messages', 'Web/StaffController.messages')
+  Route.get('/trial-staffs', 'Api/VenueController.trialStaffs')
+  Route.get('/active-staffs', 'Api/VenueController.activeStaffs')
 
-  Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
-  Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
-  Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
+  Route.post('/trial/:id', 'Api/StaffController.trial')
+  Route.post('/direct-hire/:id', 'Api/StaffController.directHire')
+  Route.post('/hire/:id', 'Api/StaffController.hire')
+
+  Route.post('/add-task/:id', 'Api/StaffController.addTask')
+  Route.post('/add-suggestion/:id', 'Api/StaffController.addSuggestion')
+
+  Route.post('/task/:id/edit', 'Web/StaffController.editTask')
+  Route.post('/task/:id/delete', 'Web/StaffController.deleteTask')
+
+  Route.post('/suggestion/:id/edit', 'Web/StaffController.editSuggestion')
+  Route.post('/suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
+
+  Route.post('/add-rating/:id', 'Api/StaffController.addRatings')
+  Route.post('/rating/:id/edit', 'Api/StaffController.editRating')
+
 
   // VENUE API MANAGEMENT
   Route.get('venue/notifications', 'Api/VenueController.notifications')
@@ -34,6 +54,8 @@ Route.group('api', function() {
   Route.post('user/profile/organizer', 'Api/UserController.saveOrganizerProfile')
 
   // EVENT API MANAGEMENT
+  Route.get('events', 'Api/EventController.index')
+  Route.get('my-events', 'Api/EventController.myEvents')
   Route.post('events', 'Api/EventController.create')
   Route.get('events/:id/interested', 'Api/EventController.interested')
   Route.post('events/:id/interest', 'Api/EventController.interest')
@@ -71,21 +93,36 @@ Route.group('profile', function() {
   Route.get('/messages', 'Web/GeneralController.messages')
   Route.post('/new-staff-message', 'Web/GeneralController.sendStaffMsg')
   Route.post('/new-venue-message', 'Web/GeneralController.sendVenueMsg')
-
-  Route.get('job-seekers', 'Web/StaffController.index')
-
-  Route.get('venues', 'Web/VenueController.index')
-  Route.get('my-staffs', 'Web/VenueController.myStaffs')
-  Route.get('events', 'Web/EventController.index')
-
   Route.post('/staff-messages', 'Web/StaffController.messages')
 
+  Route.get('job-seekers', 'Web/StaffController.index')
+  Route.get('my-staffs', 'Web/VenueController.renderMyStaffs')
+
+  Route.post('my-staffs', 'Web/VenueController.myStaffs')
+  Route.post('interested-staffs', 'Web/VenueController.interestedStaffs')
+  Route.post('/direct-hire/:id', 'Web/StaffController.directHire')
+  Route.post('/hire/:id', 'Web/StaffController.hire')
+
+  Route.post('/task/:id/edit', 'Web/StaffController.editTask')
+  Route.post('/task/:id/delete', 'Web/StaffController.deleteTask')
+
+  Route.post('/suggestion/:id/edit', 'Web/StaffController.editSuggestion')
+  Route.post('/suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
+
+  Route.get('venues', 'Web/VenueController.index')
   Route.get('venue/:id', 'Web/VenueController.select')
   Route.post('/venue-messages', 'Web/VenueController.messages')
   Route.post('venue/:id/interest', 'Web/VenueController.interest')
+
+  Route.get('events', 'Web/EventController.index')
   Route.get('events/create', 'Web/EventController.create')
   Route.post('events/create', 'Web/EventController.store')
   Route.post('event/:id/interest', 'Web/EventController.interest')
+
+  Route.post('trial/:id', 'Web/StaffController.trial')
+  Route.post('add-task/:id', 'Web/StaffController.addTask')
+  Route.post('add-suggestion/:id', 'Web/StaffController.addSuggestion')
+
 
 }).middleware('user','profile')
 
@@ -114,3 +151,4 @@ Route.group('nonuser', function() {
 }).middleware('nonuser')
 
 Route.get('seed', 'Admin/SeedController.create')
+Route.get('calendar', 'Api/EventController.calendar')

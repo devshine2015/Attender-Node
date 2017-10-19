@@ -14,7 +14,6 @@ class UserController {
     res.json({ thread: thread })
   }
 
-
   // ORGANIZER
 
   * getOrganizerProfile (req, res) {

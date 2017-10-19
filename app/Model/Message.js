@@ -31,7 +31,8 @@ messageSchema.pre('save', function(next) {
 })
 
 messageSchema.post('save', function(msg){
-  chatChannel.inRooms([msg.receiver.toString(), msg.sender.toString()]).emit('message', 'refresh-thread')
+  chatChannel.inRoom(msg.sender.toString()).emit('message', 'refresh-thread')
+  chatChannel.inRoom(msg.receiver.toString()).emit('message', 'refresh-thread')
   chatChannel.inRoom(msg.conversation.toString()).emit('message', 'refresh-messages')
 })
 

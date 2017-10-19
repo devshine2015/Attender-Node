@@ -2,6 +2,9 @@
 
 const User = use('App/Model/User')
 const Staff = use('App/Model/Staff')
+const Task = use('App/Model/Task')
+const Suggestion = use('App/Model/Suggestion')
+const StaffManagement = use('App/Model/StaffManagement')
 const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
 const Event = use('App/Model/Event')
@@ -17,6 +20,7 @@ class VenueController {
       return venue
     }
   }
+
   * formatHours(venue) {
     venue.weekdayStart = moment(venue.openingHours.Weekdays.startWeekDays).format('LT')
     venue.weekdayEnd = moment(venue.openingHours.Weekdays.endWeekDays).format('LT')
@@ -24,6 +28,7 @@ class VenueController {
     venue.weekendEnd = moment(venue.openingHours.Weekends.endWeekEnds).format('LT')
     return venue
   }
+
   * index (req, res) {
     let venues = yield Venue.find({})
     for (let venue of venues) {
@@ -35,7 +40,7 @@ class VenueController {
   * interest (req, res) {
     let _venue = yield this.getVenue(req)
     if (req.user.isStaff) {
-      _venue.interested[req.user.staffId] = { staffId: req.user.staffId, interestedAt: new Date() }
+      _venue.interested[req.user.staffId] = { staffId: req.user.staffId, interestedAt: new Date(), include: true }
       _venue.markModified('interested')
       _venue.save()
       let notification = yield VenueNotification.create({
@@ -117,10 +122,24 @@ class VenueController {
     yield Message.update({ receiver: req.user._id }, { delivered: true }, { multi: true })
   }
 
-  * myStaffs (req, res) {
+  * renderMyStaffs (req, res) {
+    yield res.sendView('web/staff/venuestaff')
+  }
+
+  * interestedStaffs (req, res) {
     let venue = yield Venue.findOne({ _id: req.user.venueId })
-    let staffs = yield Staff.find({ _id: { $in: venue.myStaffs } }).populate('user', '_id')
-    yield res.sendView('web/staff/index', { staffs: staffs, my: true })
+    let interested = yield Staff.find({ _id: { $in: venue.myStaffs } }).populate('user', '_id')
+    res.json({ status: true, interested: interested })
+  }
+
+  * myStaffs (req, res) {
+    let staffs = yield StaffManagement
+                      .find({ venue: req.user.venueId })
+                      .populate('staff')
+                      .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                      .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                      
+    res.json({ status: true, staffs: staffs })
   }
 
 }

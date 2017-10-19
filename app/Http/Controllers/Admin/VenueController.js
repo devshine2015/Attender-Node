@@ -17,6 +17,7 @@ module.exports = class VenueController {
     }
 
   }
+
   * getAvailableUsers() {
     return yield User.find({ hasProfile: false, isAdmin: false })
   }

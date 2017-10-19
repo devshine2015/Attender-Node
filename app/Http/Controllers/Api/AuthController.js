@@ -32,7 +32,6 @@ class AuthController {
     return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })
   }
 
-
   * deviceLogin (req, res) {
     const validation = yield Validator.validateAll(req.all(), { id: 'required', type: 'required' })
 

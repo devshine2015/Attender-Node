@@ -17,6 +17,16 @@ class EventController {
     }
 
   }
+  * myEvents (req, res) {
+    let events = yield Event.find({ venueId: req.user.venueId._id })
+    return res.json({ status: true, events: events })
+  }
+
+  * calendar (req, res) {
+    let events = yield Event.find({}).sort('date')
+    return res.json({ status: true, events: events })
+  }
+
 
   * index (req, res) {
     let types = req.input('types', false)
@@ -48,10 +58,10 @@ class EventController {
         event.time = JSON.parse(req.input('time', '{"start": false, "end": false}'))
         if (req.user.isOrganizer) {
           event.isOrganizer = true
-          event.organizerId = req.user.organizerId
+          event.organizerId = req.user.organizerId._id
         } else {
           event.isVenue = true
-          event.venueId = req.user.venueId
+          event.venueId = req.user.venueId._id
         }
         yield event.save()
 
@@ -65,6 +75,26 @@ class EventController {
   * select (req, res) {
     let _event = yield this.getEvent(req)
     return res.json({ status: true, event: _event })
+  }
+
+  * edit (req, res) {
+    let _event = yield this.getEvent(req)
+    if (_event) {
+      _event.name = req.input('name', _event.name)
+      _event.description = req.input('description', _event.description)
+      _event.date = new Date(req.input('date')) || _event.date
+      _event.time = JSON.parse(req.input('time', '{"start": false, "end": false}')) || _event.time
+      _event.save()
+      return res.json({ status: true, event: _event, messageCode: 'SUCCESS'  })
+    }
+  }
+
+  * destroy (req, res) {
+    let _event = yield this.getEvent(req)
+    if (_event) {
+      _event.remove()
+      return res.json({ status: true, messageCode: 'DELETED' })
+    }
   }
 
   * interested (req, res) {
@@ -92,7 +122,7 @@ class EventController {
   * interest (req, res) {
     let _event = yield this.getEvent(req, res)
     if (req.user.isStaff) {
-      _event.venueId.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
+      _event.venueId.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
       _event.venueId.markModified('interested')
       _event.venueId.save()
       _event.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }

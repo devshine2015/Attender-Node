@@ -21,11 +21,8 @@ let eventSchema = mongoose.Schema({
   organizerId: { type: ObjectId, ref: 'Organizer' },
   isVenue: { type: Boolean, default: false },
   isOrganizer: { type: Boolean, default: false },
-
   interested: { type: Mixed, default: {} },
-
   activeStaff: { type: Mixed, default: {} },
-
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 

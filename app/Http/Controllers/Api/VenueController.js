@@ -2,6 +2,10 @@
 const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
+const Task = use('App/Model/Task')
+const StaffRating = use('App/Model/StaffRating')
+const Suggestion = use('App/Model/Suggestion')
+const StaffManagement = use('App/Model/StaffManagement')
 const Organizer = use('App/Model/Organizer')
 const Event = use('App/Model/Event')
 const VenueNotification = use('App/Model/VenueNotification')
@@ -57,7 +61,7 @@ class VenueController {
   * interest (req, res) {
     let _venue = yield this.getVenue(req)
     if (req.user.isStaff) {
-      _venue.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
+      _venue.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
       _venue.markModified('interested')
       _venue.save()
       let notification = yield VenueNotification.create({
@@ -79,6 +83,27 @@ class VenueController {
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }
+  }
+
+  * activeStaffs (req, res) {
+    let staffs = yield StaffManagement
+                      .find({ venue: req.user.venueId._id, trial: false })
+                      .populate('staff')
+                      .populate('ratings')
+                      .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                      .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+
+    res.json({ status: true, staffs: staffs })
+  }
+
+  * trialStaffs (req, res) {
+    let staffs = yield StaffManagement
+                      .find({ venue: req.user.venueId._id, trial: true })
+                      .populate('staff')
+                      .populate('ratings')
+                      .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                      .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+    res.json({ status: true, staffs: staffs })
   }
 
   * sendStaffMsg (req, res) {

@@ -18,7 +18,8 @@
             <div class="box-header">
               <h3 class="box-title"> <img src="{{ staff.avatar }}" class="img-circle" style="height: 30px; width: auto;" alt="">&nbsp;&nbsp;{{ staff.fullname | title }}</h3>
               <div class="box-tools pull-right">
-                <button type="button" onclick="sendMessage('{{staff.user._id}}', '{{ staff.fullname | title }}', '{{ staff._id }}')" class="btn btn-sm btn-primary" name="button"><strong><i class="fa fa-envelope"></i></strong></button>
+                <button type="button" onclick="sendMessage('{{staff.user._id}}', '{{ staff.fullname | title }}', '{{ staff._id }}')" class="btn btn-sm btn-default" name="button"><strong><i class="fa fa-envelope"></i></strong></button>
+                <button type="button" class="btn btn-sm btn-default" name="button"><strong><i class="fa fa-plus-circle"></i></strong></button>
               </div>
             </div>
             <div class="box-body">
