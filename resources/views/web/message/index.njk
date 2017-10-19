@@ -109,7 +109,6 @@
     client.connect(console.log)
     client.joinRoom('{{user._id}}', {}, console.log)
     client.on('message', function(room, message){
-      console.log('room', room, 'message', message);
       if (room == "{{ user._id }}") {
         getMessages().then(function(threads){
           chatList.$data.threads = threads
@@ -119,7 +118,6 @@
         chatList.refreshContent()
         chatList.refreshContent()
       }
-
     })
     function getMessages() {
       return new Promise(function (resolve, reject){
@@ -169,7 +167,6 @@
           this.selectedLbl = thread.uname
           this.usid = thread.usid
           client.joinRoom(thread._id, {}, console.log)
-          client.disconnect()
           $.post(`/conversation/${thread._id}`, {}, function(res){
             if (res.status) {
               chatList.messages = res.messages

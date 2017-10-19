@@ -9,7 +9,7 @@ class ChatController {
   }
 
   * onMessage (message) {
-
+    console.log(message);
   }
 
   * joinRoom (room) {

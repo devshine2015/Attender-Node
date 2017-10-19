@@ -7,7 +7,6 @@ const moment = require('moment')
 const Ws = use('Ws')
 const chatChannel = Ws.channel('chat')
 
-
 let messageSchema = mongoose.Schema({
   sender: { type: ObjectId, ref: 'User' },
   receiver: { type: ObjectId, ref: 'User'},
@@ -31,8 +30,7 @@ messageSchema.pre('save', function(next) {
 })
 
 messageSchema.post('save', function(msg){
-  chatChannel.inRoom(msg.sender.toString()).emit('message', 'refresh-thread')
-  chatChannel.inRoom(msg.receiver.toString()).emit('message', 'refresh-thread')
+  chatChannel.inRooms([msg.receiver.toString(),msg.sender.toString()]).emit('message', 'refresh-thread')
   chatChannel.inRoom(msg.conversation.toString()).emit('message', 'refresh-messages')
 })
 
