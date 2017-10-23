@@ -41,7 +41,8 @@ class AuthController {
         mobile: mobile,
         fullname: req.input('fullname', ''),
         email: email,
-        password: yield Hash.make(req.input('password'))
+        password: yield Hash.make(req.input('password')),
+        emailToken: yield Hash.make(email)
       })
       SendGrid.sendVerification(newuser, req)
 

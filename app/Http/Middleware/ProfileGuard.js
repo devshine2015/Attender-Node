@@ -6,10 +6,9 @@ class ProfileGuard {
 
   * handle (request, response, next) {
     if (request.user) {
-      // if (!request.user.verified) {
-      //   return response.redirect('/verify-email')
-      // } else
-      if (!request.user.hasProfile) {
+      if (!request.user.verified) {
+        return response.redirect('/verify-email')
+      } else if (!request.user.hasProfile) {
         return response.redirect('/profile-setup')
       } else {
         yield next
