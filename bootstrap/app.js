@@ -11,7 +11,6 @@
 |
 */
 const providers = [
-  'adonis-mail-provider/providers/MailProvider',
   'adonis-framework/providers/ConfigProvider',
   'adonis-framework/providers/EnvProvider',
   'adonis-framework/providers/EventProvider',
@@ -66,7 +65,6 @@ const aceProviders = [
 |
 */
 const aliases = {
-  Mail: 'Adonis/Addons/Mail',
   Command: 'Adonis/Src/Command',
   Config: 'Adonis/Src/Config',
   Database: 'Adonis/Src/Database',

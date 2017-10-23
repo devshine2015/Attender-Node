@@ -4,7 +4,7 @@ const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
 const View = use('View')
-const Mail = use('Mail')
+const SendGrid = require('../../../Serializers/SendGrid');
 
 class AuthController {
 
@@ -43,11 +43,8 @@ class AuthController {
         email: email,
         password: yield Hash.make(req.input('password'))
       })
-      yield Mail.send('mail.email', newuser, (message) => {
-         message.to(newuser.email, newuser.firstname)
-         message.from('support@attender.com.au')
-         message.subject('Account Confirmation')
-       })
+      SendGrid.sendVerification(newuser, req)
+
     }
     return res.redirect('/login')
   }
@@ -92,6 +89,7 @@ class AuthController {
     if (user) {
       user.verified = true
       user.save()
+      console.log('verified!');
       yield res.sendView('mail/confirmation')
     } else {
       res.status(404).send('Not Found')

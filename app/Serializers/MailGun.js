@@ -13,10 +13,10 @@ module.exports = {
                 Click the following link to verify your email <a href="https://${_host}/email/verify/${user.verification}/${user.emailToken}" target="_blank">https://${_host}/email/verify/${user.verification}/${user.emailToken}</a>`
     console.log(_html);
     let mail = mailcomposer({
-      from: 'you@samples.mailgun.org',
+      from: 'support@attender.com.au',
       to: user.email,
-      subject: 'Test email subject',
-      text: 'Test email text',
+      subject: 'Account Confirmation',
+      text: 'Attender',
       html: _html
     })
     mail.build((mailBuildError, message) => {

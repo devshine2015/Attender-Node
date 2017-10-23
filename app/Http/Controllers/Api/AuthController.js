@@ -3,7 +3,7 @@ const _ = require('lodash')
 const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
-const MailGun = require('../../../Serializers/MailGun');
+const SendGrid = require('../../../Serializers/SendGrid');
 
 class AuthController {
 
@@ -27,7 +27,7 @@ class AuthController {
       })
       user.emailToken = yield Hash.make(user.email)
       user.save()
-      MailGun.sendVerification(user, req)
+      SendGrid.sendVerification(user, req)
     }
     return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })
   }
