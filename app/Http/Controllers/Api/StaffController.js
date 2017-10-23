@@ -139,12 +139,14 @@ class StaffController {
     res.json({ status: true, suggestion: suggestion, management: management})
   }
 
-  * addRatings (req, res) {
+  * addRating (req, res) {
     let management = yield this.getManagement(req)
     let rating = yield StaffRating.create({
       staff: management.staff,
       venue: management.venue,
-      overAll: req.input('overall', 0)
+      overAll: req.input('overall', 0),
+      review: req.input('review', ''),
+      type: req.param('type')
     })
     let items = JSON.parse(req.input('items', '{}'))
     for (let item of items) {
@@ -167,7 +169,6 @@ class StaffController {
     rating.markModified('items')
     rating.save()
     return res.json({ status: true, rating: rating })
-
   }
 
 }

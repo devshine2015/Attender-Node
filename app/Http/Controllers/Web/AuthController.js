@@ -4,6 +4,7 @@ const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
 const View = use('View')
+const Mail = use('Mail')
 
 class AuthController {
 
@@ -36,12 +37,17 @@ class AuthController {
       yield req.with({ message: 'Email or Mobile already taken' }).flash()
       return yield res.redirect('/register')
     } else {
-      yield User.create({
+      let newuser = yield User.create({
         mobile: mobile,
         fullname: req.input('fullname', ''),
         email: email,
         password: yield Hash.make(req.input('password'))
       })
+      yield Mail.send('mail.email', newuser, (message) => {
+         message.to(newuser.email, newuser.firstname)
+         message.from('support@attender.com.au')
+         message.subject('Account Confirmation')
+       })
     }
     return res.redirect('/login')
   }

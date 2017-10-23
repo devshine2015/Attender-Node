@@ -20,5 +20,6 @@ let staffManagementSchema = mongoose.Schema({
   ratings: [{ type: ObjectId, ref: 'StaffRating' }]
 })
 
+staffManagementSchema.index({ staff: 1, venue: 1 }, { unique: true })
 
 module.exports = mongoose.model('StaffManagement', staffManagementSchema)

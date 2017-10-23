@@ -10,6 +10,7 @@ Route.get('api/events', 'Api/EventController.index')
 Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
   Route.get('conversation/:convo', 'Api/GeneralController.conversation')
+  Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
 
   // MESSAGING API MANAGEMENT
   Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
@@ -36,7 +37,7 @@ Route.group('api', function() {
   Route.post('/suggestion/:id/edit', 'Web/StaffController.editSuggestion')
   Route.post('/suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
 
-  Route.post('/add-rating/:id', 'Api/StaffController.addRatings')
+  Route.post('/add-rating/:type/:id', 'Api/StaffController.addRating')
   Route.post('/rating/:id/edit', 'Api/StaffController.editRating')
 
 
