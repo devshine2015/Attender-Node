@@ -64,9 +64,11 @@ class AuthController {
   }
 
   * confirm (req, res) {
-    let user = yield User.findOne({ email: req.input('email', '') })
+    let user = yield User.findOne({ email: req.input('email', ''), confirmed: false })
     if (user) {
       if (user.verified) {
+        user.confirmed = true
+        user.save()
         yield req.jwt.generateToken(user)
         res.json({ status: true, messageCode: 'VERIFIED_EMAIL', token: user.token.token })
       }

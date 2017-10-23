@@ -29,7 +29,7 @@ let userSchema = mongoose.Schema({
 
   adminToken: String,
   webToken: String,
-  
+
   avatar: { type: String, default: 'https://randomuser.me/api/portraits/men/71.jpg' },
   isActive: { type: Boolean, default: false },
   rememberToken: String,
@@ -44,6 +44,8 @@ let userSchema = mongoose.Schema({
 
   verified: { type: Boolean, default: false },
   verification : { type: String, default: () => { return randomstring.generate() } },
+
+  confirmed: { type: Boolean, default: false },
 
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
