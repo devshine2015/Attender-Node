@@ -34,6 +34,7 @@ const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   guard: 'App/Http/Middleware/JwtGuard',
   admin: 'App/Http/Middleware/AdminGuard',
+  nonadmin: 'App/Http/Middleware/NonAdminGuard',
   nonuser: 'App/Http/Middleware/NonUserGuard',
   nav: 'App/Http/Middleware/Nav',
   user: 'App/Http/Middleware/UserGuard',

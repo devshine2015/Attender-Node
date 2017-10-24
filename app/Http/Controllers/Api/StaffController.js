@@ -12,7 +12,7 @@ const moment = require('moment')
 class StaffController {
 
   * getManagement (req) {
-    let management = yield StaffManagement.findOne({ _id: req.param('id') })
+    let management = yield StaffManagement.findOne({ _id: req.param('id') }).populate('staff')
     if (management) {
       return management
     }
@@ -118,7 +118,7 @@ class StaffController {
   * addTask (req, res) {
     let management = yield this.getManagement(req)
     let task = yield Task.create({
-      staff: management.staff,
+      staff: management.staff._id,
       venue: req.user.venueId._id,
       description: req.input('description', '')
     })
@@ -130,7 +130,7 @@ class StaffController {
   * addSuggestion (req, res) {
     let management = yield this.getManagement(req)
     let suggestion = yield Suggestion.create({
-      staff: management.staff,
+      staff: management.staff._id,
       venue: req.user.venueId._id,
       description: req.input('description', '')
     })
@@ -142,7 +142,7 @@ class StaffController {
   * addRating (req, res) {
     let management = yield this.getManagement(req)
     let rating = yield StaffRating.create({
-      staff: management.staff,
+      staff: management.staff._id,
       venue: management.venue,
       overAll: req.input('overall', 0),
       review: req.input('review', ''),
@@ -172,7 +172,16 @@ class StaffController {
   }
 
   * addStaffToEvent (req, res) {
-    let staff = yield this.getStaff(req)
+    let management = yield this.getManagement(req)
+    let _event = yield Event.findOne({ _id: req.input('event_id') })
+    if (management && _event) {
+      _event.staffs.push(management._id)
+      _event.markModified('staffs')
+      _event.save()
+      res.json({ status: true, event: _event })
+    } else {
+      res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
 
   }
 

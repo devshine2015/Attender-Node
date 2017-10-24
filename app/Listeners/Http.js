@@ -77,7 +77,7 @@ Http.onStart = function () {
       'Turkish', 'Russian', 'Nepali', 'Polish', 'Dutch', 'Czech'
   ])
   View.global('staff_certificates', [
-      'Driver`s licence',
+      'Driver\'s License',
       'Responsible Service of Alcohol (RSA)',
       'Responsible Conduct of Gambling (RCG)',
       'Diploma of Hospitality Management',

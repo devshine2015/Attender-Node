@@ -28,6 +28,7 @@ class AuthController {
       })
       user.emailToken = yield Hash.make(user.email)
       user.save()
+      yield req.jwt.generateToken(user)
       SendGrid.sendVerification(user, req)
     }
     return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })

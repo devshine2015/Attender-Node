@@ -46,7 +46,8 @@ let userSchema = mongoose.Schema({
   verification : { type: String, default: () => { return randomstring.generate() } },
 
   confirmed: { type: Boolean, default: false },
-
+  forgotkey: String,
+  forgotActive: { type: Boolean, default: false },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 }, {

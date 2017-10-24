@@ -1,0 +1,18 @@
+{% extends "auth/base" %}
+
+{% block content %}
+  <div class="login-box">
+    <div class="login-logo">
+      Forgot Email
+    </div>
+    <div class="login-box-body">
+      <p class="login-box-msg">Password reset link will be sent to your email</p>
+      <form method="post" action="">
+        <div class="input-group">
+          <input type="email" name="email" class="form-control" placeholder="Email">
+          <span class="input-group-btn"><a type="submit" class="btn btn-primary"><i class="fa fa-arrow-circle-right"></i></a></span>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

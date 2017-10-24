@@ -88,7 +88,6 @@ Route.group('manage', function() {
 
 Route.group('profile', function() {
   Route.get('/', 'Web/GeneralController.index')
-  Route.get('logout', 'Web/AuthController.logout')
 
   Route.post('/conversation/:convo', 'Web/GeneralController.conversation')
   Route.get('/messages', 'Web/GeneralController.messages')
@@ -128,6 +127,7 @@ Route.group('profile', function() {
 }).middleware('user','profile')
 
 Route.group('user', function(){
+  Route.get('logout', 'Web/AuthController.logout')
   Route.get('verify-email', 'Web/AuthController.verify')
   Route.get('profile-setup', 'Web/AuthController.setupProfile')
   Route.post('profile-setup', 'Web/AuthController.saveProfile')
@@ -137,19 +137,20 @@ Route.group('user', function(){
 
 
 Route.group('nonuser', function() {
-
   Route.get('register', 'Web/AuthController.getRegister')
   Route.post('register', 'Web/AuthController.register')
-
+  Route.get('forgot-password', 'Web/AuthController.forgotPass')
+  Route.post('forgot-password', 'Web/AuthController.forgot')
   Route.get('login', 'Web/AuthController.login')
   Route.post('login', 'Web/AuthController.login')
 
   Route.get('email/verify/:verification/:token*', 'Admin/AuthController.verification')
+}).middleware('nonuser')
 
+Route.group('nonadmin', function() {
   Route.get('manage/login', 'Admin/AuthController.login')
   Route.post('manage/login', 'Admin/AuthController.login')
-
-}).middleware('nonuser')
+}).middleware('nonadmin')
 
 Route.get('seed', 'Admin/SeedController.create')
 Route.get('calendar', 'Api/EventController.calendar')

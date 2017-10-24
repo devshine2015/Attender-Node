@@ -5,13 +5,11 @@ const View = use('View')
 module.exports =  {
 
   * handle (request, response, next) {
-    const adminToken = yield request.session.get('adminToken', false)
-    if (adminToken) {
-      const user = yield User.findOne({ adminToken: adminToken, isAdmin: true })
+    const webToken = yield request.session.get('webToken', false)
+    if (webToken) {
+      const user = yield User.findOne({ webToken: webToken })
       if (user) {
-        if (user.isAdmin) {
-          return response.redirect('/')
-        }
+        return response.redirect('/')
       }
     }
     yield next

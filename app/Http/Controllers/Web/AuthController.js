@@ -12,6 +12,49 @@ class AuthController {
     yield res.sendView('auth/verify')
   }
 
+  * forgotPass (req, res) {
+    yield res.sendView('auth/forgotpass')
+  }
+
+  * forgot (req, res) {
+    let user = yield User.findOne({ email: req.input('email') })
+    if (user) {
+      user.forgotkey = yield Hash.make(user._id + new Date().toString() + user.email)
+      user.forgotActive = true
+      user.save()
+      SendGrid.sendForgotPass(user, req)
+      res.json({ status: true, message: 'Successfully Sent!'})
+    } else {
+      res.json({ status: false, message: 'Unable to find any user with the email provided.'})
+    }
+  }
+
+  * reset (req, res) {
+    let user = yield User.findOne({ forgotkey: req.param('token'), forgotActive: true })
+    if (user) {
+      yield res.sendView('auth/reset-pass')
+    } else {
+      yield res.sendView('auth/expired-page')
+    }
+  }
+
+  * resetPost (req, res) {
+    let user = yield User.findOne({ forgotkey: req.param('token'), forgotActive: true })
+    if (user) {
+      user.forgotkey = ''
+      user.forgotActive = false
+      user.password = yield Hash.make(req.input('password'))
+      user.webToken = yield Hash.make(user._id + new Date().toString())
+      user.save()
+      yield req.session.put('webToken', user.webToken)
+      yield res.redirect('/')
+    } else {
+      yield res.sendView('auth/expired-page')
+    }
+
+  }
+
+
   * setupProfile(req, res) {
     yield res.sendView('auth/profile')
   }
@@ -44,7 +87,12 @@ class AuthController {
         password: yield Hash.make(req.input('password')),
         emailToken: yield Hash.make(email)
       })
+      yield req.jwt.generateToken(newuser)
       SendGrid.sendVerification(newuser, req)
+      newuser.webToken = yield Hash.make(newuser._id + new Date().toString())
+      newuser.save()
+      yield req.session.put('webToken', newuser.webToken)
+      yield res.redirect('/')
 
     }
     return res.redirect('/login')
@@ -80,8 +128,6 @@ class AuthController {
   }
 
   * logout (req, res) {
-    req.user.webToken = ''
-    req.user.save()
     yield req.session.forget('webToken')
     yield req.with({ message: 'You have successfully logout' }).flash()
     yield res.redirect('login')
@@ -95,13 +141,13 @@ class AuthController {
     if (user) {
       user.verified = true
       user.save()
-      console.log('verified!');
       yield res.sendView('mail/confirmation')
     } else {
       res.status(404).send('Not Found')
     }
 
   }
+
 
 }
 

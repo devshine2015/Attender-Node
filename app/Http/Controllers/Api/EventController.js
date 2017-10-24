@@ -29,8 +29,17 @@ class EventController {
 
 
   * index (req, res) {
+    let events = []
     let types = req.input('types', false)
-    let events = yield Event.find({}).populate('venueId')
+    let near = req.input('near', false)
+    if (near) {
+      let lat = req.input('lat', 10),
+          long = req.input('long', 10)
+ 
+      let venues = yield Venue.find().where('location').nearSphere({ center: [long, lat], maxDistance: 5})
+    } else {
+     events = yield Event.find({}).populate('venueId')
+    }
     if (types) {
       types = types.split(',')
       events = events.filter((event) => {

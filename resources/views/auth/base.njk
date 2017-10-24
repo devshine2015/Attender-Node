@@ -37,6 +37,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
   <script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
   <script src="https://adminlte.io/themes/AdminLTE/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script>
   <script src="{{ assets('js/bootstrap-tags-input.js') }}"></script>
 <script>
     $(function () {
@@ -186,10 +187,13 @@
           }, 1500)
         })
       })
-
-
     })
-
+    function addExp() {
+      $.get('exp-form.html', function(data){
+        $('#exp-list').append(data)
+      })
+    }
+    addExp()
 </script>
 
 </body>

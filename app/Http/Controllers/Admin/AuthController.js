@@ -68,7 +68,7 @@ class AuthController {
     if (user) {
       user.verified = true
       user.save()
-      yield res.sendView('mail/confirmation')
+      yield res.sendView('mail/confirmation', { token: user.token.token })
     } else {
       res.status(404).send('Not Found')
     }
