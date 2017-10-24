@@ -1,17 +1,14 @@
 {% extends "master" %}
 
 {% block content %}
-<section class="content-header">
-  <h1 class="pull-left">Organisers ({{ organizers.length }})</h1>
-  <h1 class="pull-right">
-     <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="/manage/organisers/create">Add New Organiser</a>
-  </h1>
-  <div style="margin: 15px;"></div>
-</section>
+
 <div class="content">
   <div class="clearfix"></div>
   <div class="clearfix"></div>
     <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Organisers ({{ organizers.length }})</h3>
+        </div>
         <div class="box-body table-responsive">
           <table class="table table-striped text-center" id="users-table">
               <thead>
@@ -41,7 +38,7 @@
                           <span class="label label-success">{{ type | title }}</span>
                         {% endfor %}
                       </td>
-                      <td>{{ venue.createdAt }}</td>
+                      <td>{{ formatTime(organizer.createdAt) }}</td>
                       <td>
                         <form class="" action="" method="post">
                           <div class='btn-group'>
@@ -58,6 +55,7 @@
         </div>
     </div>
 </div>
+<a class="btn bg-purple fab" href="/manage/organisers/create"><i class="fa fa-plus"></i></a>
 
 
 {% endblock %}

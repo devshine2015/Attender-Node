@@ -1,3 +1,41 @@
 <div id="organiserProfile" class="row" style="display:none;">
-
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr>
+    <div class="form-group">
+      <label>Organiser's Name</label>
+      <input id="oname" type="text" class="form-control" value="">
+    </div>
+    <div class="form-group">
+      <label>Company</label>
+      <div class="">
+        <button id="obtncyes" type="button" name="button" class="btn btn-info">Yes</button>
+        <button id="obtncno" type="button" name="button" class="btn btn-default">No</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Company Name</label>
+      <input type="text" id="ocompany" class="form-control" value="">
+    </div>
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" id="olocation" class="form-control" name="" value="">
+    </div>
+    <div class="form-group">
+      <label>About you / Company</label>
+      <textarea id="oabout" name="name" rows="8" cols="80" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="control-label">Event Type</label>
+      <select id="otypes" class="form-control select2-multiple" style="width: 100%;" multiple>
+        {% for type in organiser_types %}
+          <option value="{{type}}">{{ type | title }}</option>
+        {% endfor %}
+  		</select>
+    </div>
+    <div class="form-group">
+      <div style="text-align: center;">
+        <button id="saveOrganiser" type="button" class="btn btn-info btn-md" name="button">Save</button>
+      </div>
+    </div>
+  </div>
 </div>

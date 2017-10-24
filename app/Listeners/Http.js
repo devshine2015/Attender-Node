@@ -42,7 +42,7 @@ Http.onStart = function () {
   const moment = require('moment')
 
   View.global('yearNow', moment().format('YYYY'))
-  
+
   View.global('formatTime', (time) => {
     return moment(time).calendar()
   })
@@ -102,4 +102,5 @@ Http.onStart = function () {
   ])
   View.global('venue_types', ['cafe', 'restaurant', 'bar', 'club', 'pub'])
   View.global('venue_services', ['alcohol', 'drinks', 'food', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel'])
+  View.global('organiser_types', ['birthday', 'wedding', 'conference', 'music festival', 'family events'])
 }

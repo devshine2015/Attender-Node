@@ -41,6 +41,11 @@
   <script src="{{ assets('js/bootstrap-tags-input.js') }}"></script>
 <script>
     $(function () {
+      let isHiring = false,
+          isWorking = false,
+          isOrganiser = false,
+          isVenue = false
+
       $('.timepicker').timepicker({
         showInputs: false
       })
@@ -50,22 +55,44 @@
           radioClass: 'iradio_square-blue',
           increaseArea: '20%' // optional
       });
-      let selects = ['description', 'languages', 'certificates', 'positions', 'vtypes', 'vservices']
+      let selects = ['description', 'languages', 'certificates', 'positions', 'vtypes', 'vservices', 'otypes']
       for (let select of selects) {
         $('#' + select).select2( (select == 'description') ? {maximumSelectionLength: 3} : {} )
       }
       $('.datepicker').datepicker({format: "dd/mm/yyyy", autoclose: true})
 
       $('#btnBack').click(function() {
+        if (isHiring) {
+          if (isOrganiser || isVenue) {
+            showSecondary()
+            isOrganiser = false
+            isVenue = false
+
+          } else {
+            showInitial()
+          }
+        } else {
+          showInitial()
+        }
+      })
+      function showSecondary() {
+        $('.progress-bar').width("30%")
+        $('#initial').hide();
+        $('#secondary').show();
+        $('#venueProfile').hide()
+        $('#organiserProfile').hide()
+      }
+      function showInitial() {
         $('.progress-bar').width("0%")
         $('#initial').fadeIn()
+        $('#secondary').hide()
         $('#staffProfile').hide()
         $('#profileType').text('')
-        $('#secondary').hide();
         $('#btnBack').hide();
-        $('#venueProfile').hide()
-      })
+      }
       $('#btnWork').click(function(){
+        isWorking = true
+        isHiring = false
         $('.progress-bar').width("40%")
         $('#btnBack').show();
         $('#initial').hide();
@@ -73,6 +100,8 @@
         $('#profileType').text('Profile Setup')
       })
       $('#btnHire').click(function(){
+        isWorking = false
+        isHiring = true
         $('.progress-bar').width("30%")
         $('#btnBack').show();
         $('#initial').hide();
@@ -80,6 +109,8 @@
       })
 
       $('#btnVenue').click(function(){
+        isVenue = true
+        isOrganiser = false
         $('.progress-bar').width("60%")
         $('#secondary').hide();
         $('#venueProfile').show();
@@ -87,6 +118,8 @@
       })
 
       $('#btnOrganiser').click(function(){
+        isOrganiser = true
+        isVenue = false
         $('.progress-bar').width("60%")
         $('#secondary').hide();
         $('#organiserProfile').show();
@@ -162,7 +195,12 @@
           }, 1500)
         })
       })
-
+      function addExp() {
+        $.get('exp-form.html', function(data){
+          $('#exp-list').append(data)
+        })
+      }
+      addExp()
       // END STAFF PROFILE
 
       // VENUE PROFILE
@@ -188,12 +226,48 @@
         })
       })
     })
-    function addExp() {
-      $.get('exp-form.html', function(data){
-        $('#exp-list').append(data)
+    // END VENUE PROFILE
+
+    // ORGANISER PROFILE
+    let orgProfile = {isCompany: true}
+    let cBtns = ['yes', 'no']
+    for (let c of cBtns) {
+      $("#obtnc" + c).click(function() {
+          $(this).addClass('btn-info')
+          $(this).removeClass('btn-default')
+         if (c == 'yes') {
+          orgProfile.isCompany = true
+          $('#obtncno').addClass('btn-default')
+          $('#obtncno').removeClass('btn-info')
+         } else {
+          orgProfile.isCompany = false
+          $('#obtncyes').addClass('btn-default')
+          $('#obtncyes').removeClass('btn-info')
+         }
       })
     }
-    addExp()
+    let oinputs = ['name', 'company', 'about', 'location', 'types']
+    for (let i of oinputs) {
+      $('#o' + i).on('change keyup', function() {
+        orgProfile[i] = $(this).val()
+      })
+    }
+    $('#saveOrganiser').click(function(){
+      $('.progress-bar').width("80%")
+      $('#organiserProfile').fadeOut();
+      $('#profileType').text('Saving Profile ...')
+      $.post('/save-organiser-profile', orgProfile, function(res){
+        $('.progress-bar').width("100%")
+        $('#profileType').text('Profile Saved!')
+        setTimeout(function() {
+          window.location.href = '/'
+        }, 1500)
+      })
+    })
+    // END ORGANISER PROFILE
+
+
+
 </script>
 {% block extra_scripts %}
 

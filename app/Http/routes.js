@@ -133,6 +133,7 @@ Route.group('user', function(){
   Route.post('profile-setup', 'Web/AuthController.saveProfile')
   Route.post('save-staff-profile', 'Web/StaffController.save')
   Route.post('save-venue-profile', 'Web/VenueController.save')
+  Route.post('save-organiser-profile', 'Web/OrganizerController.save')
 }).middleware('user')
 
 
