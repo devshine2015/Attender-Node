@@ -25,7 +25,7 @@ class AuthController {
       SendGrid.sendForgotPass(user, req)
       res.json({ status: true, message: 'Successfully Sent!'})
     } else {
-      res.json({ status: false, message: 'Unable to find any user with the email provided.'})
+      res.json({ status: false, message: 'Unable to find any user with this.'})
     }
   }
 

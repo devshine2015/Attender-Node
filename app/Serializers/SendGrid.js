@@ -13,6 +13,7 @@ module.exports = {
                 Click <a href="${_url}" target="_blank">confirm</a> to verify your email`
     sgMail.send({
       to: user.email,
+      fromname: 'Attender',
       from: 'tom@attender.com',
       subject: 'Account Confirmation',
       text: 'Attender',
@@ -29,6 +30,7 @@ module.exports = {
                 `
     sgMail.send({
       to: user.email,
+      fromname: 'Attender',
       from: 'tom@attender.com',
       subject: 'Password Reset',
       text: 'Attender',

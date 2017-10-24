@@ -1,0 +1,22 @@
+{% extends "auth/base" %}
+{% block content %}
+<div class="login-box">
+  <div class="login-logo">
+    <a href="/">Reset Password</a>
+  </div>
+  <div class="login-box-body">
+    <form method="post" action="">
+      <div class="form-group has-feedback">
+          <input required type="password" class="form-control" placeholder="New Password" name="password">
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-4 col-xs-offset-8">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

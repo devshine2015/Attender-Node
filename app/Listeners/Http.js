@@ -41,6 +41,8 @@ Http.onStart = function () {
   const View = use('View')
   const moment = require('moment')
 
+  View.global('yearNow', moment().format('YYYY'))
+  
   View.global('formatTime', (time) => {
     return moment(time).calendar()
   })

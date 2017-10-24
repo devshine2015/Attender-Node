@@ -1,0 +1,16 @@
+{% extends "auth/base" %}
+
+{% block content %}
+  <div class="lockscreen-wrapper">
+    <div class="lockscreen-logo">
+      <a>Expired <b>Page</b></a>
+    </div>
+    <div class="text-center">
+      <a href="/login">Sign in to Attender</a>
+    </div>
+    <div class="lockscreen-footer text-center">
+      Copyright &copy; {{yearNow}} <b><a href="http://attender.com.au" class="text-black">Attender</a></b><br>
+      All rights reserved
+    </div>
+  </div>
+{% endblock %}

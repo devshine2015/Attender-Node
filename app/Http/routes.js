@@ -143,7 +143,8 @@ Route.group('nonuser', function() {
   Route.post('forgot-password', 'Web/AuthController.forgot')
   Route.get('login', 'Web/AuthController.login')
   Route.post('login', 'Web/AuthController.login')
-
+  Route.get('reset-password/:token*', 'Web/AuthController.reset')
+  Route.post('reset-password/:token*', 'Web/AuthController.resetPost')
   Route.get('email/verify/:verification/:token*', 'Admin/AuthController.verification')
 }).middleware('nonuser')
 

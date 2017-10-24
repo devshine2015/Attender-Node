@@ -7,12 +7,62 @@
     </div>
     <div class="login-box-body">
       <p class="login-box-msg">Password reset link will be sent to your email</p>
-      <form method="post" action="">
-        <div class="input-group">
-          <input type="email" name="email" class="form-control" placeholder="Email">
-          <span class="input-group-btn"><a type="submit" class="btn btn-primary"><i class="fa fa-arrow-circle-right"></i></a></span>
+
+      <div id="ibox">
+        <div class="form-group has-feedback">
+          <input id="email" type="email" name="email" class="form-control" placeholder="Email">
+          <span id="emsg" style="display: none;" class="help-block"></span>
         </div>
-      </form>
+        <div class="row">
+          <div class="col-xs-4 col-xs-offset-8">
+           <a type="submit" class="btn btn-block btn-primary" onclick="send()">Send <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-info" id="mbox" style="display: none;">
+        <h4 id="smsg"></h4>
+        <p>Did not receive any link? <a id="rst">Resend</a></p>
+      </div>
     </div>
   </div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+  <script type="text/javascript">
+  let email
+  function send() {
+    email = $('#email').val()
+    if (email) {
+      new Promise(function(resolve, reject) {
+        $.post('', {email: email}, function(res) {
+          resolve(res)
+        })
+      }).then(function(res){
+        if (res.status) {
+          $('#ibox').hide()
+          $('#mbox').fadeIn()
+          $('#smsg').text(res.message)
+        } else {
+          $('#ibox').addClass('has-error')
+          $('#emsg').text(res.message)
+          $('#emsg').show()
+        }
+      })
+
+    } else {
+      $('#ibox').addClass('has-error')
+      $('#emsg').text('Enter Email')
+      $('#emsg').show()
+    }
+  }
+
+  $('#rst').on('click', function(){
+    $.post('', {email: email}, function(res) {
+
+    })
+  })
+
+
+  </script>
 {% endblock %}
