@@ -19,7 +19,7 @@
               <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
               {% if old('emailerror') %}
                 <span class="help-block">
-                  <strong>{{ emailerror }}</strong>
+                  <strong>{{ old('emailerror') }}</strong>
                 </span>
               {% endif %}
           </div>
@@ -51,7 +51,6 @@
             </div>
 
           <div class="row">
-            {{ error }}
             {# <a href="#" class="btn btn-facebook btn-block btn-flat">Facebook</a>
             <a href="#" class="btn btn-google btn-block btn-flat">Google</a>
             <a href="#" class="btn btn-instagram btn-block btn-flat">Instagram</a> #}

@@ -58,18 +58,21 @@ class AuthController {
       if (validation.fails()) {
         yield req.withAll().andWith({errors: validation.messages()}).flash()
       } else {
-        const user = yield User.findOne({ email: req.input('email') })
+        let user = yield User.findOne({ email: req.input('email') })
         if (user) {
-          if (Hash.verify(req.input('password'), user.password)) {
+          let compare = yield Hash.verify(req.input('password'), user.password)
+          if (compare) {
             user.webToken = yield Hash.make(user._id + new Date().toString())
             user.save()
             yield req.session.put('webToken', user.webToken)
             yield req.with({ message: 'You have successfully login' }).flash()
           } else {
             yield req.withAll().andWith({ passworderror: 'Invalid Password' }).flash()
+            yield res.redirect('back')
           }
         } else {
-          yield req.withAll().andWith({ emailerror: 'Invalid Credentials' }).flash()
+          yield req.withAll().andWith({ emailerror: 'Invalid Email' }).flash()
+          yield res.redirect('back')
         }
       }
       return yield res.redirect('/')
@@ -77,6 +80,8 @@ class AuthController {
   }
 
   * logout (req, res) {
+    req.user.webToken = ''
+    req.user.save()
     yield req.session.forget('webToken')
     yield req.with({ message: 'You have successfully logout' }).flash()
     yield res.redirect('login')

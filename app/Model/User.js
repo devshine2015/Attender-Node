@@ -60,7 +60,6 @@ userSchema.statics.rules = {
 }
 
 userSchema.statics.loginRules = {
-  email: 'required|email|min:5|max:50',
   password: 'required|alpha_numeric|min:6|max:20'
 }
 
