@@ -65,6 +65,9 @@ const aceProviders = [
 |
 */
 const aliases = {
+  PromisePay: 'App/Serializers/PromisePay',
+  SendGrid: 'App/Serializers/SendGrid',
+  Twilio: 'App/Serializers/Twilio',
   Command: 'Adonis/Src/Command',
   Config: 'Adonis/Src/Config',
   Database: 'Adonis/Src/Database',

@@ -3,13 +3,14 @@ const _ = require('lodash')
 const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
-const SendGrid = require('../../../Serializers/SendGrid');
+const SendGrid = use('SendGrid')
+const Twilio = use('Twilio')
+const PromisePay = use('PromisePay')
 
 class AuthController {
 
   * register(req, res) {
     const validation = yield Validator.validateAll(req.all())
-
     if (validation.fails()) {
       return res.json({ status: false, message: validation.messages() })
     }

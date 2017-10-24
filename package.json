@@ -33,8 +33,10 @@
     "moment": "^2.18.1",
     "mongoose": "^4.11.12",
     "randomstring": "^1.1.5",
+    "request": "^2.83.0",
     "sendgrid": "^5.2.3",
     "socket.io": "^2.0.3",
+    "twilio": "^3.9.0",
     "youch": "^2.0.4"
   },
   "standard": {

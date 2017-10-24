@@ -171,6 +171,11 @@ class StaffController {
     return res.json({ status: true, rating: rating })
   }
 
+  * addStaffToEvent (req, res) {
+    let staff = yield this.getStaff(req)
+
+  }
+
 }
 
 module.exports = StaffController

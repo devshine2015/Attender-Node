@@ -4,7 +4,7 @@ const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
 const View = use('View')
-const SendGrid = require('../../../Serializers/SendGrid');
+const SendGrid = use('SendGrid')
 
 class AuthController {
 
