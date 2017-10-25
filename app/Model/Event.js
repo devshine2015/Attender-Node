@@ -35,14 +35,12 @@ let eventSchema = mongoose.Schema({
 eventSchema.statics.rules = {
   name: 'required',
   description: 'required',
-  time: 'required',
   date: 'required'
 }
 
 eventSchema.statics.messages = {
   'name.required': 'Name is required',
   'description.required': 'Description is required',
-  'time.required': 'Start & end time is required',
   'date.required': 'Event date is required'
 }
 

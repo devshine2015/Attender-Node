@@ -35,7 +35,7 @@ class EventController {
     if (near) {
       let lat = req.input('lat', 10),
           long = req.input('long', 10)
- 
+
       let venues = yield Venue.find().where('location').nearSphere({ center: [long, lat], maxDistance: 5})
     } else {
      events = yield Event.find({}).populate('venueId')
@@ -61,10 +61,17 @@ class EventController {
       if (validation.fails()) {
         res.json({ status: false, error: validation.messages(), messageCode: 'FAILED' })
       } else {
-        let event = yield Event.create(req.all())
-        event.staffInterest = req.input('staffs', '').split(',')
-        event.date = new Date(req.input('date'))
-        event.time = JSON.parse(req.input('time', '{"start": false, "end": false}'))
+        let event = yield Event.create({
+          name: req.input('name', ''),
+          description: req.input('description', ''),
+          image: req.input('image', ''),
+          staffInterest: JSON.parse(req.input('interest', '[]')),
+          date: new Date(req.input('date')),
+          time: {
+            start: req.input('startTime', 'none'),
+            end: req.input('endTime', 'none')
+          }
+        })
         if (req.user.isOrganizer) {
           event.isOrganizer = true
           event.organizerId = req.user.organizerId._id
@@ -72,8 +79,7 @@ class EventController {
           event.isVenue = true
           event.venueId = req.user.venueId._id
         }
-        yield event.save()
-
+        event.save()
         res.json({ status: true, event: event, messageCode: 'SUCCESS'  })
       }
     } else {
