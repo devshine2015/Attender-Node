@@ -4,17 +4,16 @@ const mongoose = use('Mongoose')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
+const PromisePay = use('PromisePay')
 
 let userSchema = mongoose.Schema({
   fullname: String,
   email: { type: String, unique: true},
-  mobile: { type: String, unique: true},
+  mobile: { type: String},
   password: String,
-  facebookId: String,
-  googleId: String,
-  instagramId: String,
   isSocialLogin: { type: Boolean, default: false},
-
+  googleAuth: { type: Mixed, default: {} },
+  facebookAuth: { type: Mixed, default: {} },
   isStaff: { type: Boolean, default: false},
   staffId: { type: ObjectId, ref: 'Staff'},
 
@@ -48,6 +47,10 @@ let userSchema = mongoose.Schema({
   confirmed: { type: Boolean, default: false },
   forgotkey: String,
   forgotActive: { type: Boolean, default: false },
+
+  walletId: { type: String, default: '' },
+  primaryAccount: { type: String, default: '' },
+  promisePay: { type: Boolean, default: false },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 }, {
@@ -70,7 +73,33 @@ userSchema.statics.registerRules = {
   password: 'required|string|min:6|max:20',
   mobile:   'required|max:50',
 }
-
+userSchema.statics.googleSchema = {
+  id: 'required',
+  idToken: 'required',
+  accessToken: 'required',
+  email: 'required',
+  name: 'required',
+  givenName: 'required',
+  familyName: 'required',
+  accessTokenExpirationDate: 'required'
+}
+// userSchema.post('save', function(user){
+//   if (!user.walletId) {
+//     let wallet = yield PromisePay.wallet(user._id)
+//     user.walletId = wallet.wallet_accounts.id
+//     user.save()
+//   }
+//   if (!user.promisePay) {
+//     yield PromisePay.createUser({
+//       id: user._id,
+//       email: user.email,
+//       first_name: user.fullname,
+//       country: 'AUS'
+//     })
+//     user.promisePay = true
+//     user.save()
+//   }
+// })
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
 
 module.exports = mongoose.model('User', userSchema)

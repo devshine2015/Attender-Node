@@ -27,6 +27,7 @@ Route.group('api', function() {
   Route.post('/trial/:id', 'Api/StaffController.trial')
   Route.post('/direct-hire/:id', 'Api/StaffController.directHire')
   Route.post('/hire/:id', 'Api/StaffController.hire')
+  Route.post('/remove-staff/:id', 'Api/StaffController.removeStaff')
 
   Route.post('/add-task/:id', 'Api/StaffController.addTask')
   Route.post('/add-suggestion/:id', 'Api/StaffController.addSuggestion')
@@ -43,6 +44,8 @@ Route.group('api', function() {
 
   // VENUE API MANAGEMENT
   Route.get('venue/notifications', 'Api/VenueController.notifications')
+  Route.post('venue/notification/:id/delete', 'Api/VenueController.removeNotif')
+
   Route.get('venue/interested', 'Api/VenueController.interested')
   Route.post('venue/:id/interest', 'Api/VenueController.interest')
   Route.get('venue-messages', 'Web/VenueController.messages')
@@ -64,8 +67,12 @@ Route.group('api', function() {
 
 }).prefix('api').middleware('guard')
 
+Route.post('api/auth/login/google', 'Api/AuthController.googleAuth')
 Route.post('api/auth/login', 'Api/AuthController.login')
+
 Route.post('api/auth/register', 'Api/AuthController.register')
+Route.post('api/auth/register/google', 'Api/AuthController.googleReg')
+
 Route.post('api/auth/confirm', 'Api/AuthController.confirm')
 
 
@@ -122,6 +129,7 @@ Route.group('profile', function() {
   Route.post('trial/:id', 'Web/StaffController.trial')
   Route.post('add-task/:id', 'Web/StaffController.addTask')
   Route.post('add-suggestion/:id', 'Web/StaffController.addSuggestion')
+  Route.post('/remove-staff/:id', 'Api/StaffController.removeStaff')
 
 
 }).middleware('user','profile')

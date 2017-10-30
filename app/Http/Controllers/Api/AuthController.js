@@ -9,7 +9,7 @@ const PromisePay = use('PromisePay')
 
 class AuthController {
 
-  * register(req, res) {
+  * register (req, res) {
     const validation = yield Validator.validateAll(req.all())
     if (validation.fails()) {
       return res.json({ status: false, message: validation.messages() })
@@ -30,6 +30,7 @@ class AuthController {
       user.save()
       yield req.jwt.generateToken(user)
       SendGrid.sendVerification(user, req)
+
     }
     return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })
   }
@@ -81,6 +82,46 @@ class AuthController {
 
   * current (req, res) {
     return res.json({ status: true, messageCode: 'SUCCESS', data: req.user })
+  }
+
+
+  * googleReg (req, res) {
+    const validation = yield Validator.validateAll(req.all(), User.googleSchema)
+    if (validation.fails()) {
+      return res.json({ status: false, message: validation.messages() })
+    } else {
+      let exist = yield User.findOne({'email': req.input('email')})
+      if (exist) {
+        return res.json({ status: false, messageCode: 'EMAIL_ALREADY_EXIST'})
+      } else {
+        let newuser = yield User.create({
+          fullname: req.input('name'),
+          email: req.input('email'),
+          googleAuth: req.all(),
+          verified: true,
+          confirmed: true
+        })
+        yield req.jwt.generateToken(newuser)
+        return res.json({ status: true, messageCode: 'SUCCESS', token: newuser.token.token })
+      }
+    }
+  }
+
+  * googleAuth (req, res) {
+    let google = req.all()
+    const validation = yield Validator.validateAll(google, User.googleSchema)
+    if (validation.fails()) {
+      return res.json({ status: false, message: validation.messages() })
+    } else {
+      let user = yield User.findOne({ email: google.email, 'googleAuth.id': google.id })
+      if (user) {
+        yield req.jwt.generateToken(user)
+        return res.json({ status: true, messageCode: 'LOGIN_SUCCESS', token: user.token.token })
+      } else {
+        res.json({ status: false, messageCode: 'NOT_FOUND' })
+      }
+    }
+
   }
 
 }

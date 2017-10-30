@@ -58,6 +58,16 @@ class VenueController {
     }
   }
 
+  * removeNotif (req, res) {
+    let notif = yield VenueNotification.findOne({ _id: req.param('id') })
+    if (notif) {
+      notif.remove()
+      res.json({ status: true, messageCode: 'DELETED' })
+    } else {
+      res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
   * interest (req, res) {
     let _venue = yield this.getVenue(req)
     if (req.user.isStaff) {

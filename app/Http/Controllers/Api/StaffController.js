@@ -104,6 +104,13 @@ class StaffController {
     res.json({ status: true, management: management })
   }
 
+  * removeStaff (req, res) {
+    let management = yield this.getManagement(req)
+    management.remove()
+    res.json({ status: true, messageCode: 'SUCCESS' })
+  }
+
+
   * sendVenueMsg (req, res) {
     let message = yield Message.create({
       sender: req.user._id,
@@ -178,7 +185,7 @@ class StaffController {
       _event.staffs.push(management._id)
       _event.markModified('staffs')
       _event.save()
-      res.json({ status: true, event: _event })
+      res.json({ status: true, : _event })
     } else {
       res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
