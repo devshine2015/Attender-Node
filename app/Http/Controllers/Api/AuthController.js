@@ -109,7 +109,7 @@ class AuthController {
 
   * googleAuth (req, res) {
     let google = req.all()
-    const validation = yield Validator.validateAll(google, User.googleSchema)
+    const validation = yield Validator.validateAll(google, {email: 'required', id: 'required'})
     if (validation.fails()) {
       return res.json({ status: false, message: validation.messages() })
     } else {
