@@ -185,7 +185,7 @@ class StaffController {
       _event.staffs.push(management._id)
       _event.markModified('staffs')
       _event.save()
-      res.json({ status: true, : _event })
+      res.json({ status: true, event: _event })
     } else {
       res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
