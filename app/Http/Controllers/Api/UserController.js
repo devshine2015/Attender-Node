@@ -217,6 +217,7 @@ class UserController {
       staff.licenses = licenses || staff.licenses
       staff.languages = languages || staff.languages
       staff.save()
+      req.user.avatar = avatar
       req.user.staffId = staff._id
       req.user.isStaff = true
       req.user.hasProfile = true
@@ -252,6 +253,7 @@ class UserController {
         licenses: licenses,
         languages: languages,
       })
+      req.user.avatar = avatar
       req.user.staffId = staff._id
       req.user.isStaff = true
       req.user.hasProfile = true
