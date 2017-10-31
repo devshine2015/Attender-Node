@@ -4,6 +4,8 @@ const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
 const Staff = use('App/Model/Staff')
+const Event = use('App/Model/Event')
+const StaffManagement = use('App/Model/StaffManagement')
 
 let venueSchema = mongoose.Schema({
 
@@ -40,6 +42,11 @@ mystaffs.get(function(){
       }
   }
   return staffs
+})
+
+venueSchema.post('remove', function(venue) {
+  Event.remove({ venueId: venue._id }, function(err){})
+  StaffManagement.remove({ venue: venue._id }, function(err){})
 })
 
 module.exports = mongoose.model('Venue', venueSchema)

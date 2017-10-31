@@ -72,6 +72,10 @@ module.exports = {
 
   deposit: (id, amount, account_id) => {
     return baseReq.post(`wallet_accounts/${id}/deposit`, {amount:amount,account_id:account_id})
+  },
+
+  transactions: (account_id=false, limit=10, offset=0) => {
+    return baseReq.get(`transactions?account_id=${account_id}&limit=${limit}&offset=${offset}`)
   }
 
 }

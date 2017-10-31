@@ -1,15 +1,18 @@
 'use strict'
 
 const mongoose = use('Mongoose')
+const PromisePay = use('PromisePay')
+const Staff = use('App/Model/Staff')
+const Message = use('App/Model/Message')
+const StaffManagement = use('App/Model/StaffManagement')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
-const PromisePay = use('PromisePay')
 
 let userSchema = mongoose.Schema({
   fullname: String,
   email: { type: String, unique: true},
-  mobile: { type: String},
+  mobile: { type: String },
   password: String,
   isSocialLogin: { type: Boolean, default: false},
   googleAuth: { type: Mixed, default: {} },
@@ -84,22 +87,39 @@ userSchema.statics.googleSchema = {
   accessTokenExpirationDate: 'required'
 }
 // userSchema.post('save', function(user){
-//   if (!user.walletId) {
-//     let wallet = yield PromisePay.wallet(user._id)
-//     user.walletId = wallet.wallet_accounts.id
-//     user.save()
-//   }
 //   if (!user.promisePay) {
-//     yield PromisePay.createUser({
-//       id: user._id,
+//     PromisePay.createUser({
+//       id: `test-acc-${user._id}`,
 //       email: user.email,
 //       first_name: user.fullname,
 //       country: 'AUS'
+//     }).then((res)=>{
+//       user.promisePay = true
+//       user.save()
 //     })
-//     user.promisePay = true
-//     user.save()
+//   }
+//   if (!user.walletId && user.promisePay) {
+//     PromisePay.wallet(`test-acc-${user._id}`).then((res)=>{
+//       user.walletId = res.wallet_accounts.id
+//       user.save()
+//     })
 //   }
 // })
+
+userSchema.post('remove', function(user) {
+
+ if (user.isStaff) {
+   user.staffId.remove()
+   StaffManagement.remove({ staff: user.staffId._id }, function(err){})
+ }
+ if (user.isVenue) {
+   user.venueId.remove()
+ }
+ if (user.isOrganizer) {
+   user.organizerId.remove()
+ }
+ Message.remove({ $or: [ {receiver: user._id}, {sender: user._id}] }, function(err){})
+})
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
 
 module.exports = mongoose.model('User', userSchema)
