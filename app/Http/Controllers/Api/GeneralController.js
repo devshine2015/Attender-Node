@@ -1,6 +1,7 @@
 'use strict'
 
 const Message = use('App/Model/Message')
+const PromisePay = use('PromisePay')
 const _hash = require('../../../Serializers/BaseHash');
 
 class GeneralController {

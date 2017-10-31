@@ -86,6 +86,13 @@ userSchema.statics.googleSchema = {
   familyName: 'required',
   accessTokenExpirationDate: 'required'
 }
+
+userSchema.statics.facebookSchema = {
+  id: 'required',
+  name: 'required',
+  gender: 'required',
+  accessToken: 'required'
+}
 // userSchema.post('save', function(user){
 //   if (!user.promisePay) {
 //     PromisePay.createUser({

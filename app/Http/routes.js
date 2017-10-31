@@ -9,10 +9,18 @@ Route.get('api/events', 'Api/EventController.index')
 
 Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
-  Route.get('conversation/:convo', 'Api/GeneralController.conversation')
-  Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
+
+  // PAYMENT MANAGEMENT
+  Route.get('cards', 'Api/PaymentController.cards')
+  Route.post('add-card', 'Api/PaymentController.addCard')
+
+  Route.get('banks', 'Api/PaymentController.banks')
+  Route.post('add-bank', 'Api/PaymentController.addBank')
+
 
   // MESSAGING API MANAGEMENT
+  Route.get('conversation/:convo', 'Api/GeneralController.conversation')
+  Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
   Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
   Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
   Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
@@ -67,11 +75,13 @@ Route.group('api', function() {
 
 }).prefix('api').middleware('guard')
 
+Route.post('api/auth/login/facebook', 'Api/AuthController.facebookAuth')
 Route.post('api/auth/login/google', 'Api/AuthController.googleAuth')
 Route.post('api/auth/login', 'Api/AuthController.login')
 
 Route.post('api/auth/register', 'Api/AuthController.register')
 Route.post('api/auth/register/google', 'Api/AuthController.googleReg')
+Route.post('api/auth/register/facebook', 'Api/AuthController.facebookReg')
 
 Route.post('api/auth/confirm', 'Api/AuthController.confirm')
 

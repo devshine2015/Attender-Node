@@ -98,6 +98,7 @@ class AuthController {
           fullname: req.input('name'),
           email: req.input('email'),
           googleAuth: req.all(),
+          isSocialLogin: true,
           verified: true,
           confirmed: true
         })
@@ -121,8 +122,48 @@ class AuthController {
         res.json({ status: false, messageCode: 'NOT_FOUND' })
       }
     }
-
   }
+
+
+  * facebookReg (req, res) {
+    const validation = yield Validator.validateAll(req.all(), User.facebookSchema)
+    if (validation.fails()) {
+      return res.json({ status: false, message: validation.messages() })
+    } else {
+      let exist = yield User.findOne({'facebookAuth.id': req.input('id')})
+      if (exist) {
+        return res.json({ status: false, messageCode: 'USER_ALREADY_EXIST'})
+      } else {
+        let newuser = yield User.create({
+          fullname: req.input('name'),
+          avatar: req.input('avatar', ''),
+          facebookAuth: req.all(),
+          isSocialLogin: true,
+          verified: true,
+          confirmed: true
+        })
+        yield req.jwt.generateToken(newuser)
+        return res.json({ status: true, messageCode: 'SUCCESS', token: newuser.token.token })
+      }
+    }
+  }
+
+  * facebookAuth (req, res) {
+    let facebook = req.all()
+    const validation = yield Validator.validateAll(facebook, {id: 'required'})
+    if (validation.fails()) {
+      return res.json({ status: false, message: validation.messages() })
+    } else {
+      let user = yield User.findOne({ 'facebookAuth.id': facebook.id })
+      if (user) {
+        yield req.jwt.generateToken(user)
+        return res.json({ status: true, messageCode: 'LOGIN_SUCCESS', token: user.token.token })
+      } else {
+        res.json({ status: false, messageCode: 'NOT_FOUND' })
+      }
+    }
+  }
+
 
 }
 
