@@ -14,10 +14,10 @@
               <th>Fullname</th>
               <th>Email</th>
               <th>Mobile</th>
+              <th>Social</th>
               <th>Profile</th>
               <th style="text-align: center;">Verified</th>
               <th>Date Joined</th>
-              <th>Last Update</th>
               <th colspan="3">Action</th>
           </thead>
           <tbody>
@@ -26,6 +26,15 @@
                   <td>{{ user.fullname }}</td>
                   <td>{{ user.email }}</td>
                   <td>{{ user.mobile }}</td>
+                  <td>
+                    {% if user.googleAuth %}
+                      <span class="label label-primary">Facebook</span>
+                    {% elif user.facebookAuth %}
+                      <span class="label label-danger">Google</span>
+                    {% else %}
+                      <span class="text-danger"><i class="fa fa-times-circle"></i></span>
+                    {% endif %}
+                  </td>
                   <td>
                     {% if user.isAdmin %}
                       <span class="label label-primary">Admin</span>
@@ -47,7 +56,6 @@
                     {% endif %}
                   </td>
                   <td><span class="label label-default">{{ formatTime(user.createdAt) }}</span></td>
-                  <td><span class="label label-default">{{ formatTime(user.updatedAt) }}</span></td>
                   <td>
                     <form class="" action="" method="post">
                       <div class='btn-group'>
