@@ -14,7 +14,7 @@
               <th>Fullname</th>
               <th>Email</th>
               <th>Mobile</th>
-              <th>Social</th>
+              <th>Auth</th>
               <th>Profile</th>
               <th style="text-align: center;">Verified</th>
               <th>Date Joined</th>
@@ -24,15 +24,28 @@
           {% for user in users %}
               <tr id="ud{{user._id}}">
                   <td>{{ user.fullname }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.mobile }}</td>
                   <td>
-                    {% if user.googleAuth %}
+                    {% if user.email %}
+                      {{ user.email }}
+                    {% else %}
+                      <span class="label label-danger">N/A</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if user.mobile %}
+                      {{ user.mobile }}
+                    {% else %}
+                      <span class="label label-danger">N/A</span>
+                    {% endif %}
+
+                  </td>
+                  <td>
+                    {% if user.facebookAuth.id %}
                       <span class="label label-primary">Facebook</span>
-                    {% elif user.facebookAuth %}
+                    {% elif user.googleAuth.id %}
                       <span class="label label-danger">Google</span>
                     {% else %}
-                      <span class="text-danger"><i class="fa fa-times-circle"></i></span>
+                      <span class="label label-default">Default</span>
                     {% endif %}
                   </td>
                   <td>
@@ -45,7 +58,7 @@
                     {% elif user.isVenue %}
                       <span class="label label-warning">Venue</span>
                     {% else %}
-                      <span class="label label-danger">N/A</span>
+                      <span class="label label-default">Incomplete</span>
                     {% endif %}
                   </td>
                   <td style="text-align: center;">
