@@ -70,7 +70,7 @@ class AuthController {
       user.save()
       yield res.sendView('mail/confirmation', { token: user.token.token })
     } else {
-      res.status(404).send('Not Found')
+      yield res.sendView('auth/expired-page')
     }
 
   }
