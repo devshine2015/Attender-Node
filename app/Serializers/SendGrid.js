@@ -14,7 +14,7 @@ module.exports = {
     sgMail.send({
       to: user.email,
       fromname: 'Attender',
-      from: 'tom@attender.com',
+      from: 'hello@attender.com.au',
       subject: 'Account Confirmation',
       text: 'Attender',
       html: _html

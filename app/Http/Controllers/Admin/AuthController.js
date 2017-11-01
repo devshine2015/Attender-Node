@@ -68,7 +68,7 @@ class AuthController {
     if (user) {
       user.verified = true
       user.save()
-      yield res.sendView('mail/confirmation', { token: user.token.token })
+      yield res.sendView('mail/confirmation', { token: user.token.token, fullname: user.fullname })
     } else {
       yield res.sendView('auth/expired-page')
     }
