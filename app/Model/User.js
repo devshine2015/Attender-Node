@@ -67,7 +67,8 @@ userSchema.statics.rules = {
 }
 
 userSchema.statics.loginRules = {
-  password: 'required|alpha_numeric|min:6|max:20'
+  password: 'required',
+  email: 'required'
 }
 
 userSchema.statics.registerRules = {
@@ -96,7 +97,7 @@ userSchema.statics.facebookSchema = {
 // userSchema.post('save', function(user){
 //   if (!user.promisePay) {
 //     PromisePay.createUser({
-//       id: `test-acc-${user._id}`,
+//       id: `staging-acc-${user._id}`,
 //       email: user.email,
 //       first_name: user.fullname,
 //       country: 'AUS'
@@ -106,7 +107,7 @@ userSchema.statics.facebookSchema = {
 //     })
 //   }
 //   if (!user.walletId && user.promisePay) {
-//     PromisePay.wallet(`test-acc-${user._id}`).then((res)=>{
+//     PromisePay.wallet(`staging-acc-${user._id}`).then((res)=>{
 //       user.walletId = res.wallet_accounts.id
 //       user.save()
 //     })
