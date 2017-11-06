@@ -37,6 +37,7 @@
     "sendgrid": "^5.2.3",
     "socket.io": "^2.0.3",
     "twilio": "^3.9.0",
+    "uuid": "^3.1.0",
     "youch": "^2.0.4"
   },
   "standard": {

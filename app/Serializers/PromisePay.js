@@ -1,6 +1,7 @@
 'use strict'
 const Env = use('Env')
 const https = require('https')
+const uuidv4 = require('uuid/v4');
 const request = require('request')
 const promiseAuth = Env.get('PROMISE_AUTH', 'dG9tQGF0dGVuZGVyLmNvbS5hdTpXM2xjb21lMQ==')
 const baseUrl =  Env.get('PROMISE_BASE_URL','https://test.api.promisepay.com/')
@@ -25,6 +26,13 @@ let baseReq = {
   delete: (uri) => {
     return new Promise((resolve, reject) => {
       request.delete({ url: baseUrl + uri, headers: headers}, (err, res, body) => {
+        resolve(JSON.parse(body))
+      })
+    })
+  },
+  patch: (uri, payload) => {
+    return new Promise((resolve, reject) => {
+      request.patch({ url: baseUrl + uri, form: payload, headers: headers}, (err, res, body) => {
         resolve(JSON.parse(body))
       })
     })
@@ -67,15 +75,57 @@ module.exports = {
   },
 
   withdraw: (id, amount, account_id) => {
-    return baseReq.post(`wallet_accounts/${id}/withdraw`, {amount:amount,account_id:account_id})
+    return baseReq.post(`wallet_accounts/${id}/withdraw`, {amount:(amount * 100),account_id:account_id})
   },
 
   deposit: (id, amount, account_id) => {
-    return baseReq.post(`wallet_accounts/${id}/deposit`, {amount:amount,account_id:account_id})
+    return baseReq.post(`wallet_accounts/${id}/deposit`, {amount:(amount * 100),account_id:account_id})
   },
 
-  transactions: (account_id=false, limit=10, offset=0) => {
-    return baseReq.get(`transactions?account_id=${account_id}&limit=${limit}&offset=${offset}`)
+  transactions: (id) => {
+    return baseReq.get(`items/${id}`)
+  },
+
+  transfer: (from_user, to_user, amount, from, account_id) => {
+    let transactionId = `TN-${uuidv4()}`
+    let transactionAmount = (amount * 100)
+    if (from == 'card') {
+      return false
+    } else if (from == 'bank') {
+      return new Promise((resolve, reject) => {
+        baseReq.post('direct_debit_authorities', {account_id:account_id, amount:transactionAmount}).then((res) => {
+          resolve(res)
+        })
+      }).then((res) => {
+        if (!res.errors) {
+          let payload = {
+            amount: transactionAmount,
+            currency: 'AUD',
+            payment_type: 4,
+            seller_id: to_user,
+            buyer_id: from_user,
+            id: transactionId,
+            name: 'Transfer of Funds',
+            description: 'Transfer from'
+          }
+          return new Promise((resolve, reject) => {
+             baseReq.post('items', payload).then((res) => {
+               resolve(res)
+             })
+          }).then((res) => {
+            if (!res.errors) {
+              return baseReq.patch(`items/${transactionId}/make_payment`, {account_id:account_id})
+            } else {
+              return res
+            }
+          })
+        } else {
+          return res
+        }
+      })
+    } else {
+      return false
+    }
   }
 
 }

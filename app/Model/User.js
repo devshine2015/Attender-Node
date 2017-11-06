@@ -94,25 +94,25 @@ userSchema.statics.facebookSchema = {
   gender: 'required',
   accessToken: 'required'
 }
-// userSchema.post('save', function(user){
-//   if (!user.promisePay) {
-//     PromisePay.createUser({
-//       id: `staging-acc-${user._id}`,
-//       email: user.email,
-//       first_name: user.fullname,
-//       country: 'AUS'
-//     }).then((res)=>{
-//       user.promisePay = true
-//       user.save()
-//     })
-//   }
-//   if (!user.walletId && user.promisePay) {
-//     PromisePay.wallet(`staging-acc-${user._id}`).then((res)=>{
-//       user.walletId = res.wallet_accounts.id
-//       user.save()
-//     })
-//   }
-// })
+userSchema.post('save', function(user){
+  if (!user.promisePay) {
+    PromisePay.createUser({
+      id: `staging-acc-${user._id}`,
+      email: user.email,
+      first_name: user.fullname,
+      country: 'AUS'
+    }).then((res)=>{
+      user.promisePay = true
+      user.save()
+    })
+  }
+  if (!user.walletId && user.promisePay) {
+    PromisePay.wallet(`staging-acc-${user._id}`).then((res)=>{
+      user.walletId = res.wallet_accounts.id
+      user.save()
+    })
+  }
+})
 
 userSchema.post('remove', function(user) {
 

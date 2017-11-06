@@ -8,7 +8,7 @@ const User = use('App/Model/User')
 
 const Hash = use('Hash')
 
-module.exports = {
+module.exports = class SeedController {
 
   * create (req, res) {
     let users = [],
