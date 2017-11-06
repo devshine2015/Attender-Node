@@ -35,16 +35,21 @@ module.exports = class PaymentController {
       expiry_year: req.input('expiry_year', 2020),
       cvv: req.input('cvv', 123)
     })
-    let existing = yield Card.findOne({ user: req.user._id })
-    yield Card.create({
-      promiseId: card.card_accounts.id,
-      active: card.card_accounts.active,
-      currency: card.card_accounts.currency,
-      cardMeta: card.card_accounts.card,
-      user: req.user._id,
-      primary: (existing) ? false : true
-    })
-    return res.json({ status: true, card: card.card_accounts })
+    if (card.card_accounts) {
+      let existing = yield Card.findOne({ user: req.user._id })
+      yield Card.create({
+        promiseId: card.card_accounts.id,
+        active: card.card_accounts.active,
+        currency: card.card_accounts.currency,
+        cardMeta: card.card_accounts.card,
+        user: req.user._id,
+        primary: (existing) ? false : true
+      })
+      return res.json({ status: true, card: card.card_accounts })
+    } else {
+      return res.json({ status: false, errors: card.errors })
+    }
+
   }
 
   * banks (req, res) {
@@ -63,17 +68,22 @@ module.exports = class PaymentController {
       holder_type: req.input('holder_type', 'personal'),
       country: 'AUS'
     })
-    let existing = yield Bank.findOne({ user: req.user._id })
-    yield Bank.create({
-      promiseId: bank.bank_accounts.id,
-      active: bank.bank_accounts.active,
-      currency: bank.bank_accounts.currency,
-      verification: bank.verification_status,
-      bankMeta: bank.bank_accounts.bank,
-      user: req.user._id,
-      primary: (existing) ? false : true
-    })
-    return res.json({ status: true, bank: bank.bank_accounts })
+    if (bank.bank_accounts) {
+      let existing = yield Bank.findOne({ user: req.user._id })
+      yield Bank.create({
+        promiseId: bank.bank_accounts.id,
+        active: bank.bank_accounts.active,
+        currency: bank.bank_accounts.currency,
+        verification: bank.verification_status,
+        bankMeta: bank.bank_accounts.bank,
+        user: req.user._id,
+        primary: (existing) ? false : true
+      })
+      return res.json({ status: true, bank: bank.bank_accounts })
+    } else {
+      return res.json({ status: false, errors: bank.errors })
+    }
+
   }
 
   * transfer (req, res) {
