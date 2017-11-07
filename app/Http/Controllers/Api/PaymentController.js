@@ -37,15 +37,16 @@ module.exports = class PaymentController {
     })
     if (card.card_accounts) {
       let existing = yield Card.findOne({ user: req.user._id })
+      let currentCard = yield PromisePay.getCards(`staging-acc-${req.user._id}`)
       yield Card.create({
-        promiseId: card.card_accounts.id,
-        active: card.card_accounts.active,
-        currency: card.card_accounts.currency,
-        cardMeta: card.card_accounts.card,
+        promiseId: currentCard.card_accounts.id,
+        active: currentCard.card_accounts.active,
+        currency: currentCard.card_accounts.currency,
+        cardMeta: currentCard.card_accounts.card,
         user: req.user._id,
         primary: (existing) ? false : true
       })
-      return res.json({ status: true, card: card.card_accounts })
+      return res.json({ status: true, card: currentCard.card_accounts })
     } else {
       return res.json({ status: false, errors: card.errors })
     }
