@@ -96,6 +96,7 @@ const aliases = {
 |
 */
 const commands = [
+  'App/Commands/StaffSeeder',
   'App/Commands/ResetPassword',
   'Adonis/Commands/Auth:Setup',
   'Adonis/Commands/Repl',

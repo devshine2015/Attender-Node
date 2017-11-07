@@ -98,7 +98,7 @@ Http.onStart = function () {
       'Forklift licence',
   ])
   View.global('staff_positions', [
-    'bartender', 'manager', 'waiter / waitress', 'chef / kitchen hand'
+    'bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host'
   ])
   View.global('venue_types', ['cafe', 'restaurant', 'bar', 'club', 'pub'])
   View.global('venue_services', ['alcohol', 'drinks', 'food', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel'])
