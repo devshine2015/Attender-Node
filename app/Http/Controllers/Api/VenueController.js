@@ -115,6 +115,7 @@ class VenueController {
         trials.push(staff._id.toString())
       }
       let staffs = yield StaffManagement.find({ staff: { $in: trials }, venue: req.user.venueId._id, trial: true })
+                                        .populate('staff')
       return res.json({ status: true, staffs: staffs })
     } else {
       let staffs = yield StaffManagement
