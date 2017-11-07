@@ -109,12 +109,13 @@ class VenueController {
   * trialStaffs (req, res) {
     let query = req.input('query', false)
     if (query) {
-      let staffs = yield StaffManagement
-                         .find({ 'staff.name': { $in: new RegExp(query.toString().trim())}, venue: req.user.venueId._id, trial: true })
-                         .populate('staff')
-                         .populate('ratings')
-                         .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
-                         .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+      let rawStaffs = yield Staff.find({ fullname: {$in: new RegExp(query.toString().trim()) } })
+      let trials = []
+      for (let staff of rawStaffs) {
+        trials.push(staff._id.toString())
+      }
+      let staffs = yield StaffManagement.find({ staff: { $in: trials }, venue: req.user.venueId._id, trial: true })
+      return res.json({ status: true, staffs: staffs })
     } else {
       let staffs = yield StaffManagement
                         .find({ venue: req.user.venueId._id, trial: true })
@@ -122,8 +123,8 @@ class VenueController {
                         .populate('ratings')
                         .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
                         .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+      return res.json({ status: true, staffs: staffs })
     }
-    res.json({ status: true, staffs: staffs })
   }
 
   * sendStaffMsg (req, res) {
