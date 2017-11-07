@@ -91,7 +91,7 @@ module.exports = {
   },
 
   transactions: (id) => {
-    return baseReq.get(`items/${id}`)
+    return baseReq.get(`users/${id}/items`)
   },
 
   transfer: (from_user, to_user, amount, from, account_id) => {
