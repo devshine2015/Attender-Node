@@ -53,6 +53,19 @@ module.exports = class PaymentController {
 
   }
 
+  * removeCard (req, res) {
+    let card = yield Card.findOne({ promiseId: req.param('id') })
+    if (card) {
+      card.remove()
+      let redact = yield PromisePay.redactCard(card.promiseId)
+      if (redact.card_account) {
+        return res.json({ status: true, message: redact.card_account, messageCode: 'SUCCESS' })
+      } else {
+        return res.json({ status: false, errors: redact.errors, messageCode: 'FAILED' })
+      }
+    }
+  }
+
   * banks (req, res) {
     let banks = yield Bank.find({ user: req.user._id })
     return res.json({ status: true, banks: banks })
@@ -85,6 +98,19 @@ module.exports = class PaymentController {
       return res.json({ status: false, errors: bank.errors })
     }
 
+  }
+
+  * removeBank (req, res) {
+    let bank = yield Bank.findOne({ promiseId: req.param('id') })
+    if (bank) {
+      bank.remove()
+      let redact = yield PromisePay.redactBank(bank.promiseId)
+      if (redact.bank_account) {
+        return res.json({ status: true, message: redact.bank_account, messageCode: 'SUCCESS' })
+      } else {
+        return res.json({ status: false, errors: redact.errors, messageCode: 'FAILED' })
+      }
+    }
   }
 
   * transfer (req, res) {

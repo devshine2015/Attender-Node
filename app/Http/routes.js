@@ -13,12 +13,14 @@ Route.group('api', function() {
   // PAYMENT MANAGEMENT
   Route.get('earnings', 'Api/PaymentController.earnings')
   Route.get('transactions', 'Api/PaymentController.transactions')
-  
+
   Route.get('cards', 'Api/PaymentController.cards')
   Route.post('add-card', 'Api/PaymentController.addCard')
+  Route.post('remove-card/:id', 'Api/PaymentController.removeCard')
 
   Route.get('banks', 'Api/PaymentController.banks')
   Route.post('add-bank', 'Api/PaymentController.addBank')
+  Route.post('remove-bank/:id', 'Api/PaymentController.removeBank')
 
   Route.post('withdraw', 'Api/PaymentController.withdraw')
   Route.post('deposit', 'Api/PaymentController.deposit')

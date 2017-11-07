@@ -107,12 +107,22 @@ class VenueController {
   }
 
   * trialStaffs (req, res) {
-    let staffs = yield StaffManagement
-                      .find({ venue: req.user.venueId._id, trial: true })
-                      .populate('staff')
-                      .populate('ratings')
-                      .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
-                      .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+    let query = req.input('query', false)
+    if (query) {
+      let staffs = yield StaffManagement
+                         .find({ 'staff.name': { $in: new RegExp(query.toString().trim())}, venue: req.user.venueId._id, trial: true })
+                         .populate('staff')
+                         .populate('ratings')
+                         .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                         .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+    } else {
+      let staffs = yield StaffManagement
+                        .find({ venue: req.user.venueId._id, trial: true })
+                        .populate('staff')
+                        .populate('ratings')
+                        .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+                        .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
+    }
     res.json({ status: true, staffs: staffs })
   }
 

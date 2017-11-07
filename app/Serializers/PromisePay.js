@@ -58,12 +58,20 @@ module.exports = {
     return baseReq.post('card_accounts', payload)
   },
 
+  redactCard: (id) => {
+    return baseReq.delete(`card_accounts/${id}`)
+  },
+
   getCards: (id) => {
     return baseReq.get(`users/${id}/card_accounts`)
   },
 
   addBank: (payload) => {
     return baseReq.post('bank_accounts', payload)
+  },
+
+  redactBank: (id) => {
+    return baseReq.delete(`bank_accounts/${id}`)
   },
 
   getBanks: (id) => {
