@@ -168,7 +168,6 @@ class StaffController {
   }
 
   * editRating (req, res) {
-
     let rating = yield StaffRating.findOne({ _id: req.param('id') })
     let items = JSON.parse(req.input('items', '{}')) || rating.items
     rating.overAll = req.input('overAll', rating.overAll)
@@ -179,18 +178,49 @@ class StaffController {
   }
 
   * addStaffToEvent (req, res) {
-    let management = yield this.getManagement(req)
-    let _event = yield Event.findOne({ _id: req.input('event_id') })
-    if (management && _event) {
-      _event.staffs.push(management._id)
+    let staff = yield this.getStaff(req)
+    let _event = yield Event.findOne({ _id: req.param('eid') })
+    if (staff && _event) {
+      _event.staffs.push(staff._id)
       _event.markModified('staffs')
       _event.save()
       res.json({ status: true, event: _event })
     } else {
       res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
-
   }
+
+  * removeStaffFromEvent (req, res) {
+    let staff = yield this.getStaff(req)
+    let _event = yield Event.findOne({ _id: req.param('eid') })
+    if (management && _event ) {
+      let index = _event.staffs.indexOf(staff._id)
+      if (index > -1) {
+        _event.staffs.splice(index, 1)
+        _event.markModified('staffs')
+        _event.save()
+        return res.json({ status: true, event: _event })
+      } else {
+        return res.json({ status: false, messageCode: 'STAFF_NOT_EXIST_ON_EVENT' })
+      }
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_EXIST' })
+    }
+  }
+
+  * saveStaffSchedule (req, res) {
+    let management = yield this.getManagement(req)
+    if (management) {
+      management.schedules = JSON.parse(req.input('schedules', '{}'))
+      management.markModified('schedules')
+      management.save()
+      return res.json({ status: true, messageCode: 'SUCCESS', management: management })
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
+
 
 }
 

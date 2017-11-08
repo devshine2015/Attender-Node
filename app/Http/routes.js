@@ -30,39 +30,43 @@ Route.group('api', function() {
   // MESSAGING API MANAGEMENT
   Route.get('conversation/:convo', 'Api/GeneralController.conversation')
   Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
-  Route.post('/new-initial-message', 'Api/VenueController.sendInitialMsg')
-  Route.post('/new-staff-message', 'Api/VenueController.sendStaffMsg')
-  Route.post('/new-venue-message', 'Api/StaffController.sendVenueMsg')
+  Route.post('new-initial-message', 'Api/VenueController.sendInitialMsg')
+  Route.post('new-staff-message', 'Api/VenueController.sendStaffMsg')
+  Route.post('new-venue-message', 'Api/StaffController.sendVenueMsg')
 
   // STAFF API MANAGEMENT
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
-  Route.get('/staff-messages', 'Web/StaffController.messages')
-  Route.get('/trial-staffs', 'Api/VenueController.trialStaffs')
-  Route.get('/active-staffs', 'Api/VenueController.activeStaffs')
+  Route.get('staff-messages', 'Web/StaffController.messages')
+  Route.get('trial-staffs', 'Api/VenueController.trialStaffs')
+  Route.get('active-staffs', 'Api/VenueController.activeStaffs')
 
-  Route.post('/trial/:id', 'Api/StaffController.trial')
-  Route.post('/direct-hire/:id', 'Api/StaffController.directHire')
-  Route.post('/hire/:id', 'Api/StaffController.hire')
-  Route.post('/remove-staff/:id', 'Api/StaffController.removeStaff')
+  Route.post('trial/:id', 'Api/StaffController.trial')
+  Route.post('direct-hire/:id', 'Api/StaffController.directHire')
+  Route.post('hire/:id', 'Api/StaffController.hire')
+  Route.post('remove-staff/:id', 'Api/StaffController.removeStaff')
 
-  Route.post('/add-task/:id', 'Api/StaffController.addTask')
-  Route.post('/add-suggestion/:id', 'Api/StaffController.addSuggestion')
+  Route.post('add-task/:id', 'Api/StaffController.addTask')
+  Route.post('add-suggestion/:id', 'Api/StaffController.addSuggestion')
 
-  Route.post('/task/:id/edit', 'Web/StaffController.editTask')
-  Route.post('/task/:id/delete', 'Web/StaffController.deleteTask')
+  Route.post('task/:id/edit', 'Web/StaffController.editTask')
+  Route.post('task/:id/delete', 'Web/StaffController.deleteTask')
 
-  Route.post('/suggestion/:id/edit', 'Web/StaffController.editSuggestion')
-  Route.post('/suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
+  Route.post('suggestion/:id/edit', 'Web/StaffController.editSuggestion')
+  Route.post('suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
 
-  Route.post('/add-rating/:type/:id', 'Api/StaffController.addRating')
-  Route.post('/rating/:id/edit', 'Api/StaffController.editRating')
+  Route.post('add-rating/:type/:id', 'Api/StaffController.addRating')
+  Route.post('rating/:id/edit', 'Api/StaffController.editRating')
 
+  Route.post('save-staff-sched/:id', 'Api/StaffController.saveStaffSchedule')
+
+  Route.post('add-staff/:id/event/:eid', 'Api/StaffController.addStaffToEvent')
+  Route.post('remove-staff/:id/event/:eid', 'Api/StaffController.removeStaffFromEvent')
 
   // VENUE API MANAGEMENT
+  Route.get('my-staffs/:filter', 'Api/VenueController.myStaffs')
   Route.get('venue/notifications', 'Api/VenueController.notifications')
   Route.post('venue/notification/:id/delete', 'Api/VenueController.removeNotif')
-
   Route.get('venue/interested', 'Api/VenueController.interested')
   Route.post('venue/:id/interest', 'Api/VenueController.interest')
   Route.get('venue-messages', 'Web/VenueController.messages')

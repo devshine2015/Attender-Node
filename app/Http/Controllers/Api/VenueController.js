@@ -161,8 +161,15 @@ class VenueController {
       uavatar: staff.avatar
     }
     res.json({ status: true, thread: thread })
+  }
 
-
+  * myStaffs (req, res) {
+    let filter = req.param('filter')
+    let managements = yield StaffManagement.find({ venue: req.user.venueId._id }).populate('staff')
+    let staffs = managements.filter((management) => {
+      return (management.staff.position.includes(filter))
+    })
+    return res.json({ status: true, staffs: staffs })
   }
 
 }
