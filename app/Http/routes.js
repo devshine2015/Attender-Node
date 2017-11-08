@@ -64,7 +64,7 @@ Route.group('api', function() {
   Route.post('remove-staff/:id/event/:eid', 'Api/StaffController.removeStaffFromEvent')
 
   // VENUE API MANAGEMENT
-  Route.get('my-staffs/:filter', 'Api/VenueController.myStaffs')
+  Route.get('my-staffs', 'Api/VenueController.myStaffs')
   Route.get('venue/notifications', 'Api/VenueController.notifications')
   Route.post('venue/notification/:id/delete', 'Api/VenueController.removeNotif')
   Route.get('venue/interested', 'Api/VenueController.interested')

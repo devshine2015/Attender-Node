@@ -164,11 +164,14 @@ class VenueController {
   }
 
   * myStaffs (req, res) {
-    let filter = req.param('filter')
     let managements = yield StaffManagement.find({ venue: req.user.venueId._id }).populate('staff')
-    let staffs = managements.filter((management) => {
-      return (management.staff.position.includes(filter))
-    })
+    let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
+    let staffs = {}
+    for (let position of positions) {
+      staffs[position] = managements.filter((management) => {
+        return (management.staff.position.includes(position))
+      })
+    }
     return res.json({ status: true, staffs: staffs })
   }
 
