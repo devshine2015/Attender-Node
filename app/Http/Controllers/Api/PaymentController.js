@@ -8,7 +8,7 @@ module.exports = class PaymentController {
 
   * earnings (req, res) {
     let banks = yield Bank.find({ user: req.user._id })
-    let promiseWallet = yield PromisePay.wallet('test-acc-59f746737bea260ed74da575')
+    let promiseWallet = yield PromisePay.wallet(`staging-acc-${req.user._id}`)
     let wallet = {}
     if (promiseWallet.wallet_accounts) {
       let balance = promiseWallet.wallet_accounts.balance

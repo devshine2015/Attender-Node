@@ -190,3 +190,4 @@ Route.group('nonadmin', function() {
 Route.get('seed', 'Admin/SeedController.create')
 Route.get('calendar', 'Api/EventController.calendar')
 Route.post('send-test', 'Api/GeneralController.sendNotif')
+Route.get('staffs', 'Api/GeneralController.staffs')

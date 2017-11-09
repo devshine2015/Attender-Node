@@ -1,5 +1,6 @@
 'use strict'
 
+const Staff = use('App/Model/Staff')
 const Message = use('App/Model/Message')
 const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
@@ -27,13 +28,18 @@ class GeneralController {
   }
 
   * sendNotif (req, res) {
-    let send = IOSNotification.send({
+    let send = PushNotification.send({
       deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
       alert: req.input('message')
     })
     return res.json({ status: true, messageCode: 'SENT' })
   }
 
+
+  * staffs (req, res) {
+    let staffs = yield Staff.find({})
+    return res.json({staffs})
+  }
 }
 
 module.exports = GeneralController

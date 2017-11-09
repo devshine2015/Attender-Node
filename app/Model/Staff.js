@@ -36,7 +36,7 @@ let staffSchema = mongoose.Schema({
   rateBadge: String,
   rateType: { type: String, default: 'hourly'},
   ratings: [{
-    venue: { type: ObjectId, ref: 'Venue' },
+    ratedby: { type: ObjectId, ref: 'Venue' },
     rating: Number,
     ratedAt: { type: Date, default: Date.now }
   }],
@@ -60,13 +60,22 @@ let staffSchema = mongoose.Schema({
 
 }, {
   versionKey: false
-});
-//
-// let rating = staffSchema.virtual('rating')
-// rating.get(function() {
-//   let rating = this.ratings.reduce((a,b)=>({a.rating + b.rating}))
-//   return (rating/this.ratings.length)
-// })
+})
+staffSchema.set('toObject', { getters: true, virtuals: true })
+staffSchema.set('toJSON', { getters: true, virtuals: true })
+
+let rating = staffSchema.virtual('rating')
+rating.get(function() {
+  if (this.ratings.length > 0) {
+    let total = this.ratings.reduce(function(a,b) {
+        return { rating: a.rating + b.rating }
+    })
+    let rating = total.rating / this.ratings.length
+    return { star: Math.floor( (rating * 100) / 100 ), label: rating.toFixed(2) }
+  } else {
+    return { star: 0, label: 0 }
+  }
+})
 
 staffSchema.statics.rules = {
   mobile: 'required|max:50',

@@ -147,11 +147,12 @@ class StaffController {
   }
 
   * addRating (req, res) {
+    let overAll = req.input('overall', 0)
     let management = yield this.getManagement(req)
     let rating = yield StaffRating.create({
       staff: management.staff._id,
       venue: management.venue,
-      overAll: req.input('overall', 0),
+      overAll: overAll,
       review: req.input('review', ''),
       type: req.param('type')
     })
@@ -164,6 +165,15 @@ class StaffController {
     management.ratings.push(rating._id)
     management.markModified('ratings')
     management.save()
+    if (rating.type == 'monthly') {
+      management.staff.ratings.push({
+        rating: overAll,
+        ratedBy: management.venue
+      })
+      management.staff.markModified('ratings')
+      management.staff.save()
+    }
+
     return res.json({ status: true, rating: rating, management: management })
   }
 
@@ -223,7 +233,7 @@ class StaffController {
   * payStaff (req, res) {
     let management = yield this.getManagement(req)
     if (management) {
-      
+
     }
   }
 
