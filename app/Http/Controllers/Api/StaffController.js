@@ -220,7 +220,12 @@ class StaffController {
     }
   }
 
-
+  * payStaff (req, res) {
+    let management = yield this.getManagement(req)
+    if (management) {
+      
+    }
+  }
 
 }
 

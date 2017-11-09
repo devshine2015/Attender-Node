@@ -35,7 +35,11 @@ let staffSchema = mongoose.Schema({
 
   rateBadge: String,
   rateType: { type: String, default: 'hourly'},
-  ratings: Number,
+  ratings: [{
+    venue: { type: ObjectId, ref: 'Venue' },
+    rating: Number,
+    ratedAt: { type: Date, default: Date.now }
+  }],
 
   preferredLocation: String,
   preferredDistance: String,
@@ -57,10 +61,17 @@ let staffSchema = mongoose.Schema({
 }, {
   versionKey: false
 });
+//
+// let rating = staffSchema.virtual('rating')
+// rating.get(function() {
+//   let rating = this.ratings.reduce((a,b)=>({a.rating + b.rating}))
+//   return (rating/this.ratings.length)
+// })
 
 staffSchema.statics.rules = {
   mobile: 'required|max:50',
   fullname: 'required|alpha_numeric|min:5|max:45',
 }
+
 
 module.exports = mongoose.model('Staff', staffSchema)

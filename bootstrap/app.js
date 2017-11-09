@@ -65,6 +65,7 @@ const aceProviders = [
 |
 */
 const aliases = {
+  PushNotification: 'App/Serializers/PushNotification',
   PromisePay: 'App/Serializers/PromisePay',
   SendGrid: 'App/Serializers/SendGrid',
   Twilio: 'App/Serializers/Twilio',

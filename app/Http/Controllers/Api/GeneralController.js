@@ -2,6 +2,7 @@
 
 const Message = use('App/Model/Message')
 const PromisePay = use('PromisePay')
+const PushNotification = use('PushNotification')
 const _hash = require('../../../Serializers/BaseHash');
 
 class GeneralController {
@@ -23,6 +24,14 @@ class GeneralController {
     let exist = yield Message.findOne({ conversation: conversation })
     return res.json({ status: true, exist: (exist) ? true : false, conversation: conversation })
 
+  }
+
+  * sendNotif (req, res) {
+    let send = IOSNotification.send({
+      deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
+      alert: req.input('message')
+    })
+    return res.json({ status: true, messageCode: 'SENT' })
   }
 
 }
