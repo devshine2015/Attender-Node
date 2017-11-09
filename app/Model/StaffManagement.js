@@ -18,7 +18,7 @@ let staffManagementSchema = mongoose.Schema({
   tasks: [{ type: ObjectId, ref: 'Task' }],
   suggestions: [{ type: ObjectId, ref: 'Suggestion' }],
   ratings: [{ type: ObjectId, ref: 'StaffRating' }],
-  schedules: [{ type: Mixed, default: {} }]
+  schedules: { type: Mixed, default: {} }
 })
 
 staffManagementSchema.index({ staff: 1, venue: 1 }, { unique: true })
