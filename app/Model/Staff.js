@@ -30,8 +30,8 @@ let staffSchema = mongoose.Schema({
 
   frequency: String,
   eligibility: String,
-  startRate: { type: String, default: 8},
-  endRate: { type: String, default: 10},
+  startRate: { type: Number, default: 8},
+  endRate: { type: Number, default: 10},
 
   rateType: { type: String, default: 'hourly'},
   ratings: [{
