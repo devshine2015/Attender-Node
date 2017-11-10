@@ -64,6 +64,7 @@ Route.group('api', function() {
   Route.post('remove-staff/:id/event/:eid', 'Api/StaffController.removeStaffFromEvent')
 
   Route.post('pay-staff/:id', 'Api/StaffController.payStaff')
+  Route.get('management/:id/timesheet', 'Api/PaymentController.getTimesheet')
 
   // VENUE API MANAGEMENT
   Route.get('my-staffs', 'Api/VenueController.myStaffs')
@@ -191,3 +192,4 @@ Route.get('seed', 'Admin/SeedController.create')
 Route.get('calendar', 'Api/EventController.calendar')
 Route.post('send-test', 'Api/GeneralController.sendNotif')
 Route.get('staffs', 'Api/GeneralController.staffs')
+Route.get('management/:id/timesheet', 'Api/PaymentController.getTimesheet')

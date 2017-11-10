@@ -1,8 +1,10 @@
 'use strict'
-
+const moment = require('moment')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
+const StaffManagement = use('App/Model/StaffManagement')
+const Timesheet = use('App/Model/Timesheet')
 
 module.exports = class PaymentController {
 
@@ -153,6 +155,69 @@ module.exports = class PaymentController {
     } else {
       return res.json({ status: false, messageCode: 'INTERNAL_SERVER_ERROR' })
     }
+  }
+
+  * getManagement (req) {
+    let management = yield StaffManagement.findOne({ _id: req.param('id') }).populate('staff')
+    return (management) ? management : false
+  }
+
+  * getTimesheet (req, res) {
+    let management = yield this.getManagement(req)
+    if (management) {
+      let day = moment()
+      let timesheet = yield Timesheet.findOne({
+                        management: management._id,
+                        weekStart: { $gte: day },
+                        weekEnd: { $lt: day }
+                      })
+      if (timesheet) {
+        return res.json({ status: true, timesheet })
+      } else {
+        // create timesheet for this week
+        let weekStart = moment().startOf('isoWeek').format()
+        let weekEnd = moment().endOf('isoWeek').format()
+        let days = []
+        let isoWeeks = [1,2,3,4,5,6,7]
+        for (let isoWeek of isoWeeks) {
+          let date = moment().isoWeekday(isoWeek).hour(0).minute(0).second(0).millisecond(0)
+          let week = date.format('dddd').toString().toLowerCase()
+          let day = {
+            date: date,
+            isoWeekPeriod: isoWeek,
+            schedules: []
+          }
+          if (management.schedules[week]) {
+            for (let sched in management.schedules[week]) {
+              let _break
+              let start = moment(management.schedules[week][sched].startTime, ['hh:mm a'])
+              let end = moment(management.schedules[week][sched].endTime, ['hh:mm a'])
+              let payableHours = moment.duration(end.diff(start)).asHours()
+              if (sched == 0) {
+                _break = 0.5
+                payableHours = (payableHours > 0.5 && payableHours >= 6) ? payableHours - 0.5 : payableHours
+              } else {
+                _break = 0
+              }
+              day.schedules.push({
+                break: _break,
+                payableHours: payableHours,
+                startTime: management.schedules[week][sched].startTime,
+                endTime: management.schedules[week][sched].endTime
+              })
+            }
+          } else {
+            //
+          }
+          days.push(day)
+        }
+        return res.json({ days, weekStart, weekEnd })
+      }
+
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+
   }
 
 }
