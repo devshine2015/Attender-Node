@@ -30,10 +30,9 @@ let staffSchema = mongoose.Schema({
 
   frequency: String,
   eligibility: String,
-  startRate: { type: String, default: 10},
-  endRate: { type: String, default: 15},
+  startRate: { type: String, default: 8},
+  endRate: { type: String, default: 10},
 
-  rateBadge: String,
   rateType: { type: String, default: 'hourly'},
   ratings: [{
     ratedby: { type: ObjectId, ref: 'Venue' },
@@ -75,6 +74,11 @@ rating.get(function() {
   } else {
     return { star: 0, label: 0 }
   }
+})
+
+let rateBadge = staffSchema.virtual('rateBadge')
+rateBadge.get(function() {
+  return `$${this.startRate}/hr - $${this.endRate}/hr`
 })
 
 staffSchema.statics.rules = {
