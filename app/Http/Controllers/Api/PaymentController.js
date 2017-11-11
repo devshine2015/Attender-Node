@@ -212,8 +212,8 @@ module.exports = class PaymentController {
           }
           if (management.schedules[week]) {
             for (let sched of management.schedules[week]) {
-              let start = moment(sched.startTime, ['hh:mm a'])
-              let end = moment(sched.endTime, ['hh:mm a'])
+              let start = moment(sched.startTime, ['hh:mm A', 'hh A'])
+              let end = moment(sched.endTime, ['hh:mm A', 'hh A'])
               let payableHours = moment.duration(end.diff(start)).asHours()
               let _break = (management.schedules[week].length > 1) ? 0 : payableHours >= 6 ? 0.5 : 0
               totalPayableHours += payableHours
@@ -261,7 +261,28 @@ module.exports = class PaymentController {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
   }
+  * findTimesheet (req) {
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') })
+    return timesheet
+  }
 
+  * updateTimesheetRate (req, res) {
+    let timesheet = yield this.findTimesheet(req)
+    if (timesheet) {
+      timesheet.rate = req.input('rate', timesheet.rate)
+      timesheet.save()
+      return res.json({ status: true, messageCode: 'SAVED', timesheet: timesheet })
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
+  * updateTimesheetHours (req, res) {
+    let timesheet = yield this.findTimesheet(req)
+
+
+
+  }
 
 
 }
