@@ -1,5 +1,6 @@
 'use strict'
 const moment = require('moment')
+const uuidv4 = require('uuid/v4');
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
@@ -162,21 +163,43 @@ module.exports = class PaymentController {
     return (management) ? management : false
   }
 
-  * getTimesheet (req, res) {
+  * currentTimesheet (req, res) {
     let management = yield this.getManagement(req)
+    let nextWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
+    let lastWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
+    let previous = yield Timesheet.findOne({ management: management._id, weekStart: lastWeek })
+    let next = yield Timesheet.findOne({ management: management._id, weekStart: nextWeek })
+    let actions = {
+      next: (next) ? next._id : false,
+      previous: (previous) ? previous._id : false
+    }
     if (management) {
-      let day = moment()
+      let weekStart = moment().startOf('isoWeek').format()
+      let weekEnd = moment().endOf('isoWeek').format()
       let timesheet = yield Timesheet.findOne({
                         management: management._id,
-                        weekStart: { $gte: day },
-                        weekEnd: { $lt: day }
+                        weekStart: weekStart,
+                        weekEnd: weekEnd
                       })
       if (timesheet) {
-        return res.json({ status: true, timesheet })
+        return res.json({ status: true, timesheet, actions })
       } else {
-        // create timesheet for this week
+        let time = yield this.initializeTimesheet(management)
+        timesheet = yield Timesheet.create(time)
+        return res.json({ status: true, timesheet, actions })
+      }
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
+  * initializeTimesheet (management) {
+    return new Promise((resolve, reject) => {
+      if (management) {
         let weekStart = moment().startOf('isoWeek').format()
         let weekEnd = moment().endOf('isoWeek').format()
+        let totalPayableHours = 0
+        let hourRate = management.staff.startRate
         let days = []
         let isoWeeks = [1,2,3,4,5,6,7]
         for (let isoWeek of isoWeeks) {
@@ -188,36 +211,57 @@ module.exports = class PaymentController {
             schedules: []
           }
           if (management.schedules[week]) {
-            for (let sched in management.schedules[week]) {
-              let _break
-              let start = moment(management.schedules[week][sched].startTime, ['hh:mm a'])
-              let end = moment(management.schedules[week][sched].endTime, ['hh:mm a'])
+            for (let sched of management.schedules[week]) {
+              let start = moment(sched.startTime, ['hh:mm a'])
+              let end = moment(sched.endTime, ['hh:mm a'])
               let payableHours = moment.duration(end.diff(start)).asHours()
-              if (sched == 0) {
-                _break = 0.5
-                payableHours = (payableHours > 0.5 && payableHours >= 6) ? payableHours - 0.5 : payableHours
-              } else {
-                _break = 0
-              }
+              let _break = (management.schedules[week].length > 1) ? 0 : payableHours >= 6 ? 0.5 : 0
+              totalPayableHours += payableHours
               day.schedules.push({
                 break: _break,
                 payableHours: payableHours,
-                startTime: management.schedules[week][sched].startTime,
-                endTime: management.schedules[week][sched].endTime
+                startTime: sched.startTime,
+                endTime: sched.endTime
               })
             }
           } else {
-            //
+            day.schedules.push({
+              break: 0,
+              payableHours: 0,
+              startTime: '',
+              endTime: ''
+            })
           }
           days.push(day)
         }
-        return res.json({ days, weekStart, weekEnd })
+        resolve({ weekStart, weekEnd, totalPayableHours, days, hourRate, management: management._id, staff: management.staff._id, venue: management.venue, transactionId: `TN-${uuidv4()}` })
+      } else {
+        reject({ error: 'Management Missing'})
       }
+    })
+
+  }
+
+  * getTimesheet (req, res) {
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') })
+    if (timesheet) {
+      let nextWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
+      let lastWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
+      let weekStart = moment().startOf('isoWeek')
+      let previous = yield Timesheet.findOne({ management: timesheet.management, weekStart: lastWeek })
+      let next = yield Timesheet.findOne({ management: timesheet.management, weekStart: nextWeek })
+      let actions = {
+        next: (next) ? next._id : false,
+        previous: (previous) ? previous._id : false,
+        initializeNext: (weekStart == nextWeek)
+      }
+      return res.json({ status: true, timesheet, actions })
 
     } else {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
-
   }
+
+
 
 }
