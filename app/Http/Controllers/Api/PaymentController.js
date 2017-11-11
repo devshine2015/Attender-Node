@@ -199,7 +199,7 @@ module.exports = class PaymentController {
         let weekStart = moment().startOf('isoWeek').format()
         let weekEnd = moment().endOf('isoWeek').format()
         let totalPayableHours = 0
-        let hourRate = management.staff.startRate
+        let rate = management.staff.startRate
         let days = []
         let isoWeeks = [1,2,3,4,5,6,7]
         for (let isoWeek of isoWeeks) {
@@ -214,7 +214,7 @@ module.exports = class PaymentController {
             for (let sched of management.schedules[week]) {
               let start = moment(sched.startTime, ['hh:mm A', 'hh A'])
               let end = moment(sched.endTime, ['hh:mm A', 'hh A'])
-              let payableHours = moment.duration(end.diff(start)).asHours()
+              let payableHours = (start.isValid() && end.isValid()) ? moment.duration(end.diff(start)).asHours() : 0
               let _break = (management.schedules[week].length > 1) ? 0 : payableHours >= 6 ? 0.5 : 0
               totalPayableHours += payableHours
               day.schedules.push({
@@ -234,7 +234,7 @@ module.exports = class PaymentController {
           }
           days.push(day)
         }
-        resolve({ weekStart, weekEnd, totalPayableHours, days, hourRate, management: management._id, staff: management.staff._id, venue: management.venue, transactionId: `TN-${uuidv4()}` })
+        resolve({ weekStart, weekEnd, totalPayableHours, days, rate, management: management._id, staff: management.staff._id, venue: management.venue })
       } else {
         reject({ error: 'Management Missing'})
       }
@@ -243,7 +243,7 @@ module.exports = class PaymentController {
   }
 
   * getTimesheet (req, res) {
-    let timesheet = yield Timesheet.findOne({ _id: req.param('id') })
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('venue')
     if (timesheet) {
       let nextWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
       let lastWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
@@ -261,28 +261,49 @@ module.exports = class PaymentController {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
   }
-  * findTimesheet (req) {
-    let timesheet = yield Timesheet.findOne({ _id: req.param('id') })
-    return timesheet
-  }
 
-  * updateTimesheetRate (req, res) {
-    let timesheet = yield this.findTimesheet(req)
+  * updateTimesheet (req, res) {
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('venue')
     if (timesheet) {
-      timesheet.rate = req.input('rate', timesheet.rate)
-      timesheet.save()
-      return res.json({ status: true, messageCode: 'SAVED', timesheet: timesheet })
+      switch (req.param('action')) {
+        case 'rate':
+          timesheet.rate = req.input('rate', timesheet.rate)
+          timesheet.save()
+          break;
+        case 'payable':
+          timesheet.totalPayableHours = req.input('payable', timesheet.totalPayableHours)
+          timesheet.save()
+          break;
+        case 'hours':
+          let days = JSON.parse(req.input('days', JSON.stringify(timesheet.days)))
+          timesheet.days = days
+          timesheet.save()
+        case 'make_payment':
+          let transfer = yield PromisePay.transfer(
+            `staging-acc-${timesheet.venue.user}`,
+            `staging-acc-${timesheet.staff.user}`,
+            req.input('amount', 0),
+            'bank',
+            req.input('account_id', '')
+          )
+          if (transfer.items) {
+            timesheet.transactionId = transfer.items.id
+            timesheet.mutable = false
+            timesheet.save()
+            return res.json({ status: true, messageCode: 'PAYMENT_PENDING', timesheet })
+          } else {
+            return res.json({ status: false, errors: transfer.errors })
+          }
+        default:
+          return res.json({ status: false, messageCode: 'INVALID_ACTION' })
+      }
+      return res.json({ status: true, messageCode: 'SAVED', timesheet })
     } else {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
   }
 
-  * updateTimesheetHours (req, res) {
-    let timesheet = yield this.findTimesheet(req)
 
-
-
-  }
 
 
 }
