@@ -43,4 +43,13 @@ active.get(function() {
 })
 
 
+let label = timesheetSchema.virtual('label')
+label.get(function() {
+  if (this.weekStart.getMonth() != this.weekEnd.getMonth()) {
+    return  `${moment(this.weekStart).format('MMM D')} - ${moment(this.weekEnd).format('MMM D YYYY')}`
+  } else {
+    return `${moment(this.weekStart).format('MMMM D')}-${moment(this.weekEnd).format('D YYYY')}`
+  }
+})
+
 module.exports = mongoose.model('Timesheet', timesheetSchema)
