@@ -1,5 +1,6 @@
 'use strict'
 
+const User = use('App/Model/User')
 const Staff = use('App/Model/Staff')
 const Message = use('App/Model/Message')
 const PromisePay = use('PromisePay')
@@ -19,11 +20,16 @@ class GeneralController {
   }
 
   * openConvo (req, res) {
+    let user = yield User.findOne({ _id: req.param('id') })
+    if (user) {
+      let sorted = [req.user._id, user._id].sort()
+      let conversation = _hash(sorted[0] + sorted[1])
+      let exist = yield Message.findOne({ conversation: conversation })
+      return res.json({ status: true, exist: (exist) ? true : false, conversation: conversation })
 
-    let sorted = [req.user._id, req.param('id')].sort()
-    let conversation = _hash(sorted[0] + sorted[1])
-    let exist = yield Message.findOne({ conversation: conversation })
-    return res.json({ status: true, exist: (exist) ? true : false, conversation: conversation })
+    } else {
+      return res.json({ status: false, messageCode: 'USER_NOT_FOUND' })
+    }
 
   }
 
