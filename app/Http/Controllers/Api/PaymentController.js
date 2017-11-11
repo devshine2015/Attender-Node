@@ -289,6 +289,7 @@ module.exports = class PaymentController {
           if (transfer.items) {
             timesheet.transactionId = transfer.items.id
             timesheet.mutable = false
+            timesheet.paymentStatus = 'pending'
             timesheet.save()
             return res.json({ status: true, messageCode: 'PAYMENT_PENDING', timesheet })
           } else {
