@@ -59,6 +59,7 @@ Route.group('api', function() {
   Route.post('rating/:id/edit', 'Api/StaffController.editRating')
 
   Route.post('save-staff-sched/:id', 'Api/StaffController.saveStaffSchedule')
+  Route.post('save-staff-assignment/:id', 'Api/StaffController.saveAssignment')
 
   Route.post('add-staff/:id/event/:eid', 'Api/StaffController.addStaffToEvent')
   Route.post('remove-staff/:id/event/:eid', 'Api/StaffController.removeStaffFromEvent')
@@ -66,6 +67,9 @@ Route.group('api', function() {
   Route.post('pay-staff/:id', 'Api/StaffController.payStaff')
   Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTimesheet')
   Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet')
+  Route.post('timesheet/:id/rate', 'Api/PaymentController.updateTimesheetRate')
+  Route.post('timesheet/:id/hours', 'Api/PaymentController.updateTimesheetHours')
+  Route.post('timesheet/:id/payable', 'Api/PaymentController.updatePayableHours')
 
 
 
@@ -197,3 +201,4 @@ Route.post('send-test', 'Api/GeneralController.sendNotif')
 Route.get('staffs', 'Api/GeneralController.staffs')
 Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTimesheet')
 Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet')
+Route.post('save-staff-assignment/:id', 'Api/StaffController.saveAssignment')

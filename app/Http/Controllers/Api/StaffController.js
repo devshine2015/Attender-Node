@@ -122,6 +122,20 @@ class StaffController {
     return res.json({ status: true })
   }
 
+  * saveAssignment (req, res) {
+    let management = yield this.getManagement(req)
+    if (management) {
+      let assignments = JSON.parse(req.input('assignments', JSON.stringify(management.assignments)))
+      management.assignments = assignments
+      management.markModified('assignments')
+      management.save()
+      return res.json({ status: true, management })
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+
+  }
+
   * addTask (req, res) {
     let management = yield this.getManagement(req)
     let task = yield Task.create({

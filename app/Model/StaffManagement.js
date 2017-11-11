@@ -15,8 +15,14 @@ let staffManagementSchema = mongoose.Schema({
   trialEndDate: { type: Date },
   hired: { type: Boolean, default: false },
   hiredDate: Date,
-  tasks: [{ type: ObjectId, ref: 'Task' }],
-  suggestions: [{ type: ObjectId, ref: 'Suggestion' }],
+  assignments: {
+    tasks: [{
+      description: String
+    }],
+    suggestions: [{
+      description: String
+    }]
+  },
   ratings: [{ type: ObjectId, ref: 'StaffRating' }],
   schedules: { type: Mixed, default: {} }
 })
