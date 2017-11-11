@@ -64,7 +64,10 @@ Route.group('api', function() {
   Route.post('remove-staff/:id/event/:eid', 'Api/StaffController.removeStaffFromEvent')
 
   Route.post('pay-staff/:id', 'Api/StaffController.payStaff')
-  Route.get('management/:id/timesheet', 'Api/PaymentController.getTimesheet')
+  Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTimesheet')
+  Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet')
+
+
 
   // VENUE API MANAGEMENT
   Route.get('my-staffs', 'Api/VenueController.myStaffs')
