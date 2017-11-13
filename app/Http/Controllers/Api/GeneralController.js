@@ -1,8 +1,10 @@
 'use strict'
 
 const User = use('App/Model/User')
+const Item = use('App/Model/Item')
 const Staff = use('App/Model/Staff')
 const Message = use('App/Model/Message')
+const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
 const _hash = require('../../../Serializers/BaseHash');
@@ -41,11 +43,34 @@ class GeneralController {
     return res.json({ status: true, messageCode: 'SENT' })
   }
 
-
   * staffs (req, res) {
     let staffs = yield Staff.find({})
     return res.json({staffs})
   }
+
+  * itemUpdates (req, res) {
+    let itemUpdate = req.input('items', {})
+    let item = yield Item.findOne({ promiseId: itemUpdate.id })
+    if (!item) {
+      let newItem = yield Item.create(itemUpdate)
+      newItem.promiseId = itemUpdate.id
+      yield newItem.save()
+    } else {
+      // vv
+    }
+    return res.json({ status: true })
+  }
+
+  * transactionUpdates (req, res) {
+    console.log(req.all());
+    return res.json({ status: true })
+  }
+
+  * items (req, res) {
+    let items = yield Item.find({})
+    return res.json({ items })
+  }
+
 }
 
 module.exports = GeneralController

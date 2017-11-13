@@ -199,3 +199,10 @@ Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTime
 Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet')
 Route.post('timesheet/:id/:action', 'Api/PaymentController.updateTimesheet')
 Route.post('save-staff-assignment/:id', 'Api/StaffController.saveAssignment')
+
+
+Route.group('promisepay-callbacks', function() {
+  Route.get('items', 'Api/GeneralController.items')
+  Route.post('items', 'Api/GeneralController.itemUpdates')
+  Route.post('transactions', 'Api/GeneralController.transactionUpdates')
+}).prefix('api/promise-pay')
