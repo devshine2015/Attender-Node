@@ -56,6 +56,10 @@ class GeneralController {
       newItem.promiseId = itemUpdate.id
       yield newItem.save()
     } else {
+      item.state = itemUpdate.state
+      item.status = itemUpdate.status
+      item.payment_method = itemUpdate.payment_method
+      yield item.save()
       // vv
     }
     return res.json({ status: true })
