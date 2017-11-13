@@ -62,6 +62,25 @@ class GeneralController {
       yield item.save()
       // vv
     }
+    let timesheet = yield Timesheet.findOne({ transactionId: item.promiseId })
+    if (timesheet) {
+      switch (item.state) {
+        case 'completed':
+          timesheet.paymentStatus = 'paid'
+          yield timesheet.save()
+          break;
+        case 'voided':
+          timesheet.paymentStatus = 'failed'
+          yield timesheet.save()
+          break;
+        case 'cancelled':
+          timesheet.paymentStatus = 'cancelled'
+          yield timesheet.save()
+          break;
+        default:
+          //
+      }
+    }
     return res.json({ status: true })
   }
 

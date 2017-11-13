@@ -25,7 +25,7 @@ let timesheetSchema = mongoose.Schema({
   }],
   totalPayableHours: Number,
   rate: Number,
-  paymentStatus: { type: String, enum: ['unpaid', 'pending', 'failed', 'paid'], default: 'unpaid' },
+  paymentStatus: { type: String, enum: ['unpaid', 'pending', 'failed', 'paid', 'cancelled'], default: 'unpaid' },
   transactionId: String,
   mutable: { type: Boolean, default: true }
 
