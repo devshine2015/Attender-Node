@@ -98,7 +98,7 @@ const aliases = {
 |
 */
 const commands = [
-  'App/Commands/UpdateTimeSheet',
+  'App/Commands/UpdateTimesheet',
   'App/Commands/UpdateRates',
   'App/Commands/StaffSeeder',
   'App/Commands/ResetPassword',
