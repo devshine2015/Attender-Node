@@ -65,12 +65,14 @@ staffSchema.set('toJSON', { getters: true, virtuals: true })
 
 let rating = staffSchema.virtual('rating')
 rating.get(function() {
-  if (this.ratings.length > 0) {
-    let total = this.ratings.reduce(function(a,b) {
-        return { rating: a.rating + b.rating }
-    })
-    let rating = total.rating / this.ratings.length
-    return { star: Math.floor( (rating * 100) / 100 ), label: rating.toFixed(2) }
+  if (typeof(this.ratings) != 'undefined') {
+    if (this.ratings.length > 0) {
+      let total = this.ratings.reduce(function(a,b) {
+          return { rating: a.rating + b.rating }
+      })
+      let rating = total.rating / this.ratings.length
+      return { star: Math.floor( (rating * 100) / 100 ), label: rating.toFixed(2) }
+    }
   } else {
     return { star: 0, label: 0 }
   }
