@@ -31,7 +31,7 @@ class EventController {
       _event.save()
       let notification = yield VenueNotification.create({
         venueId: _event.venueId._id,
-        staffId: req.user.staffId._id,
+        staffId: req.user.staffId,
         type: 'event-interest'
       })
       return res.json({ status: true, _event: _event })
