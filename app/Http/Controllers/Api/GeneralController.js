@@ -4,6 +4,7 @@ const User = use('App/Model/User')
 const Item = use('App/Model/Item')
 const Staff = use('App/Model/Staff')
 const Message = use('App/Model/Message')
+const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
@@ -20,15 +21,28 @@ class GeneralController {
 
     return res.json({ status: true, messages: messages })
   }
+  // staff - '5a01a8b12306d42411fb181e'
+  // user - '5a01a8b02306d42411fb181d'
 
+  // venue - '59f82f2057f2b322c2e715fa'
+  // user - '59f82f2057f2b322c2e715f9'
+  
   * openConvo (req, res) {
     let user = yield User.findOne({ _id: req.param('id') })
     if (user) {
+      let trial = false,
+          hired = false
       let sorted = [req.user._id, user._id].sort()
       let conversation = _hash(sorted[0] + sorted[1])
       let exist = yield Message.findOne({ conversation: conversation })
-      return res.json({ status: true, exist: (exist) ? true : false, conversation: conversation })
-
+      if (user.isStaff) {
+        let management = yield StaffManagement.findOne({ venue: req.user.venueId._id, staff: user.staffId })
+        if (management) {
+          hired = management.hired
+          trial = management.trial
+        }
+      }
+      return res.json({ status: true, exist: (exist) ? true : false, conversation, trial, hired })
     } else {
       return res.json({ status: false, messageCode: 'USER_NOT_FOUND' })
     }
@@ -36,10 +50,12 @@ class GeneralController {
   }
 
   * sendNotif (req, res) {
-    let send = PushNotification.send({
+    let send = yield PushNotification.sendIOS({
       deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
-      alert: req.input('message')
+      initialMessge: 'What is this!',
+      fromNoti: 'Suc'
     })
+    console.log(send);
     return res.json({ status: true, messageCode: 'SENT' })
   }
 

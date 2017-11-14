@@ -1,6 +1,7 @@
 'use strict'
 const _ = require('lodash')
 const User = use('App/Model/User')
+const Device = use('App/Model/Device')
 const Hash = use('Hash')
 const Validator = use('Validator')
 const SendGrid = use('SendGrid')
@@ -58,6 +59,16 @@ class AuthController {
     } else {
       const auth = yield req.jwt.auth(req)
       if (auth) {
+        let deviceToken = req.input('deviceToken', false)
+        if (deviceToken) {
+          let exist = yield Device.findOne({ token: deviceToken })
+          if (!exist) {
+            yield Device.create({ token: deviceToken, user: auth._id, type: req.input('deviceType', 'ios') })
+          } else {
+            exist.active = true
+            yield exist.save()
+          }
+        }
         return res.json({ status: true, messageCode: 'LOGIN_SUCCESS', token: auth.token.token })
       } else {
         return res.json({ status: false, messageCode: 'USER_NOT_FOUND' })

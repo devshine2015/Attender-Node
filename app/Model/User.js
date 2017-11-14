@@ -3,7 +3,7 @@
 const mongoose = use('Mongoose')
 const PromisePay = use('PromisePay')
 const Staff = use('App/Model/Staff')
-const Message = use('App/Model/Message')
+// const Message = use('App/Model/Message')
 const StaffManagement = use('App/Model/StaffManagement')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
@@ -126,7 +126,7 @@ userSchema.post('remove', function(user) {
  if (user.isOrganizer) {
    user.organizerId.remove()
  }
- Message.remove({ $or: [ {receiver: user._id}, {sender: user._id}] }, function(err){})
+ // Message.remove({ $or: [ {receiver: user._id}, {sender: user._id}] }, function(err){})
 })
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
 

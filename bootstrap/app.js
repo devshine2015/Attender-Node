@@ -65,6 +65,7 @@ const aceProviders = [
 |
 */
 const aliases = {
+  AHelpers: 'App/Serializers/AHelpers',
   PushNotification: 'App/Serializers/PushNotification',
   PromisePay: 'App/Serializers/PromisePay',
   SendGrid: 'App/Serializers/SendGrid',
@@ -97,6 +98,7 @@ const aliases = {
 |
 */
 const commands = [
+  'App/Commands/UpdateTimeSheet',
   'App/Commands/UpdateRates',
   'App/Commands/StaffSeeder',
   'App/Commands/ResetPassword',

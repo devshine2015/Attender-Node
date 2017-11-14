@@ -1,6 +1,7 @@
 'use strict'
 const moment = require('moment')
 const uuidv4 = require('uuid/v4');
+const AHelpers = use('AHelpers')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
@@ -62,6 +63,14 @@ module.exports = class PaymentController {
       card.remove()
       let redact = yield PromisePay.redactCard(card.promiseId)
       if (redact.card_account) {
+        let primaryCard = yield Card.findOne({ user: req.user._id, primary: true})
+        if (!primaryCard) {
+          let setcard = yield Card.findOne({ user: req.user._id, primary: false })
+          if (setcard) {
+            setcard.primary = true
+            yield setcard.save()
+          }
+        }
         return res.json({ status: true, message: redact.card_account, messageCode: 'SUCCESS' })
       } else {
         return res.json({ status: false, errors: redact.errors, messageCode: 'FAILED' })
@@ -87,7 +96,7 @@ module.exports = class PaymentController {
     })
     if (bank.bank_accounts) {
       let existing = yield Bank.findOne({ user: req.user._id })
-      yield Bank.create({
+      let newBank = yield Bank.create({
         promiseId: bank.bank_accounts.id,
         active: bank.bank_accounts.active,
         currency: bank.bank_accounts.currency,
@@ -96,7 +105,7 @@ module.exports = class PaymentController {
         user: req.user._id,
         primary: (existing) ? false : true
       })
-      return res.json({ status: true, bank: bank.bank_accounts })
+      return res.json({ status: true, bank: newBank })
     } else {
       return res.json({ status: false, errors: bank.errors })
     }
@@ -109,6 +118,14 @@ module.exports = class PaymentController {
       bank.remove()
       let redact = yield PromisePay.redactBank(bank.promiseId)
       if (redact.bank_account) {
+        let primaryBank = yield Bank.findOne({ user: req.user._id, primary: true})
+        if (!primaryBank) {
+          let setbank = yield Bank.findOne({ user: req.user._id, primary: false })
+          if (setbank) {
+            setbank.primary = true
+            yield setbank.save()
+          }
+        }
         return res.json({ status: true, message: redact.bank_account, messageCode: 'SUCCESS' })
       } else {
         return res.json({ status: false, errors: redact.errors, messageCode: 'FAILED' })
@@ -184,62 +201,13 @@ module.exports = class PaymentController {
       if (timesheet) {
         return res.json({ status: true, timesheet, actions })
       } else {
-        let time = yield this.initializeTimesheet(management)
+        let time = yield AHelpers.initializeTimesheet(management)
         timesheet = yield Timesheet.create(time)
         return res.json({ status: true, timesheet, actions })
       }
     } else {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }
-  }
-
-  * initializeTimesheet (management) {
-    return new Promise((resolve, reject) => {
-      if (management) {
-        let weekStart = moment().startOf('isoWeek').format()
-        let weekEnd = moment().endOf('isoWeek').format()
-        let totalPayableHours = 0
-        let rate = management.staff.startRate
-        let days = []
-        let isoWeeks = [1,2,3,4,5,6,7]
-        for (let isoWeek of isoWeeks) {
-          let date = moment().isoWeekday(isoWeek).hour(0).minute(0).second(0).millisecond(0)
-          let week = date.format('dddd').toString().toLowerCase()
-          let day = {
-            date: date,
-            isoWeekPeriod: isoWeek,
-            schedules: []
-          }
-          if (management.schedules[week]) {
-            for (let sched of management.schedules[week]) {
-              let start = moment(sched.startTime, ['hh:mm A', 'hh A'])
-              let end = moment(sched.endTime, ['hh:mm A', 'hh A'])
-              let payableHours = (start.isValid() && end.isValid()) ? moment.duration(end.diff(start)).asHours() : 0
-              let _break = (management.schedules[week].length > 1) ? 0 : payableHours >= 6 ? 0.5 : 0
-              totalPayableHours += payableHours
-              day.schedules.push({
-                break: _break,
-                payableHours: payableHours,
-                startTime: sched.startTime,
-                endTime: sched.endTime
-              })
-            }
-          } else {
-            day.schedules.push({
-              break: 0,
-              payableHours: 0,
-              startTime: '',
-              endTime: ''
-            })
-          }
-          days.push(day)
-        }
-        resolve({ weekStart, weekEnd, totalPayableHours, days, rate, management: management._id, staff: management.staff._id, venue: management.venue })
-      } else {
-        reject({ error: 'Management Missing'})
-      }
-    })
-
   }
 
   * getTimesheet (req, res) {

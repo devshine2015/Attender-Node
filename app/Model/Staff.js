@@ -3,7 +3,7 @@
 const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
-
+const VenueNotification = use('App/Model/VenueNotification')
 
 let staffSchema = mongoose.Schema({
 
@@ -87,6 +87,8 @@ staffSchema.statics.rules = {
   mobile: 'required|max:50',
   fullname: 'required|alpha_numeric|min:5|max:45',
 }
-
+staffSchema.post('remove', function(staff) {
+  VenueNotification.remove({ staffId: staff._id }, function(err){})
+})
 
 module.exports = mongoose.model('Staff', staffSchema)

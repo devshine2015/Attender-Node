@@ -1,5 +1,6 @@
 'use strict'
 const Env = use('Env')
+const apn = require('apn')
 
 /**
 ====================
@@ -58,10 +59,43 @@ androidApp.addUser('some_fake_deviceid_that_i_made_up', JSON.stringify({
 
 **/
 
+/**
+=========================
+=== APNS Basic ==========
+=========================
+
+AuthKey_QV5FPHCBMD.p8
+{
+	"teamId": "WFXCBU48U4",
+	"keyId": "QV5FPHCBMD"
+}
+
+
+**/
+
+
+let options = {
+  token: {
+    key: "/AuthKey_QV5FPHCBMD.p8",
+    keyId: "QV5FPHCBMD",
+    teamId: "WFXCBU48U4"
+  },
+  production: false
+};
+
+let apnProvider = new apn.Provider(options)
+
 module.exports = {
 
-  send: (payload) => {
-
+  sendIOS: (payload) => {
+    let note = new apn.Notification()
+    note.expiry = Math.floor(Date.now() / 1000) + 3600
+    note.badge = 3
+    note.sound = 'ping.aiff'
+    note.alert = payload.initialMessge
+    note.payload = { messageFrom: payload.fromNoti }
+    note.topic = 'com.attender.attender'
+    return apnProvider.send(note, payload.deviceToken)
   }
 
 }
