@@ -21,7 +21,7 @@ class GeneralController {
 
     return res.json({ status: true, messages: messages })
   }
-  
+
   // staff - '5a01a8b12306d42411fb181e'
   // user - '5a01a8b02306d42411fb181d'
 
