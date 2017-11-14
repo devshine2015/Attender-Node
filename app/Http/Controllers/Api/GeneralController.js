@@ -7,7 +7,7 @@ const Message = use('App/Model/Message')
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
-const PushNotification = use('PushNotification')
+// const PushNotification = use('PushNotification')
 const _hash = require('../../../Serializers/BaseHash');
 
 class GeneralController {
@@ -26,7 +26,7 @@ class GeneralController {
 
   // venue - '59f82f2057f2b322c2e715fa'
   // user - '59f82f2057f2b322c2e715f9'
-  
+
   * openConvo (req, res) {
     let user = yield User.findOne({ _id: req.param('id') })
     if (user) {
@@ -50,12 +50,12 @@ class GeneralController {
   }
 
   * sendNotif (req, res) {
-    let send = yield PushNotification.sendIOS({
-      deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
-      initialMessge: 'What is this!',
-      fromNoti: 'Suc'
-    })
-    console.log(send);
+    // let send = yield PushNotification.sendIOS({
+    //   deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
+    //   initialMessge: 'What is this!',
+    //   fromNoti: 'Suc'
+    // })
+    // console.log(send);
     return res.json({ status: true, messageCode: 'SENT' })
   }
 
