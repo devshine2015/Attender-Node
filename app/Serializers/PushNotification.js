@@ -79,19 +79,28 @@ let apnProvider = new apn.Provider(options)
 **/
 
 
+let options = {
+  token: {
+    key: "/AuthKey_QV5FPHCBMD.p8",
+    keyId: "QV5FPHCBMD",
+    teamId: "WFXCBU48U4"
+  },
+  production: false
+};
 
+let apnProvider = new apn.Provider(options)
 
 module.exports = {
 
-  // sendIOS: (payload) => {
-  //   let note = new apn.Notification()
-  //   note.expiry = Math.floor(Date.now() / 1000) + 3600
-  //   note.badge = 3
-  //   note.sound = 'ping.aiff'
-  //   note.alert = payload.initialMessge
-  //   note.payload = { messageFrom: payload.fromNoti }
-  //   note.topic = 'com.attender.attender'
-  //   return apnProvider.send(note, payload.deviceToken)
-  // }
+  sendIOS: (payload) => {
+    let note = new apn.Notification()
+    note.expiry = Math.floor(Date.now() / 1000) + 3600
+    note.badge = 3
+    note.sound = 'ping.aiff'
+    note.alert = payload.initialMessge
+    note.payload = { messageFrom: payload.fromNoti }
+    note.topic = 'com.attender.attender'
+    return apnProvider.send(note, payload.deviceToken)
+  }
 
 }
