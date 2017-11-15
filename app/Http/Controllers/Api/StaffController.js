@@ -36,6 +36,43 @@ class StaffController {
     return yield Staff.findOne({ _id: req.param('id') }).populate('user', '_id fullname')
   }
 
+  * showStaff (req, res) {
+    let staff = yield this.getStaff(req)
+    if (staff) {
+      return res.json({ status: true, staff })
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
+  * getManagements (req, res) {
+    let staff = yield this.getStaff(req)
+    if (staff) {
+      let managements = yield StaffManagement.find({ staff: staff._id }).populate('venue')
+      if (managements) {
+        return res.json({ status: true, managements })
+      } else {
+        return res.json({ status: false, messageCode: 'NO_AVAILABLE_MANAGEMENTS' })
+      }
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
+  * getReviews (req, res) {
+    let staff = yield this.getStaff(req)
+    if (staff) {
+      let ratings = yield StaffRating.find({ staff: staff._id, type: 'monthly' }).populate('venue', '_id name image')
+      if (ratings) {
+        return res.json({ status: true, ratings })
+      } else {
+        return res.json({ status: false, messageCode: 'NO_AVAILABLE_RATINGS' })
+      }
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
+  }
+
   * index (req, res) {
     let positions = req.input('positions', false)
     let staffs = yield Staff.find({}).populate('user', '_id fullname email mobile staffId')
@@ -171,11 +208,13 @@ class StaffController {
       type: req.param('type')
     })
     let items = JSON.parse(req.input('items', '{}'))
-    for (let item of items) {
-      rating.items.push(item)
+    if (Object.keys(items).length > 0) {
+      for (let item of items) {
+        rating.items.push(item)
+      }
+      rating.markModified('items')
+      rating.save()
     }
-    rating.markModified('items')
-    rating.save()
     management.ratings.push(rating._id)
     management.markModified('ratings')
     management.save()

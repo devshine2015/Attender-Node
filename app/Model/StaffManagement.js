@@ -15,6 +15,8 @@ let staffManagementSchema = mongoose.Schema({
   trialEndDate: { type: Date },
   hired: { type: Boolean, default: false },
   hiredDate: Date,
+  endedDate: Date,
+  active: { type: Boolean, default: true },
   assignments: {
     tasks: [{
       description: String

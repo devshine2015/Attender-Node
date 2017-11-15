@@ -35,6 +35,10 @@ Route.group('api', function() {
   Route.post('new-venue-message', 'Api/StaffController.sendVenueMsg')
 
   // STAFF API MANAGEMENT
+  Route.get('staff/:id/show', 'Api/StaffController.showStaff')
+  Route.get('staff/:id/managements', 'Api/StaffController.getManagements')
+  Route.get('staff/:id/reviews', 'Api/StaffController.getReviews')
+
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
   Route.get('staff-messages', 'Web/StaffController.messages')
