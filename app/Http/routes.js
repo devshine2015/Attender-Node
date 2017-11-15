@@ -91,7 +91,7 @@ Route.group('api', function() {
 
   // EVENT API MANAGEMENT
   Route.get('events', 'Api/EventController.index')
-  Route.get('my-events', 'Api/EventController.myEvents')
+  Route.post('my-events', 'Api/EventController.myEvents')
   Route.post('events', 'Api/EventController.create')
   Route.get('events/:id/interested', 'Api/EventController.interested')
   Route.post('events/:id/interest', 'Api/EventController.interest')

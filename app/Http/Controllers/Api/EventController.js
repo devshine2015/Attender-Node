@@ -5,6 +5,8 @@ const Organizer = use('App/Model/Organizer')
 const Event = use('App/Model/Event')
 const Validator = use('Validator')
 const VenueNotification = use('App/Model/VenueNotification')
+const moment = require('moment')
+
 
 class EventController {
 
@@ -18,9 +20,17 @@ class EventController {
 
   }
   * myEvents (req, res) {
-    let events = yield Event.find({ venueId: req.user.venueId._id }).populate('staffs').populate('venueId', '_id name location locationName services type')
-    return res.json({ status: true, events: events })
+    let filter = req.input('date', new Date())
+    let date = moment(filter).hours(0).minutes(0).seconds(0).milliseconds(0)
+    if (date.isValid()) {
+      let events = yield Event.find({ venueId: req.user.venueId._id, date: date }).populate('staffs').populate('venueId', '_id name location locationName services type')
+      return res.json({ status: true, events: events })
+    } else {
+      return res.json({ status: false, messageCode: 'INVALID_DATE_FORMAT' })
+    }
   }
+
+
 
   * calendar (req, res) {
     let events = yield Event.find({}).sort('date')
