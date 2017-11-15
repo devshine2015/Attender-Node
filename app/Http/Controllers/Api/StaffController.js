@@ -37,7 +37,7 @@ class StaffController {
   }
 
   * myManagements (req, res) {
-    let managements = yield StaffManagement.find({ staff: req.user.staffId._id }).populate('venue', '_id name location locationName services types')
+    let managements = yield StaffManagement.find({ staff: req.user.staffId._id }).populate('venue', '_id name location locationName services type')
     return res.json({ status: true, managements })
   }
 
