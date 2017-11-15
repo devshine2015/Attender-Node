@@ -36,6 +36,11 @@ class StaffController {
     return yield Staff.findOne({ _id: req.param('id') }).populate('user', '_id fullname')
   }
 
+  * myManagements (req, res) {
+    let managements = yield StaffManagement.find({ staff: req.user.staffId._id }).populate('venue', '_id name location locationName services types')
+    return res.json({ status: true, managements })
+  }
+
   * showStaff (req, res) {
     let staff = yield this.getStaff(req)
     if (staff) {

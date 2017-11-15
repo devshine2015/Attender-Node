@@ -18,7 +18,7 @@ class EventController {
 
   }
   * myEvents (req, res) {
-    let events = yield Event.find({ venueId: req.user.venueId._id }).populate('staffs').populate('venueId', '_id name location locationName')
+    let events = yield Event.find({ venueId: req.user.venueId._id }).populate('staffs').populate('venueId', '_id name location locationName services types')
     return res.json({ status: true, events: events })
   }
 
