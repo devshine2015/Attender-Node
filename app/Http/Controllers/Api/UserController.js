@@ -93,6 +93,7 @@ class UserController {
     let name = req.input('name', ''),
         managerName = req.input('managerName', ''),
         type = [],
+        image = req.input('image', ''),
         info = req.input('info', ''),
         tag1 = req.input('tag1', ''),
         tag2 = req.input('tag2', ''),
@@ -118,6 +119,7 @@ class UserController {
     if (req.user.isVenue) {
       let venue = yield Venue.findOne(req.user.venueId._id)
       venue.name = name || venue.name
+      venue.image = image || venue.image
       venue.info = info || venue.info
       venue.tag1 = tag1 || venue.tag1
       venue.tag2 = tag2 || venue.tag2
@@ -142,6 +144,7 @@ class UserController {
         tag1: tag1,
         tag2: tag2,
         info: info,
+        image: image,
         managerName: managerName,
         type: type,
         location: location,
