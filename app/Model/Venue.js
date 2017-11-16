@@ -18,6 +18,8 @@ let venueSchema = mongoose.Schema({
     index: '2d',
     type: [Number]
   },
+  tag1: String,
+  tag2: String,
   image: { type: String, default: 'https://www.scandichotels.com/imagevault/publishedmedia/suw58cmdyrxfvvjep2a5/Scandic-Malmen-Interior-bar-Lilla-hotellbaren-over.jpg' },
   locationName: String,
   openingHours: { type: Mixed, default: {} },
