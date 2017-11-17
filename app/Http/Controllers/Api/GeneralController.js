@@ -52,12 +52,12 @@ class GeneralController {
 
   * sendNotif (req, res) {
     let send = yield PushNotification.sendIOS({
-      deviceToken: '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8',
-      initialMessge: 'What is this!',
+      deviceToken: req.input('deviceToken', '60306944365c147d2e5077755ea0c2bc3fd356912f399a4d966ba758947ceac8'),
+      initialMessge: req.input('message', ''),
       fromNoti: 'Suc'
     })
     console.log(send);
-    return res.json({ status: true, messageCode: 'SENT' })
+    return res.json({ status: send })
   }
 
   * staffs (req, res) {
