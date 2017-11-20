@@ -7,6 +7,11 @@ const Organizer = use('App/Model/Organizer')
 
 class UserController {
 
+  * index (req, res) {
+    let users = yield User.find({})
+    return res.json({ users })
+  }
+
   // GENERAL
 
   * messages (req, res) {

@@ -2,6 +2,7 @@
 
 const Route = use('Route')
 
+Route.get('api/users', 'Api/UserController.index')
 Route.get('api/staffs', 'Api/StaffController.index')
 Route.get('api/venues', 'Api/VenueController.index')
 Route.get('api/organizers', 'Api/OrganizerController.index')
