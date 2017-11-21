@@ -7,7 +7,9 @@ const StaffRating = use('App/Model/StaffRating')
 const StaffManagement = use('App/Model/StaffManagement')
 const Validator = use('Validator')
 const moment = require('moment')
+const Notify = use('App/Serializers/Notify')
 
+let notify = new Notify()
 
 class StaffController {
 
@@ -79,22 +81,22 @@ class StaffController {
   }
 
   * index (req, res) {
-    let positions = req.input('positions', false)
-    let staffs = yield Staff.find({}).populate('user', '_id fullname email mobile staffId')
+    let availabilities = req.input('availabilities', false),
+             positions = req.input('positions', false),
+                 hours = req.input('hours', false),
+                staffs = []
+    let rates = (hours) ? hours.split(',') : false
+    
     if (positions) {
-      positions = positions.split(',')
-      staffs = staffs.filter((staff) => {
-          for (let position of positions) {
-            let i = staff.position.indexOf(position)
-            if (i >= 0) {
-              return true
-            }
-          }
-      })
+      staffs = yield Staff.find({ position: { $in: positions.split(',') } }).populate('user', '_id fullname email mobile staffId')
+      return res.json({ status: true, staffs, messageCode: 'SUCCESS', filtered: true })
+    } else {
+      staffs = yield Staff.find({}).populate('user', '_id fullname email mobile staffId')
+      return res.json({ status: true, staffs, messageCode: 'SUCCESS', filtered: false })
     }
-    res.json({ status: true, staffs: staffs, messageCode: 'SUCCESS' })
-  }
 
+  }
+// startRate: { $lte: parseInt(rates[0]) }, endRate: { $gte: parseInt(rates[1]) }
   * select (req, res) {
     let staff = yield this.getStaff(req)
     res.json({ status: true, staff: staff })
@@ -161,7 +163,8 @@ class StaffController {
       staff: req.user.staffId._id,
       venue: req.input('venue', '')
     })
-    return res.json({ status: true })
+    res.json({ status: true })
+    yield notify.newMessage(message)
   }
 
   * saveAssignment (req, res) {

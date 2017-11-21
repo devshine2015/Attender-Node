@@ -65,6 +65,7 @@ const aceProviders = [
 |
 */
 const aliases = {
+  Notify: 'App/Serializers/Notify',
   AHelpers: 'App/Serializers/AHelpers',
   PushNotification: 'App/Serializers/PushNotification',
   PromisePay: 'App/Serializers/PromisePay',

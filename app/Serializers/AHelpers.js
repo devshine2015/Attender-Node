@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 module.exports = {
-  
+
   initializeTimesheet: (management) => {
     return new Promise((resolve, reject) => {
       if (management) {
@@ -49,7 +49,6 @@ module.exports = {
         reject({ error: 'Management Missing'})
       }
     })
-
   }
 
 }

@@ -6,7 +6,9 @@ const Event = use('App/Model/Event')
 const Validator = use('Validator')
 const VenueNotification = use('App/Model/VenueNotification')
 const moment = require('moment')
+const Notify = use('App/Serializers/Notify')
 
+let notify = new Notify()
 
 class EventController {
 
@@ -159,7 +161,8 @@ class EventController {
         eventId: _event._id,
         type: 'event-interest'
       })
-      return res.json({ status: true, event: _event })
+      res.json({ status: true, event: _event })
+      yield notify.eventInterest(req.user.staffId, _event)
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }

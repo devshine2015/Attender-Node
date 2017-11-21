@@ -19,7 +19,8 @@ let messageSchema = mongoose.Schema({
   seen: { type: Boolean, default: false },
   seenAt: Date,
   sentAt: { type: Date, default: Date.now },
-  archived: { type: Boolean, default: false }
+  archivedTo: [{ type: ObjectId, ref: 'User' }],
+  hiddenTo: [{ type: ObjectId, ref: 'User' }]
 })
 
 messageSchema.pre('save', function(next) {
@@ -30,10 +31,11 @@ messageSchema.pre('save', function(next) {
   next()
 })
 
-messageSchema.post('save', function(msg){
+messageSchema.post('save', function(msg) {
   chatChannel.inRooms([msg.receiver.toString(),msg.sender.toString()]).emit('message', 'refresh-thread')
   chatChannel.inRoom(msg.conversation.toString()).emit('message', 'refresh-messages')
 })
+
 
 
 

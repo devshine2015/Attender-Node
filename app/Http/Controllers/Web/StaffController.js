@@ -79,7 +79,7 @@ class StaffController {
 
     let threads = yield Message.aggregate(
       {
-        $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }] }
+        $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }], archivedTo: { $ne: req.user._id }, hiddenTo: { $ne: req.user._id } }
       }, {
         $lookup : {
          from: 'venues',
@@ -106,7 +106,7 @@ class StaffController {
       }
     )
     res.json({ status: true, threads: threads })
-    yield Message.update({ receiver: req.user._id }, { delivered: true }, { multi: true })
+    yield Message.update({ receiver: req.user._id, delivered: false }, { delivered: true }, { multi: true })
 
   }
 

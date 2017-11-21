@@ -35,8 +35,8 @@
               <h3 class="box-title">{{ selectedLbl }}</h3>
               <div class="box-tools pull-right" v-show="selected">
                 <button type="button" class="btn btn-box-tool" v-show="isVenue"><i class="fa fa-user-plus"></i></button>
-                <button type="button" class="btn btn-box-tool"><i class="fa fa-download"></i></button>
-                <button type="button" class="btn btn-box-tool"><i class="fa fa-trash"></i></button>
+                <button type="button" class="btn btn-box-tool" v-on:click="archive()"><i class="fa fa-download"></i></button>
+                <button type="button" class="btn btn-box-tool" v-on:click="deleteConvo()"><i class="fa fa-trash"></i></button>
               </div>
             </div>
             <div class="box-body">
@@ -191,6 +191,30 @@
               if (res.status) {
                 chatList.message = ''
                 chatList.refreshContent()
+              }
+            })
+          }
+        },
+        archive: function() {
+          if (this.conversation) {
+            $.post(`/conversation/${this.conversation}/archive`, {}, function(res){
+              if (res.status) {
+                getMessages().then(function(threads){
+                  chatList.$data.threads = threads
+                  chatList.$data.messages = []
+                })
+              }
+            })
+          }
+        },
+        deleteConvo: function() {
+          if (this.conversation) {
+            $.post(`/conversation/${this.conversation}/delete`, {}, function(res){
+              if (res.status) {
+                getMessages().then(function(threads){
+                  chatList.$data.threads = threads
+                  chatList.$data.messages = []
+                })
               }
             })
           }

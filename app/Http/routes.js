@@ -29,11 +29,18 @@ Route.group('api', function() {
   Route.post('transfer', 'Api/PaymentController.transfer')
 
   // MESSAGING API MANAGEMENT
-  Route.get('conversation/:convo', 'Api/GeneralController.conversation')
+  Route.get('conversation/:convo', 'Api/MessageController.conversation')
+  Route.post('conversation/:convo/delete', 'Api/MessageController.deleteConversation')
+  Route.post('conversation/:convo/archive', 'Api/MessageController.archiveConversation')
   Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
   Route.post('new-initial-message', 'Api/VenueController.sendInitialMsg')
   Route.post('new-staff-message', 'Api/VenueController.sendStaffMsg')
   Route.post('new-venue-message', 'Api/StaffController.sendVenueMsg')
+
+  Route.get('staff-messages', 'Api/MessageController.staffMessages')
+  Route.get('venue-messages', 'Api/MessageController.venueMessages')
+  Route.get('staff-archives', 'Api/MessageController.staffArchives')
+  Route.get('venue-archives', 'Api/MessageController.venueArchives')
 
   // STAFF API MANAGEMENT
   Route.get('my-managements', 'Api/StaffController.myManagements')
@@ -43,7 +50,6 @@ Route.group('api', function() {
 
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
-  Route.get('staff-messages', 'Web/StaffController.messages')
   Route.get('trial-staffs', 'Api/VenueController.trialStaffs')
   Route.get('active-staffs', 'Api/VenueController.activeStaffs')
 
@@ -81,7 +87,6 @@ Route.group('api', function() {
   Route.post('venue/notification/:id/delete', 'Api/VenueController.removeNotif')
   Route.get('venue/interested', 'Api/VenueController.interested')
   Route.post('venue/:id/interest', 'Api/VenueController.interest')
-  Route.get('venue-messages', 'Web/VenueController.messages')
 
   Route.get('user/profile/venue', 'Api/UserController.getVenueProfile')
   Route.post('user/profile/venue', 'Api/UserController.saveVenueProfile')
@@ -131,12 +136,15 @@ Route.group('manage', function() {
 Route.group('profile', function() {
   Route.get('/', 'Web/GeneralController.index')
 
-  Route.post('/conversation/:convo', 'Web/GeneralController.conversation')
+  Route.post('/conversation/:convo', 'Api/MessageController.conversation')
+  Route.post('conversation/:convo/delete', 'Api/MessageController.deleteConversation')
+  Route.post('conversation/:convo/archive', 'Api/MessageController.archiveConversation')
   Route.get('/messages', 'Web/GeneralController.messages')
   Route.post('/new-staff-message', 'Web/GeneralController.sendStaffMsg')
   Route.post('/new-venue-message', 'Web/GeneralController.sendVenueMsg')
-  Route.post('/staff-messages', 'Web/StaffController.messages')
-
+  // Route.post('/staff-messages', 'Web/StaffController.messages')
+  Route.post('staff-messages', 'Api/MessageController.staffMessages')
+  Route.post('venue-messages', 'Api/MessageController.venueMessages')
   Route.get('job-seekers', 'Web/StaffController.index')
   Route.get('my-staffs', 'Web/VenueController.renderMyStaffs')
 
@@ -153,7 +161,7 @@ Route.group('profile', function() {
 
   Route.get('venues', 'Web/VenueController.index')
   Route.get('venue/:id', 'Web/VenueController.select')
-  Route.post('/venue-messages', 'Web/VenueController.messages')
+  // Route.post('/venue-messages', 'Web/VenueController.messages')
   Route.post('venue/:id/interest', 'Web/VenueController.interest')
 
   Route.get('events', 'Web/EventController.index')

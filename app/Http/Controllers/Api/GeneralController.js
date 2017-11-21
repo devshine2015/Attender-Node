@@ -3,6 +3,7 @@
 const User = use('App/Model/User')
 const Item = use('App/Model/Item')
 const Staff = use('App/Model/Staff')
+const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
@@ -14,7 +15,7 @@ class GeneralController {
 
   * conversation (req, res) {
     let messages = yield Message
-                        .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}] })
+                        .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}], hiddenTo: { $ne: req.user._id } })
                         .sort('-sentAt')
                         .populate('staff', '_id fullname avatar')
                         .populate('venue', '_id name image')
@@ -56,7 +57,6 @@ class GeneralController {
       initialMessge: req.input('message', ''),
       fromNoti: 'Suc'
     })
-    console.log(send);
     return res.json({ status: send })
   }
 

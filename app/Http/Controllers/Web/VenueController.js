@@ -92,7 +92,7 @@ class VenueController {
   * messages (req, res) {
     let threads = yield Message.aggregate(
       {
-        $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }] }
+        $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }], archivedTo: { $ne: req.user._id }, hiddenTo: { $ne: req.user._id } }
       }, {
         $lookup : {
          from: 'staffs',
@@ -119,7 +119,7 @@ class VenueController {
       }
     )
     res.json({ status: true, threads: threads })
-    yield Message.update({ receiver: req.user._id }, { delivered: true }, { multi: true })
+    yield Message.update({ receiver: req.user._id, delivered: false }, { delivered: true }, { multi: true })
   }
 
   * renderMyStaffs (req, res) {
@@ -138,7 +138,7 @@ class VenueController {
                       .populate('staff')
                       .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
                       .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
-                      
+
     res.json({ status: true, staffs: staffs })
   }
 

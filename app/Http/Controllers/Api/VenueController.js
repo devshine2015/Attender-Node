@@ -10,6 +10,10 @@ const Organizer = use('App/Model/Organizer')
 const Event = use('App/Model/Event')
 const VenueNotification = use('App/Model/VenueNotification')
 const Validator = use('Validator')
+const Notify = use('App/Serializers/Notify')
+
+let notify = new Notify()
+
 
 class VenueController {
 
@@ -79,7 +83,8 @@ class VenueController {
         staffId: req.user.staffId._id,
         type: 'venue-interest'
       })
-      return res.json({ status: true, venue: _venue })
+      res.json({ status: true, venue: _venue })
+      yield notify.venueInterest(req.user.staffId, _venue)
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }
@@ -136,11 +141,11 @@ class VenueController {
       staff: req.input('staff', ''),
       venue: req.user.venueId._id
     })
-    return res.json({ status: true })
+    res.json({ status: true })
+    yield notify.newMessage(message)
   }
 
   * sendInitialMsg (req, res) {
-
     let staff = yield Staff.findOne({ _id: req.input('staff', '') })
     let message = yield Message.create({
       sender: req.user._id,
