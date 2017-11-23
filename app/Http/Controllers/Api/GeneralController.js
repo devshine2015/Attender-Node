@@ -34,7 +34,7 @@ class GeneralController {
   }
 
   * pushEventInterest (req, res) {
-    let $event = yield Venue.findOne({ _id: req.param('event') })
+    let $event = yield Event.findOne({ _id: req.param('event') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
     yield notify.eventInterest(staff, $event)
     return res.json({ status: true })
