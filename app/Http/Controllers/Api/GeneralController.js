@@ -3,6 +3,7 @@
 const User = use('App/Model/User')
 const Device = use('App/Model/Device')
 const Item = use('App/Model/Item')
+const Event = use('App/Model/Event')
 const Staff = use('App/Model/Staff')
 const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
