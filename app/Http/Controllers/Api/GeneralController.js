@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Model/User')
+const Device = use('App/Model/Device')
 const Item = use('App/Model/Item')
 const Staff = use('App/Model/Staff')
 const Venue = use('App/Model/Venue')
@@ -21,6 +22,21 @@ class GeneralController {
                         .populate('venue', '_id name image')
 
     return res.json({ status: true, messages: messages })
+  }
+
+  * deviceList (req, res) {
+    let devices = yield Device.find({}).populate('user', '_id fullname')
+    return res.json({ devices })
+  }
+
+  * managements (req, res) {
+    let managements = yield StaffManagement.find({}).populate('staff', '_id fullname position').populate('venue', '_id name')
+    return res.json({ managements })
+  }
+
+  * timesheets (req, res) {
+    let timesheets = yield Timesheet.find({}).populate('staff', '_id fullname position').populate('venue', '_id name')
+    return res.json({ timesheets })
   }
 
   // staff - '5a01a8b12306d42411fb181e'

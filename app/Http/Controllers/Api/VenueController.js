@@ -169,7 +169,7 @@ class VenueController {
   }
 
   * myStaffs (req, res) {
-    let managements = yield StaffManagement.find({ venue: req.user.venueId._id }).populate('staff')
+    let managements = yield StaffManagement.find({ venue: req.user.venueId._id, trial: false }).populate('staff')
     let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
     let staffs = {}
     for (let position of positions) {
@@ -177,7 +177,7 @@ class VenueController {
         return (management.staff.position.includes(position))
       })
     }
-    return res.json({ status: true, staffs: staffs })
+    return res.json({ status: true, staffs, total: managements.length })
   }
 
 }
