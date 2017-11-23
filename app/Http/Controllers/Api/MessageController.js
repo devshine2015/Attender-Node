@@ -11,7 +11,7 @@ class MessageController {
   * conversation (req, res) {
     let messages = yield Message
                         .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}], hiddenTo: { $ne: req.user._id } })
-                        .sort('sentAt')
+                        .sort('-sentAt')
                         .populate('staff', '_id fullname avatar')
                         .populate('venue', '_id name image')
     res.json({ status: true, messages: messages })
