@@ -42,7 +42,7 @@ class Notify {
   }
 
   * newMessage (message) {
-    let device = yield this.getDevice({ user: message.receiver })
+    let device = yield this.getDevice(message.receiver)
     if (device) {
       if (message.sender.isStaff) {
         return yield this.send(device, `${message.staff.fullname}: ${message.message}`, { message })
