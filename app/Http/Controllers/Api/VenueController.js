@@ -142,7 +142,8 @@ class VenueController {
       venue: req.user.venueId._id
     })
     res.json({ status: true })
-    yield notify.newMessage(message)
+    let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
+    yield notify.newMessage(m)
   }
 
   * sendInitialMsg (req, res) {

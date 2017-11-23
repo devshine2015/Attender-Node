@@ -1,4 +1,5 @@
 'use strict'
+const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
 const Staff = use('App/Model/Staff')
 const Task = use('App/Model/Task')
@@ -86,7 +87,7 @@ class StaffController {
                  hours = req.input('hours', false),
                 staffs = []
     let rates = (hours) ? hours.split(',') : false
-    
+
     if (positions) {
       staffs = yield Staff.find({ position: { $in: positions.split(',') } }).populate('user', '_id fullname email mobile staffId')
       return res.json({ status: true, staffs, messageCode: 'SUCCESS', filtered: true })
@@ -164,7 +165,8 @@ class StaffController {
       venue: req.input('venue', '')
     })
     res.json({ status: true })
-    yield notify.newMessage(message)
+    let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
+    yield notify.newMessage(m)
   }
 
   * saveAssignment (req, res) {
