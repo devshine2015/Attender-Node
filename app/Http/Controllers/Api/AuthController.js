@@ -96,11 +96,11 @@ class AuthController {
     let deviceType = req.input('type', false)
     if (deviceToken && deviceType) { // save device token --- override old token
       let device = yield Device.findOne({ user: req.user._id, type: deviceType })
-      if (device) { // register new device
+      if (device) { 
         device.token = deviceToken
         yield device.save()
         return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'updated' })
-      } else { // override old device token
+      } else {
         let newDevice = yield Device.create({
           token: deviceToken,
           type: deviceType,
@@ -109,9 +109,8 @@ class AuthController {
         return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'saved' })
       }
     } else {
-      console.log('Invalid');
+      return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'unsaved' })
     }
-    return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'unsaved' })
 
   }
 
