@@ -46,6 +46,16 @@ class GeneralController {
     return res.json({ devices })
   }
 
+  * messages (req, res) {
+    let messages = yield Message.find({})
+    return res.json({ messages })
+  }
+  * pushMessage (req, res) {
+    let m = yield Message.findOne({ _id: req.param('id') }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
+    yield notify.newMessage(m)
+    return res.json({ status: true })
+  }
+
   * managements (req, res) {
     let managements = yield StaffManagement.find({}).populate('staff', '_id fullname position').populate('venue', '_id name')
     return res.json({ managements })
