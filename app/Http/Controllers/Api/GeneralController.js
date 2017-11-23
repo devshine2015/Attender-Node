@@ -10,7 +10,9 @@ const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
+const Notify = use('App/Serializers/Notify')
 const _hash = require('../../../Serializers/BaseHash');
+let notify = new Notify()
 
 class GeneralController {
 
@@ -22,6 +24,20 @@ class GeneralController {
                         .populate('venue', '_id name image')
 
     return res.json({ status: true, messages: messages })
+  }
+
+  * pushVenueInterest (req, res) {
+    let venue = yield Venue.findOne({ _id: req.param('venue') })
+    let staff = yield Staff.findOne({ _id: req.param('staff') })
+    yield notify.venueInterest(staff, venue)
+    return res.json({ status: true })
+  }
+
+  * pushEventInterest (req, res) {
+    let $event = yield Venue.findOne({ _id: req.param('event') })
+    let staff = yield Staff.findOne({ _id: req.param('staff') })
+    yield notify.eventInterest(staff, $event)
+    return res.json({ status: true })
   }
 
   * deviceList (req, res) {

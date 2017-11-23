@@ -10,6 +10,9 @@ Route.get('api/staffs', 'Api/StaffController.index')
 Route.get('api/venues', 'Api/VenueController.index')
 Route.get('api/organizers', 'Api/OrganizerController.index')
 Route.get('api/events', 'Api/EventController.index')
+Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEventInterest')
+Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest')
+
 
 Route.group('api', function() {
   Route.get('auth/current', 'Api/AuthController.current')
