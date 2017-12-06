@@ -12,7 +12,7 @@ module.exports = class PaymentController {
 
   * earnings (req, res) {
     let banks = yield Bank.find({ user: req.user._id })
-    let promiseWallet = yield PromisePay.wallet(`staging-acc-${req.user._id}`)
+    let promiseWallet = yield PromisePay.wallet(`beta-v1-acc-${req.user._id}`)
     let wallet = {}
     if (promiseWallet.wallet_accounts) {
       let balance = promiseWallet.wallet_accounts.balance
@@ -32,7 +32,7 @@ module.exports = class PaymentController {
 
   * addCard (req, res) {
     let card = yield PromisePay.addCard({
-      user_id: `staging-acc-${req.user._id}`,
+      user_id: `beta-v1-acc-${req.user._id}`,
       full_name: req.input('account_name', ''),
       number: req.input('account_number', ''),
       expiry_month: req.input('expiry_month', 1),
@@ -41,7 +41,7 @@ module.exports = class PaymentController {
     })
     if (card.card_accounts) {
       let existing = yield Card.findOne({ user: req.user._id })
-      let currentCard = yield PromisePay.getCards(`staging-acc-${req.user._id}`)
+      let currentCard = yield PromisePay.getCards(`beta-v1-acc-${req.user._id}`)
       yield Card.create({
         promiseId: currentCard.card_accounts.id,
         active: currentCard.card_accounts.active,
@@ -85,7 +85,7 @@ module.exports = class PaymentController {
 
   * addBank (req, res) {
     let bank = yield PromisePay.addBank({
-      user_id: `staging-acc-${req.user._id}`,
+      user_id: `beta-v1-acc-${req.user._id}`,
       bank_name: req.input('bank_name', ''),
       account_name: req.input('account_name', ''),
       routing_number: req.input('routing_number', ''),
@@ -135,8 +135,8 @@ module.exports = class PaymentController {
 
   * transfer (req, res) {
     let transfer = yield PromisePay.transfer(
-      `staging-acc-${req.user._id}`,
-      `staging-acc-${req.input('to_user', '')}`,
+      `beta-v1-acc-${req.user._id}`,
+      `beta-v1-acc-${req.input('to_user', '')}`,
       req.input('amount', 0),
       req.input('from', 'bank'),
       req.input('account_id', '')
@@ -159,7 +159,7 @@ module.exports = class PaymentController {
 
   * deposit (req, res) {
     let withdraw = yield PromisePay.deposit(
-      id=req.user.id,
+      id=`beta-v1-acc-${req.user._id}`,
       account_id=req.input('account_id', req.user.primaryAccount ),
       amount=req.input('amount', 0)
     )
@@ -167,7 +167,7 @@ module.exports = class PaymentController {
   }
 
   * transactions (req, res) {
-    let transactions = yield PromisePay.transactions(`staging-acc-${req.user._id}`)
+    let transactions = yield PromisePay.transactions(`beta-v1-acc-${req.user._id}`)
     if (transactions.items) {
       return res.json({ status:true, transactions: transactions })
     } else {
@@ -248,8 +248,8 @@ module.exports = class PaymentController {
           timesheet.save()
         case 'make_payment':
           let transfer = yield PromisePay.transfer(
-            `staging-acc-${timesheet.venue.user}`,
-            `staging-acc-${timesheet.staff.user}`,
+            `beta-v1-acc-${timesheet.venue.user}`,
+            `beta-v1-acc-${timesheet.staff.user}`,
             req.input('amount', 0),
             'bank',
             req.input('account_id', '')

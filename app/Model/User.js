@@ -97,7 +97,7 @@ userSchema.statics.facebookSchema = {
 userSchema.post('save', function(user){
   if (!user.promisePay) {
     PromisePay.createUser({
-      id: `staging-acc-${user._id}`,
+      id: `beta-v1-acc-${user._id}`,
       email: user.email,
       first_name: user.fullname,
       country: 'AUS'
@@ -107,7 +107,7 @@ userSchema.post('save', function(user){
     })
   }
   if (!user.walletId && user.promisePay) {
-    PromisePay.wallet(`staging-acc-${user._id}`).then((res)=>{
+    PromisePay.wallet(`beta-v1-acc-${user._id}`).then((res)=>{
       user.walletId = res.wallet_accounts.id
       user.save()
     })

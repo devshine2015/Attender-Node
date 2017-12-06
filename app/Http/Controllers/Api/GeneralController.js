@@ -27,6 +27,11 @@ class GeneralController {
     return res.json({ status: true, messages: messages })
   }
 
+  * users (req, res) {
+    let users = yield User.find({})
+    return res.json({ users })
+  }
+
   * pushVenueInterest (req, res) {
     let venue = yield Venue.findOne({ _id: req.param('venue') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
@@ -53,7 +58,7 @@ class GeneralController {
   * pushMessage (req, res) {
     let m = yield Message.findOne({ _id: req.param('id') }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
     yield notify.newMessage(m)
-    return res.json({ status: true })
+    return res.json({ status: true, message: m })
   }
 
   * managements (req, res) {

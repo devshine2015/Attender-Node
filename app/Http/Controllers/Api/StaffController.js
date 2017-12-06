@@ -56,7 +56,7 @@ class StaffController {
   * getManagements (req, res) {
     let staff = yield this.getStaff(req)
     if (staff) {
-      let managements = yield StaffManagement.find({ staff: staff._id }).populate('venue')
+      let managements = yield StaffManagement.find({ staff: staff._id, hired: true }).populate('venue')
       if (managements) {
         return res.json({ status: true, managements })
       } else {

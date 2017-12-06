@@ -17,6 +17,7 @@ const Suggestion = use('App/Model/Suggestion')
 const Task = use('App/Model/Task')
 const Timesheet = use('App/Model/Timesheet')
 const VenueNotification = use('App/Model/VenueNotification')
+const Device = use('App/Model/Device')
 
 class ResetDB extends Command {
 
@@ -31,7 +32,7 @@ class ResetDB extends Command {
   * handle (args, options) {
     let confirm = yield this.confirm('Are you sure you want to reset collections?').print()
     if (confirm) {
-      let collections = [User, Staff, Venue, Organizer, Bank, Card, Item, Event, StaffManagement, StaffRating, Suggestion, Task, Timesheet, VenueNotification]
+      let collections = [User, Staff, Venue, Organizer, Bank, Card, Item, Event, StaffManagement, StaffRating, Suggestion, Task, Timesheet, VenueNotification, Device]
       for (let collection of collections) {
         let del = yield collection.remove({})
         console.log(del);
