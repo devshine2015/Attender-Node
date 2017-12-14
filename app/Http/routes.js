@@ -148,6 +148,8 @@ Route.group('profile', function() {
   Route.post('/conversation/:convo', 'Api/MessageController.conversation')
   Route.post('conversation/:convo/delete', 'Api/MessageController.deleteConversation')
   Route.post('conversation/:convo/archive', 'Api/MessageController.archiveConversation')
+  Route.post('conversation/:convo/restore', 'Api/MessageController.restoreArchive')
+  
   Route.get('/messages', 'Web/GeneralController.messages')
   Route.post('/new-staff-message', 'Web/GeneralController.sendStaffMsg')
   Route.post('/new-venue-message', 'Web/GeneralController.sendVenueMsg')

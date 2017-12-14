@@ -121,7 +121,7 @@ class VenueController {
       }
       let staffs = yield StaffManagement.find({ staff: { $in: trials }, venue: req.user.venueId._id, trial: true })
                                         .populate('staff')
-      return res.json({ status: true, staffs: staffs })
+      return res.json({ status: (staffs.length > 0), staffs: staffs })
     } else {
       let staffs = yield StaffManagement
                         .find({ venue: req.user.venueId._id, trial: true })
@@ -144,6 +144,7 @@ class VenueController {
     res.json({ status: true })
     let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
     yield notify.newMessage(m)
+    let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
   }
 
   * sendInitialMsg (req, res) {

@@ -178,6 +178,11 @@ class MessageController {
     }
   }
 
+  * restoreArchive (req, res) {
+    let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: req.user._id } }, { multi: true })
+    return res.json({ status: true, messageCode: 'SUCCESS' })
+  }
+
 }
 
 

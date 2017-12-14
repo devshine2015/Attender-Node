@@ -167,6 +167,7 @@ class StaffController {
     res.json({ status: true })
     let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
     yield notify.newMessage(m)
+    let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
   }
 
   * saveAssignment (req, res) {
