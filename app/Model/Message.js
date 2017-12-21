@@ -4,8 +4,8 @@ const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
 const moment = require('moment')
-const Ws = use('Ws')
-const chatChannel = Ws.channel('chat')
+// const Ws = use('Ws')
+// const chatChannel = Ws.channel('chat')
 const _hash = require('../Serializers/BaseHash');
 
 let messageSchema = mongoose.Schema({
@@ -35,10 +35,10 @@ messageSchema.pre('save', function(next) {
   next()
 })
 
-messageSchema.post('save', function(msg) {
-  chatChannel.inRooms([msg.receiver.toString(),msg.sender.toString()]).emit('message', 'refresh-thread')
-  chatChannel.inRoom(msg.conversation.toString()).emit('message', 'refresh-messages')
-})
+// messageSchema.post('save', function(msg) {
+//   chatChannel.inRooms([msg.receiver.toString(),msg.sender.toString()]).emit('message', 'refresh-thread')
+//   chatChannel.inRoom(msg.conversation.toString()).emit('message', 'refresh-messages')
+// })
 
 
 
