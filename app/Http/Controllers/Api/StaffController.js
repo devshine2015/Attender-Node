@@ -137,7 +137,7 @@ class StaffController {
     let venue = req.user.employer
     let management = yield StaffManagement.create({
       staff: staff._id,
-      employer: employer._id,
+      employer: venue._id,
       trialStartDate: moment().format(),
       trialEndDate: moment().add(7, 'days').format()
     })
@@ -147,7 +147,7 @@ class StaffController {
       venue.markModified('interested')
       venue.save()
     }
-    res.json({ status: true, management: management })
+    res.json({ status: true, management })
   }
 
   * removeStaff (req, res) {
