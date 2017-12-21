@@ -32,7 +32,7 @@ class Migration extends Command {
         organizers = 0,
         venues = 0
 
-    let users = yield User.find({ isVenue: true, isOrganizer: true })
+    let users = yield User.find({ $or: [{isVenue: true}, {isOrganizer: true}] })
                           .populate('venueId')
                           .populate('organizerId')
 
