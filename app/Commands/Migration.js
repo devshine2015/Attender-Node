@@ -115,13 +115,13 @@ class Migration extends Command {
 
       } else if (employer.isOrganizer) {
         employer.name = user.organizerId.name
-        employer.isCompany = user.organizerId.name
-        employer.companyName = user.organizerId.name
-        employer.location = user.organizerId.name
-        employer.locationName = user.organizerId.name
-        employer.about = user.organizerId.name
-        employer.eventType = user.organizerId.name
-        employer.image = user.organizerId.name
+        employer.isCompany = user.organizerId.isCompany
+        employer.companyName = user.organizerId.companyName
+        employer.location = user.organizerId.location
+        employer.locationName = user.organizerId.locationName
+        employer.about = user.organizerId.about
+        employer.eventType = user.organizerId.eventType
+        employer.image = user.organizerId.image
         yield employer.save()
         console.log('Employer => organizer', employer.name, employer._id)
         updated += 1
