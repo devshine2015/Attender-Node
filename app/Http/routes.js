@@ -2,7 +2,6 @@
 
 const Route = use('Route')
 
-Route.get('api/secret-update', 'Api/GeneralController.updateMessages')
 Route.get('api/users', 'Api/UserController.index')
 Route.get('api/devices', 'Api/GeneralController.deviceList')
 Route.get('api/managements', 'Api/GeneralController.managements')

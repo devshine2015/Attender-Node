@@ -160,28 +160,6 @@ class GeneralController {
     return res.json({ items })
   }
 
-  * updateMessages (req, res) {
-    let total = 0
-    let messages = yield Message.find({}).populate('sender').populate('receiver')
-    for (let message of messages) {
-      if (message.sender) {
-        if (message.sender.isEmployer) {
-          message.employer = message.sender.employer
-          yield message.save()
-          total += 1
-        }
-      }
-      if (message.receiver) {
-        if (message.receiver.isEmployer){
-         message.employer = message.receiver.employer
-         yield message.save()
-         total += 1
-        }
-      }
-    }
-    res.json({ total, messages })
-  }
-
 }
 
 module.exports = GeneralController

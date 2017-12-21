@@ -40,13 +40,13 @@ class MessageController {
         $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }], archivedTo: req.user._id }
       }, {
         $lookup : {
-         from: 'venues',
-         localField: 'venue',
+         from: 'employers',
+         localField: 'employer',
          foreignField: '_id',
-         as: 'venue'
+         as: 'employer'
         }
       }, {
-        $unwind: '$venue'
+        $unwind: '$employer'
       }, {
         $group: {
           _id: '$conversation',
@@ -54,10 +54,10 @@ class MessageController {
           message: { $last: '$message' },
           delivered: { $last: '$delivered' },
           seen: { $last: '$seen' },
-          usid: { $last: '$venue.user'},
-          uselect: { $last: '$venue._id' },
-          uname: { $last: '$venue.name' },
-          uavatar: { $last: '$venue.image'}
+          usid: { $last: '$employer.user'},
+          uselect: { $last: '$employer._id' },
+          uname: { $last: '$employer.name' },
+          uavatar: { $last: '$employer.image'}
         }
       }, {
         $sort: { latest: -1 }
@@ -104,13 +104,13 @@ class MessageController {
         $match: { $or : [{ sender: req.user._id }, { receiver: req.user._id }], archivedTo: { $ne: req.user._id }, hiddenTo: { $ne: req.user._id } }
       }, {
         $lookup : {
-         from: 'venues',
-         localField: 'venue',
+         from: 'employers',
+         localField: 'employer',
          foreignField: '_id',
-         as: 'venue'
+         as: 'employer'
         }
       }, {
-        $unwind: '$venue'
+        $unwind: '$employer'
       }, {
         $group: {
           _id: '$conversation',
@@ -118,10 +118,10 @@ class MessageController {
           message: { $last: '$message' },
           delivered: { $last: '$delivered' },
           seen: { $last: '$seen' },
-          usid: { $last: '$venue.user'},
-          uselect: { $last: '$venue._id' },
-          uname: { $last: '$venue.name' },
-          uavatar: { $last: '$venue.image'},
+          usid: { $last: '$employer.user'},
+          uselect: { $last: '$employer._id' },
+          uname: { $last: '$employer.name' },
+          uavatar: { $last: '$employer.image'},
           msgId: { $last: '$_id'}
         }
       }, {
