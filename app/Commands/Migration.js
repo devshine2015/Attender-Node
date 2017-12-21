@@ -95,7 +95,7 @@ class Migration extends Command {
         let ratings = yield StaffRating.find({ venue: user.venueId._id })
         for (let rating of ratings) {
           rating.employer = employer._id
-          yield rating.employer.save()
+          yield rating.save()
         }
 
         let notifications = yield VenueNotification.find({ venueId: user.venueId._id })
