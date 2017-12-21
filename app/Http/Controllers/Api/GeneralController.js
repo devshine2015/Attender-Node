@@ -176,10 +176,10 @@ class GeneralController {
          message.employer = message.receiver.employer
          yield message.save()
          total += 1
-       }
+        }
       }
     }
-    res.json({ total })
+    res.json({ total, messages })
   }
 
 }
