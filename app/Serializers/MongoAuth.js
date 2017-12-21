@@ -99,7 +99,7 @@ class MongoAuth {
   * getUser(request) {
     const user = yield this.verify(request)
     if (user) {
-      const fields = 'fullname email avatar hasProfile facebookId googleId instagramId isSocialLogin isStaff staffId isActive isVenue venueId isOrganizer organizerId isAdmin adminId avatar rememberToken emailToken apiKey employer'
+      const fields = 'fullname email avatar hasProfile facebookId googleId instagramId isSocialLogin isStaff staffId isActive isVenue venueId isOrganizer organizerId isAdmin adminId avatar rememberToken emailToken apiKey employer isEmployer'
       return yield User.findOne({ _id: user.payload }, fields).populate('staffId').populate('employer').populate('venueId').populate('organizerId')
     } else {
       return false;
