@@ -84,21 +84,20 @@ class EmployerController {
     }
 
     if (req.user.isEmployer) {
-      let employer = yield Employer.findOne(req.user.employer._id)
-      employer.name = name || employer.name
-      employer.image = image || employer.image
-      employer.info = info || employer.info
-      employer.tag1 = tag1 || employer.tag1
-      employer.tag2 = tag2 || employer.tag2
-      employer.managerName = managerName || employer.managerName
-      employer.type = type || employer.type
-      employer.location = location || employer.location
-      employer.locationName = locationName || locationName
-      employer.openingHours = openingHours || employer.openingHours
-      employer.numberEmployees = numberEmployees || employer.numberEmployees
-      employer.services = services || employer.services
-      employer.socialMedia = socialMedia || employer.socialMedia
-      employer.save()
+      req.user.employer.name = name || req.user.employer.name
+      req.user.employer.image = image || req.user.employer.image
+      req.user.employer.info = info || req.user.employer.info
+      req.user.employer.tag1 = tag1 || req.user.employer.tag1
+      req.user.employer.tag2 = tag2 || req.user.employer.tag2
+      req.user.employer.managerName = managerName || req.user.employer.managerName
+      req.user.employer.type = type || req.user.employer.type
+      req.user.employer.location = location || req.user.employer.location
+      req.user.employer.locationName = locationName || locationName
+      req.user.employer.openingHours = openingHours || req.user.employer.openingHours
+      req.user.employer.numberEmployees = numberEmployees || req.user.employer.numberEmployees
+      req.user.employer.services = services || req.user.employer.services
+      req.user.employer.socialMedia = socialMedia || req.user.employer.socialMedia
+      req.user.employer.save()
       yield res.json({ status: true, messageCode: 'UPDATED', data: venue })
 
     } else {
@@ -163,16 +162,15 @@ class EmployerController {
     }
 
     if (req.user.isEmployer) {
-      let employer = yield Employer.findOne(req.user.employer._id)
-      employer.name = name || employer.name
-      employer.isCompany = isCompany
-      employer.companyName = companyName || employer.companyName
-      employer.location = location || employer.location
-      employer.locationName = locationName || employer.locationName
-      employer.about = about || employer.about
-      employer.eventType = eventType || employer.eventType
-      employer.image = image || employer.image
-      employer.save()
+      req.user.employer.name = name || req.user.employer.name
+      req.user.employer.isCompany = isCompany
+      req.user.employer.companyName = companyName || req.user.employer.companyName
+      req.user.employer.location = location || req.user.employer.location
+      req.user.employer.locationName = locationName || req.user.employer.locationName
+      req.user.employer.about = about || req.user.employer.about
+      req.user.employer.eventType = eventType || req.user.employer.eventType
+      req.user.employer.image = image || req.user.employer.image
+      req.user.employer.save()
       yield res.json({ status: true, messageCode: 'UPDATED', data: employer })
 
     } else {
