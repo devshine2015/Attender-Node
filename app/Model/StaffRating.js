@@ -9,6 +9,7 @@ const moment = require('moment')
 let staffRatingSchema = mongoose.Schema({
   staff: { type: ObjectId, ref: 'Staff' },
   venue: { type: ObjectId, ref: 'Venue' },
+  employer: { type: ObjectId, ref: 'Employer' },
   type: { type: String, enum: ['monthly', 'daily']},
   date: { type: Date, default: Date.now },
   overAll: Number,

@@ -1,4 +1,6 @@
 'use strict'
+const Employer = use('App/Model/Employer')
+const EmployerNotification = use('App/Model/EmployerNotification')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
@@ -13,7 +15,7 @@ let notify = new Notify()
 class EventController {
 
   * getEvent (req , res) {
-    let _event =  yield Event.findOne({ _id: req.param('id') }).populate('venueId')
+    let _event =  yield Event.findOne({ _id: req.param('id') }).populate('employer')
     if (_event) {
       return _event
     } else {
@@ -25,7 +27,7 @@ class EventController {
     let filter = req.input('date', new Date())
     let date = moment(filter).hours(0).minutes(0).seconds(0).milliseconds(0)
     if (date.isValid()) {
-      let events = yield Event.find({ venueId: req.user.venueId._id, date: date }).populate('staffs').populate('venueId', '_id name location locationName services type')
+      let events = yield Event.find({ employer: req.user.employer._id, date: date }).populate('staffs').populate('employer', '_id name location locationName services type')
       return res.json({ status: true, events: events })
     } else {
       return res.json({ status: false, messageCode: 'INVALID_DATE_FORMAT' })
@@ -48,9 +50,9 @@ class EventController {
       let lat = req.input('lat', 10),
           long = req.input('long', 10)
 
-      let venues = yield Venue.find().where('location').nearSphere({ center: [long, lat], maxDistance: 5})
+      let venues = yield Employer.find().where('location').nearSphere({ center: [long, lat], maxDistance: 5})
     } else {
-     events = yield Event.find({}).populate('venueId')
+     events = yield Event.find({}).populate('employer')
     }
     if (types) {
       types = types.split(',')
@@ -68,7 +70,7 @@ class EventController {
 
   * create (req, res) {
 
-    if (req.user.isOrganizer || req.user.isVenue) {
+    if (req.user.isEmployer) {
       const validation = yield Validator.validateAll(req.all(), Event.rules, Event.messages)
       if (validation.fails()) {
         res.json({ status: false, error: validation.messages(), messageCode: 'FAILED' })
@@ -82,17 +84,10 @@ class EventController {
           time: {
             start: req.input('startTime', 'none'),
             end: req.input('endTime', 'none')
-          }
+          },
+          employer: req.user.employer._id
         })
-        if (req.user.isOrganizer) {
-          event.isOrganizer = true
-          event.organizerId = req.user.organizerId._id
-        } else {
-          event.isVenue = true
-          event.venueId = req.user.venueId._id
-        }
-        event.save()
-        res.json({ status: true, event: event, messageCode: 'SUCCESS'  })
+        res.json({ status: true, event, messageCode: 'SUCCESS'  })
       }
     } else {
       res.json({ status: false, messageCode: 'INVALID_PROFILE' })
@@ -128,7 +123,7 @@ class EventController {
     let _event = yield this.getEvent(req, res)
     if (req.user.isVenue) {
 
-      if (req.user.venueId._id.toString() === _event.venueId._id.toString()) {
+      if (req.user.employer._id.toString() === _event.employer._id.toString()) {
         let _staffs = []
         for (let _staff in _event.interested) {
             _staffs.push(_staff)
@@ -138,7 +133,7 @@ class EventController {
         return res.json({ status: true, messageCode: 'SUCCESS', staffs: staffs })
 
       } else {
-        return res.json({ status: false, messageCode: 'UNAUTHORIZED', ids: [req.user.venueId._id, _event.venueId._id] })
+        return res.json({ status: false, messageCode: 'UNAUTHORIZED', ids: [req.user.employer._id, _event.employer._id] })
       }
 
     } else {
@@ -149,14 +144,14 @@ class EventController {
   * interest (req, res) {
     let _event = yield this.getEvent(req, res)
     if (req.user.isStaff) {
-      _event.venueId.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
-      _event.venueId.markModified('interested')
-      _event.venueId.save()
+      _event.employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
+      _event.employer.markModified('interested')
+      _event.employer.save()
       _event.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
       _event.markModified('interested')
       _event.save()
-      let notification = yield VenueNotification.create({
-        venueId: _event.venueId._id,
+      let notification = yield EmployerNotification.create({
+        employer: _event.employer._id,
         staffId: req.user.staffId._id,
         eventId: _event._id,
         type: 'event-interest'
@@ -171,20 +166,3 @@ class EventController {
 }
 
 module.exports = EventController
-
-
-
-// let venueFilter = req.input('venues', false)
-// let serviceFilter = req.input('services', false)
-// let venues = venueFilter.split(',')
-// let rawEvents = yield Event.find({}).populate('venueId')
-// // filters the event by venue type
-// if (venueFilter) {
-//   let events = rawEvents.filter((event) => {
-//     for (let venue of venues) {
-//       let i = event.venueId.type.indexOf(venue)
-//       if (i >= 0) {
-//         return true
-//       }
-//     }
-//   })

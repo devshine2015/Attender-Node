@@ -1,4 +1,5 @@
 'use strict'
+const Employer = require('../Model/Employer')
 const Staff = require('../Model/Staff')
 const Organizer = require('../Model/Organizer')
 const Venue = require('../Model/Venue')
@@ -31,7 +32,7 @@ class MongoAuth {
     }
     return yield userSchema.save()
   }
-  
+
   * verify (request) {
     try {
       const token = request.input('token') || request.header('x-request-token')
@@ -62,7 +63,7 @@ class MongoAuth {
   }
 
   * authMobile (request) {
-    const userAuth = yield User.findOne({ mobile: request.input('mobile') }).populate('staffId').populate('venueId').populate('organizerId')
+    const userAuth = yield User.findOne({ mobile: request.input('mobile') }).populate('staffId').populate('venueId').populate('organizerId').populate('employer')
     if (userAuth) {
       yield this.generateToken(userAuth, 3600)
       userAuth.token = userAuth.token.token
@@ -98,8 +99,8 @@ class MongoAuth {
   * getUser(request) {
     const user = yield this.verify(request)
     if (user) {
-      const fields = 'fullname email avatar hasProfile facebookId googleId instagramId isSocialLogin isStaff staffId isActive isVenue venueId isOrganizer organizerId isAdmin adminId avatar rememberToken emailToken apiKey'
-      return yield User.findOne({ _id: user.payload }, fields).populate('staffId').populate('venueId').populate('organizerId')
+      const fields = 'fullname email avatar hasProfile facebookId googleId instagramId isSocialLogin isStaff staffId isActive isVenue venueId isOrganizer organizerId isAdmin adminId avatar rememberToken emailToken apiKey employer'
+      return yield User.findOne({ _id: user.payload }, fields).populate('staffId').populate('employer').populate('venueId').populate('organizerId')
     } else {
       return false;
     }

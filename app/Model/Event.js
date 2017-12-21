@@ -24,11 +24,13 @@ let eventSchema = mongoose.Schema({
   interested: { type: Mixed, default: {} },
   activeStaff: { type: Mixed, default: {} },
   staffs: [{ type: ObjectId, ref: 'StaffManagement' }],
-  updatedAt: { type: Date },
-  createdAt: { type: Date, default: Date.now }
+
+  employer: { type: ObjectId, ref: 'Employer' }
+
 
 }, {
-  versionKey: false
+  versionKey: false,
+  timestamps: true
 });
 
 

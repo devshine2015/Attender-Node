@@ -7,6 +7,7 @@ const Event = use('App/Model/Event')
 const Staff = use('App/Model/Staff')
 const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
+const Employer = use('App/Model/Employer')
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
@@ -22,7 +23,7 @@ class GeneralController {
                         .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}], hiddenTo: { $ne: req.user._id } })
                         .sort('-sentAt')
                         .populate('staff', '_id fullname avatar')
-                        .populate('venue', '_id name image')
+                        .populate('employer', '_id name image')
 
     return res.json({ status: true, messages: messages })
   }
@@ -56,18 +57,18 @@ class GeneralController {
     return res.json({ messages })
   }
   * pushMessage (req, res) {
-    let m = yield Message.findOne({ _id: req.param('id') }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
+    let m = yield Message.findOne({ _id: req.param('id') }).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue')
     yield notify.newMessage(m)
     return res.json({ status: true, message: m })
   }
 
   * managements (req, res) {
-    let managements = yield StaffManagement.find({}).populate('staff', '_id fullname position').populate('venue', '_id name')
+    let managements = yield StaffManagement.find({}).populate('staff', '_id fullname position').populate('employer', '_id name')
     return res.json({ managements })
   }
 
   * timesheets (req, res) {
-    let timesheets = yield Timesheet.find({}).populate('staff', '_id fullname position').populate('venue', '_id name')
+    let timesheets = yield Timesheet.find({}).populate('staff', '_id fullname position').populate('employer', '_id name')
     return res.json({ timesheets })
   }
 
@@ -86,7 +87,7 @@ class GeneralController {
       let conversation = _hash(sorted[0] + sorted[1])
       let exist = yield Message.findOne({ conversation: conversation })
       if (user.isStaff) {
-        let management = yield StaffManagement.findOne({ venue: req.user.venueId._id, staff: user.staffId })
+        let management = yield StaffManagement.findOne({ venue: req.user.employer._id, staff: user.staffId })
         if (management) {
           hired = management.hired
           trial = management.trial
@@ -157,6 +158,28 @@ class GeneralController {
   * items (req, res) {
     let items = yield Item.find({})
     return res.json({ items })
+  }
+
+  * updateMessages (req, res) {
+    let total = 0
+    let messages = yield Message.find({}).populate('sender').populate('receiver')
+    for (let message of messages) {
+      if (message.sender) {
+        if (message.sender.isEmployer) {
+          message.employer = message.sender.employer
+          yield message.save()
+          total += 1
+        }
+      }
+      if (message.receiver) {
+        if (message.receiver.isEmployer){
+         message.employer = message.receiver.employer
+         yield message.save()
+         total += 1
+       }
+      }
+    }
+    res.json({ total })
   }
 
 }

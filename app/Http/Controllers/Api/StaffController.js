@@ -6,6 +6,7 @@ const Task = use('App/Model/Task')
 const Suggestion = use('App/Model/Suggestion')
 const StaffRating = use('App/Model/StaffRating')
 const StaffManagement = use('App/Model/StaffManagement')
+const StaffNotification = use('App/Model/StaffNotification')
 const Validator = use('Validator')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
@@ -40,7 +41,7 @@ class StaffController {
   }
 
   * myManagements (req, res) {
-    let managements = yield StaffManagement.find({ staff: req.user.staffId._id }).populate('venue', '_id name location locationName services type')
+    let managements = yield StaffManagement.find({ staff: req.user.staffId._id }).populate('employer', '_id name location locationName services type')
     return res.json({ status: true, managements })
   }
 
@@ -56,7 +57,7 @@ class StaffController {
   * getManagements (req, res) {
     let staff = yield this.getStaff(req)
     if (staff) {
-      let managements = yield StaffManagement.find({ staff: staff._id, hired: true }).populate('venue')
+      let managements = yield StaffManagement.find({ staff: staff._id, hired: true }).populate('employer')
       if (managements) {
         return res.json({ status: true, managements })
       } else {
@@ -70,7 +71,7 @@ class StaffController {
   * getReviews (req, res) {
     let staff = yield this.getStaff(req)
     if (staff) {
-      let ratings = yield StaffRating.find({ staff: staff._id, type: 'monthly' }).populate('venue', '_id name image')
+      let ratings = yield StaffRating.find({ staff: staff._id, type: 'monthly' }).populate('employer', '_id name image')
       if (ratings) {
         return res.json({ status: true, ratings })
       } else {
@@ -105,10 +106,10 @@ class StaffController {
 
   * directHire (req, res) {
     let staff = yield this.getStaff(req)
-    let venue = req.user.venueId
+    let venue = req.user.employer
     let management = yield StaffManagement.create({
       staff: staff._id,
-      venue: venue._id,
+      employer: venue._id,
       trial: false,
       hired: true,
       hiredDate: moment().format()
@@ -133,10 +134,10 @@ class StaffController {
 
   * trial (req, res) {
     let staff = yield this.getStaff(req)
-    let venue = req.user.venueId
+    let venue = req.user.employer
     let management = yield StaffManagement.create({
       staff: staff._id,
-      venue: venue._id,
+      employer: employer._id,
       trialStartDate: moment().format(),
       trialEndDate: moment().add(7, 'days').format()
     })
@@ -162,10 +163,10 @@ class StaffController {
       receiver: req.input('receiver'),
       message: req.input('message'),
       staff: req.user.staffId._id,
-      venue: req.input('venue', '')
+      employer: req.input('venue', '')
     })
     res.json({ status: true })
-    let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('venue', 'name').populate('sender', '_id isStaff isVenue')
+    let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue isEmployer isOrganizer')
     yield notify.newMessage(m)
     let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
   }
@@ -188,7 +189,7 @@ class StaffController {
     let management = yield this.getManagement(req)
     let task = yield Task.create({
       staff: management.staff._id,
-      venue: req.user.venueId._id,
+      employer: req.user.employer._id,
       description: req.input('description', '')
     })
     management.tasks.push(task._id)
@@ -200,7 +201,7 @@ class StaffController {
     let management = yield this.getManagement(req)
     let suggestion = yield Suggestion.create({
       staff: management.staff._id,
-      venue: req.user.venueId._id,
+      employer: req.user.employer._id,
       description: req.input('description', '')
     })
     management.suggestions.push(suggestion._id)
@@ -299,6 +300,18 @@ class StaffController {
     if (management) {
 
     }
+  }
+
+  * notifications (req, res) {
+    if (req.user.isStaff) {
+      let notifications = yield StaffNotification.find({ staffId: req.user.staffId._id }).populate('eventId').populate('staffId').populate('employer').sort('-createdAt')
+      res.json({ status: true, messageCode: 'SUCCESS', notifications })
+      yield StaffNotification.update({ opened: false, employer: req.user.staffId._id }, { opened: true }, { multi: true })
+
+    } else {
+     res.json({ status: false, messageCode: 'INVALID_PROFILE' })
+    }
+
   }
 
 }

@@ -13,6 +13,7 @@ let messageSchema = mongoose.Schema({
   receiver: { type: ObjectId, ref: 'User'},
   staff: { type: ObjectId, ref: 'Staff'},
   venue: { type: ObjectId, ref: 'Venue' },
+  organizer: { type: ObjectId, ref: 'Orghanizer' },
   conversation: String,
   message: String,
   delivered: { type: Boolean, default: false},
@@ -20,7 +21,10 @@ let messageSchema = mongoose.Schema({
   seenAt: Date,
   sentAt: { type: Date, default: Date.now },
   archivedTo: [{ type: ObjectId, ref: 'User' }],
-  hiddenTo: [{ type: ObjectId, ref: 'User' }]
+  hiddenTo: [{ type: ObjectId, ref: 'User' }],
+
+  employer: { type: ObjectId, ref: 'Employer' },
+
 })
 
 messageSchema.pre('save', function(next) {

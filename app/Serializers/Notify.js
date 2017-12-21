@@ -22,7 +22,7 @@ class Notify {
   }
 
   * eventInterest (staff, $event) {
-    let device = yield this.getDevice($event.venueId.user)
+    let device = yield this.getDevice($event.employer.user)
     if (device) {
       let message = `${staff.fullname} is interested to your event ${$event.name}`
       yield this.send(device, message, { staff })
@@ -47,7 +47,7 @@ class Notify {
       if (message.sender.isStaff) {
         return yield this.send(device, `${message.staff.fullname}: ${message.message}`, { message })
       } else if (message.sender.isVenue) {
-        return yield this.send(device, `${message.venue.name}: ${message.message}`, { message })
+        return yield this.send(device, `${message.employer.name}: ${message.message}`, { message })
       } else {
         return yield this.send(device, 'New Message', { message })
       }

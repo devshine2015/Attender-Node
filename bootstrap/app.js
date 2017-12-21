@@ -99,6 +99,8 @@ const aliases = {
 |
 */
 const commands = [
+  'App/Commands/UpdateData',
+  'App/Commands/Migration',
   'App/Commands/CreateAdmin',
   'App/Commands/ResetDB',
   'App/Commands/UpdateTimesheet',

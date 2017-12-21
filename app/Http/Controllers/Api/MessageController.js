@@ -13,7 +13,7 @@ class MessageController {
                         .find({ conversation: req.param('convo', ''), $or: [ {receiver: req.user._id}, {sender: req.user._id}], hiddenTo: { $ne: req.user._id } })
                         .sort('-sentAt')
                         .populate('staff', '_id fullname avatar')
-                        .populate('venue', '_id name image')
+                        .populate('employer', '_id name image')
     res.json({ status: true, messages: messages })
     let message = yield Message.find({conversation: req.param('convo', ''), receiver: req.user._id, seen: false }).sort('-sentAt').limit(1)
     if (message.length > 0) {

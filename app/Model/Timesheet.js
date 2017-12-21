@@ -9,6 +9,7 @@ const Mixed = mongoose.Schema.Types.Mixed
 let timesheetSchema = mongoose.Schema({
 
   staff: { type: ObjectId, ref: 'Staff' },
+  employer: { type: ObjectId, ref: 'Employer' },
   venue: { type: ObjectId, ref: 'Venue' },
   management: { type: ObjectId, ref: 'StaffManagement' },
   weekStart: { type: Date },

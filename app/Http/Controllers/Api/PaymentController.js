@@ -1,4 +1,5 @@
 'use strict'
+const Env = use('Env')
 const moment = require('moment')
 const uuidv4 = require('uuid/v4');
 const AHelpers = use('AHelpers')
@@ -12,7 +13,7 @@ module.exports = class PaymentController {
 
   * earnings (req, res) {
     let banks = yield Bank.find({ user: req.user._id })
-    let promiseWallet = yield PromisePay.wallet(`beta-v1-acc-${req.user._id}`)
+    let promiseWallet = yield PromisePay.wallet(req.user.promiseId)
     let wallet = {}
     if (promiseWallet.wallet_accounts) {
       let balance = promiseWallet.wallet_accounts.balance
@@ -32,7 +33,7 @@ module.exports = class PaymentController {
 
   * addCard (req, res) {
     let card = yield PromisePay.addCard({
-      user_id: `beta-v1-acc-${req.user._id}`,
+      user_id: req.user.promiseId,
       full_name: req.input('account_name', ''),
       number: req.input('account_number', ''),
       expiry_month: req.input('expiry_month', 1),
@@ -41,7 +42,7 @@ module.exports = class PaymentController {
     })
     if (card.card_accounts) {
       let existing = yield Card.findOne({ user: req.user._id })
-      let currentCard = yield PromisePay.getCards(`beta-v1-acc-${req.user._id}`)
+      let currentCard = yield PromisePay.getCards(req.user.promiseId)
       yield Card.create({
         promiseId: currentCard.card_accounts.id,
         active: currentCard.card_accounts.active,
@@ -85,7 +86,7 @@ module.exports = class PaymentController {
 
   * addBank (req, res) {
     let bank = yield PromisePay.addBank({
-      user_id: `beta-v1-acc-${req.user._id}`,
+      user_id: req.user.promiseId,
       bank_name: req.input('bank_name', ''),
       account_name: req.input('account_name', ''),
       routing_number: req.input('routing_number', ''),
@@ -135,8 +136,8 @@ module.exports = class PaymentController {
 
   * transfer (req, res) {
     let transfer = yield PromisePay.transfer(
-      `beta-v1-acc-${req.user._id}`,
-      `beta-v1-acc-${req.input('to_user', '')}`,
+      req.user.promiseId,
+      `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${req.input('to_user', '')}`,
       req.input('amount', 0),
       req.input('from', 'bank'),
       req.input('account_id', '')
@@ -159,7 +160,7 @@ module.exports = class PaymentController {
 
   * deposit (req, res) {
     let withdraw = yield PromisePay.deposit(
-      id=`beta-v1-acc-${req.user._id}`,
+      id=req.user.promiseId,
       account_id=req.input('account_id', req.user.primaryAccount ),
       amount=req.input('amount', 0)
     )
@@ -167,7 +168,7 @@ module.exports = class PaymentController {
   }
 
   * transactions (req, res) {
-    let transactions = yield PromisePay.transactions(`beta-v1-acc-${req.user._id}`)
+    let transactions = yield PromisePay.transactions(req.user.promiseId)
     if (transactions.items) {
       return res.json({ status:true, transactions: transactions })
     } else {
@@ -211,7 +212,7 @@ module.exports = class PaymentController {
   }
 
   * getTimesheet (req, res) {
-    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('venue')
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('employer')
     if (timesheet) {
       let nextWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
       let lastWeek = moment(timesheet.weekStart).isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
@@ -231,7 +232,7 @@ module.exports = class PaymentController {
   }
 
   * updateTimesheet (req, res) {
-    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('venue')
+    let timesheet = yield Timesheet.findOne({ _id: req.param('id') }).populate('staff').populate('employer')
     if (timesheet) {
       switch (req.param('action')) {
         case 'rate':
@@ -248,8 +249,8 @@ module.exports = class PaymentController {
           timesheet.save()
         case 'make_payment':
           let transfer = yield PromisePay.transfer(
-            `beta-v1-acc-${timesheet.venue.user}`,
-            `beta-v1-acc-${timesheet.staff.user}`,
+            `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.venue.user}`,
+            `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
             req.input('amount', 0),
             'bank',
             req.input('account_id', '')

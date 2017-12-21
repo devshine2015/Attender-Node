@@ -8,6 +8,8 @@ const StaffManagement = use('App/Model/StaffManagement')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
+const Env = use('Env')
+
 
 let userSchema = mongoose.Schema({
   fullname: String,
@@ -19,6 +21,10 @@ let userSchema = mongoose.Schema({
   facebookAuth: { type: Mixed, default: {} },
   isStaff: { type: Boolean, default: false},
   staffId: { type: ObjectId, ref: 'Staff'},
+
+  isEmployer: { type: Boolean, default: false },
+  employer: { type: ObjectId, ref: 'Employer' },
+
 
   isVenue: { type: Boolean, default: false},
   venueId: { type: ObjectId, ref: 'Venue' },
@@ -55,7 +61,9 @@ let userSchema = mongoose.Schema({
   primaryAccount: { type: String, default: '' },
   promisePay: { type: Boolean, default: false },
   updatedAt: { type: Date },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  promiseId: { type: String, default: '' }
+
 }, {
   versionKey: false
 });
@@ -95,19 +103,21 @@ userSchema.statics.facebookSchema = {
   accessToken: 'required'
 }
 userSchema.post('save', function(user){
+  let promiseId = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${user._id}`
   if (!user.promisePay) {
     PromisePay.createUser({
-      id: `beta-v1-acc-${user._id}`,
+      id: promiseId,
       email: user.email,
       first_name: user.fullname,
       country: 'AUS'
     }).then((res)=>{
       user.promisePay = true
+      user.promiseId = promiseId
       user.save()
     })
   }
   if (!user.walletId && user.promisePay) {
-    PromisePay.wallet(`beta-v1-acc-${user._id}`).then((res)=>{
+    PromisePay.wallet(user.promiseId).then((res)=>{
       user.walletId = res.wallet_accounts.id
       user.save()
     })
@@ -129,5 +139,6 @@ userSchema.post('remove', function(user) {
  // Message.remove({ $or: [ {receiver: user._id}, {sender: user._id}] }, function(err){})
 })
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
+
 
 module.exports = mongoose.model('User', userSchema)

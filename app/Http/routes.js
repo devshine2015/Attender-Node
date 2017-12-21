@@ -2,13 +2,16 @@
 
 const Route = use('Route')
 
+Route.get('api/update-messages-x', 'Api/GeneralController.updateMessages')
 Route.get('api/users', 'Api/UserController.index')
 Route.get('api/devices', 'Api/GeneralController.deviceList')
 Route.get('api/managements', 'Api/GeneralController.managements')
 Route.get('api/timesheets', 'Api/GeneralController.timesheets')
 Route.get('api/staffs', 'Api/StaffController.index')
-Route.get('api/venues', 'Api/VenueController.index')
-Route.get('api/organizers', 'Api/OrganizerController.index')
+
+Route.get('api/venues', 'Api/EmployerController.venues')
+Route.get('api/organizers', 'Api/EmployerController.organisers')
+
 Route.get('api/events', 'Api/EventController.index')
 Route.get('api/messages', 'Api/GeneralController.messages')
 
@@ -45,7 +48,7 @@ Route.group('api', function() {
 
   Route.get('open-convo/:id', 'Api/GeneralController.openConvo')
   Route.post('new-initial-message', 'Api/VenueController.sendInitialMsg')
-  Route.post('new-staff-message', 'Api/VenueController.sendStaffMsg')
+  Route.post('new-staff-message', 'Api/EmployerController.sendStaffMsg')
   Route.post('new-venue-message', 'Api/StaffController.sendVenueMsg')
 
   Route.get('staff-messages', 'Api/MessageController.staffMessages')
@@ -58,11 +61,12 @@ Route.group('api', function() {
   Route.get('staff/:id/show', 'Api/StaffController.showStaff')
   Route.get('staff/:id/managements', 'Api/StaffController.getManagements')
   Route.get('staff/:id/reviews', 'Api/StaffController.getReviews')
+  Route.get('staff-notifications', 'Api/StaffController.notifications')
 
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
-  Route.get('trial-staffs', 'Api/VenueController.trialStaffs')
-  Route.get('active-staffs', 'Api/VenueController.activeStaffs')
+  Route.get('trial-staffs', 'Api/EmployerController.trialStaffs')
+  Route.get('active-staffs', 'Api/EmployerController.activeStaffs')
 
   Route.post('trial/:id', 'Api/StaffController.trial')
   Route.post('direct-hire/:id', 'Api/StaffController.directHire')
@@ -93,18 +97,18 @@ Route.group('api', function() {
   Route.post('timesheet/:id/:action', 'Api/PaymentController.updateTimesheet')
 
   // VENUE API MANAGEMENT
-  Route.get('my-staffs', 'Api/VenueController.myStaffs')
-  Route.get('venue/notifications', 'Api/VenueController.notifications')
-  Route.post('venue/notification/:id/delete', 'Api/VenueController.removeNotif')
-  Route.get('venue/interested', 'Api/VenueController.interested')
-  Route.post('venue/:id/interest', 'Api/VenueController.interest')
+  Route.get('my-staffs', 'Api/EmployerController.myStaffs')
+  Route.get('venue/notifications', 'Api/EmployerController.notifications')
+  Route.post('venue/notification/:id/delete', 'Api/EmployerController.removeNotif')
+  Route.get('venue/interested', 'Api/EmployerController.interested')
+  Route.post('venue/:id/interest', 'Api/EmployerController.interest')
 
-  Route.get('user/profile/venue', 'Api/UserController.getVenueProfile')
-  Route.post('user/profile/venue', 'Api/UserController.saveVenueProfile')
+  Route.get('user/profile/venue', 'Api/EmployerController.getVenueProfile')
+  Route.post('user/profile/venue', 'Api/EmployerController.saveVenueProfile')
 
   // ORGANIZER API MANAGEMENT
-  Route.get('user/profile/organizer', 'Api/UserController.getOrganizerProfile')
-  Route.post('user/profile/organizer', 'Api/UserController.saveOrganizerProfile')
+  Route.get('user/profile/organizer', 'Api/EmployerController.getOrganizerProfile')
+  Route.post('user/profile/organizer', 'Api/EmployerController.saveOrganizerProfile')
 
   // EVENT API MANAGEMENT
   Route.get('events', 'Api/EventController.index')
@@ -142,53 +146,6 @@ Route.group('manage', function() {
 
 }).prefix('manage').middleware('admin')
 
-
-
-Route.group('profile', function() {
-  Route.get('/', 'Web/GeneralController.index')
-
-  Route.post('/conversation/:convo', 'Api/MessageController.conversation')
-  Route.post('conversation/:convo/delete', 'Api/MessageController.deleteConversation')
-  Route.post('conversation/:convo/archive', 'Api/MessageController.archiveConversation')
-  Route.post('conversation/:convo/restore', 'Api/MessageController.restoreArchive')
-
-  Route.get('/messages', 'Web/GeneralController.messages')
-  Route.post('/new-staff-message', 'Web/GeneralController.sendStaffMsg')
-  Route.post('/new-venue-message', 'Web/GeneralController.sendVenueMsg')
-  // Route.post('/staff-messages', 'Web/StaffController.messages')
-  Route.post('staff-messages', 'Api/MessageController.staffMessages')
-  Route.post('venue-messages', 'Api/MessageController.venueMessages')
-  Route.get('job-seekers', 'Web/StaffController.index')
-  Route.get('my-staffs', 'Web/VenueController.renderMyStaffs')
-
-  Route.post('my-staffs', 'Web/VenueController.myStaffs')
-  Route.post('interested-staffs', 'Web/VenueController.interestedStaffs')
-  Route.post('/direct-hire/:id', 'Web/StaffController.directHire')
-  Route.post('/hire/:id', 'Web/StaffController.hire')
-
-  Route.post('/task/:id/edit', 'Web/StaffController.editTask')
-  Route.post('/task/:id/delete', 'Web/StaffController.deleteTask')
-
-  Route.post('/suggestion/:id/edit', 'Web/StaffController.editSuggestion')
-  Route.post('/suggestion/:id/delete', 'Web/StaffController.deleteSuggestion')
-
-  Route.get('venues', 'Web/VenueController.index')
-  Route.get('venue/:id', 'Web/VenueController.select')
-  // Route.post('/venue-messages', 'Web/VenueController.messages')
-  Route.post('venue/:id/interest', 'Web/VenueController.interest')
-
-  Route.get('events', 'Web/EventController.index')
-  Route.get('events/create', 'Web/EventController.create')
-  Route.post('events/create', 'Web/EventController.store')
-  Route.post('event/:id/interest', 'Web/EventController.interest')
-
-  Route.post('trial/:id', 'Web/StaffController.trial')
-  Route.post('add-task/:id', 'Web/StaffController.addTask')
-  Route.post('add-suggestion/:id', 'Web/StaffController.addSuggestion')
-  Route.post('/remove-staff/:id', 'Api/StaffController.removeStaff')
-
-
-}).middleware('user','profile')
 
 Route.group('user', function(){
   Route.get('logout', 'Web/AuthController.logout')

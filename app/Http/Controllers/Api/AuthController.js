@@ -1,6 +1,9 @@
 'use strict'
 const _ = require('lodash')
 const User = use('App/Model/User')
+const EmployerNotification = use('App/Model/EmployerNotification')
+const StaffNotification = use('App/Model/StaffNotification')
+const Message = use('App/Model/Message')
 const Device = use('App/Model/Device')
 const Hash = use('Hash')
 const Validator = use('Validator')
@@ -94,22 +97,30 @@ class AuthController {
   * current (req, res) {
     let deviceToken = req.input('dToken', false)
     let deviceType = req.input('type', false)
+    let newNotifications = 0
+    let newMessages = yield Message.find({ receiver: req.user._id, seen: false }).count()
+    if (req.user.isEmployer) {
+      newNotifications = yield EmployerNotification.find({ employer: req.user.employer._id, opened: false }).count()
+    } else if (req.user.isStaff) {
+      newNotifications = yield StaffNotification.find({ staffId: req.user.staffId._id, opened: false }).count()
+    }
+
     if (deviceToken && deviceType) { // save device token --- override old token
       let device = yield Device.findOne({ user: req.user._id, type: deviceType })
-      if (device) { 
+      if (device) {
         device.token = deviceToken
         yield device.save()
-        return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'updated' })
+        return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'updated', newNotifications, newMessages })
       } else {
         let newDevice = yield Device.create({
           token: deviceToken,
           type: deviceType,
           user: req.user._id
         })
-        return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'saved' })
+        return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'saved', newNotifications, newMessages })
       }
     } else {
-      return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'unsaved' })
+      return res.json({ status: true, messageCode: 'SUCCESS', data: req.user, device: 'unsaved', newNotifications, newMessages })
     }
 
   }

@@ -28,7 +28,7 @@ class GeneralController {
       receiver: req.input('receiver'),
       message: req.input('message'),
       staff: req.input('staff', ''),
-      venue: req.user.venueId
+      employer: req.user.employer
     })
     return res.json({ status: true })
   }

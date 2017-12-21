@@ -7,6 +7,7 @@ const moment = require('moment')
 
 let taskSchema = mongoose.Schema({
   staff: { type: ObjectId, ref: 'Staff' },
+  employer: { type: ObjectId, ref: 'Employer' },
   venue: { type: ObjectId, ref: 'Venue' },
   date: { type: Date, default: Date.now },
   completed: { type: Boolean, default: false },
