@@ -249,7 +249,7 @@ module.exports = class PaymentController {
           timesheet.save()
         case 'make_payment':
           let transfer = yield PromisePay.transfer(
-            `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.venue.user}`,
+            `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
             `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
             req.input('amount', 0),
             'bank',
