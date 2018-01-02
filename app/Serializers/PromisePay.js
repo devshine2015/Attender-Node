@@ -62,6 +62,10 @@ module.exports = {
     return baseReq.delete(`card_accounts/${id}`)
   },
 
+  getCard: (id) => {
+    return baseReq.get(`card_accounts/${id}`)
+  },
+
   getCards: (id) => {
     return baseReq.get(`users/${id}/card_accounts`)
   },

@@ -42,7 +42,7 @@ module.exports = class PaymentController {
     })
     if (card.card_accounts) {
       let existing = yield Card.findOne({ user: req.user._id })
-      let currentCard = yield PromisePay.getCards(req.user.promiseId)
+      let currentCard = yield PromisePay.getCard(card.card_accounts.id)
       yield Card.create({
         promiseId: currentCard.card_accounts.id,
         active: currentCard.card_accounts.active,
