@@ -44,7 +44,7 @@ module.exports = {
           }
           days.push(day)
         }
-        resolve({ weekStart, weekEnd, totalPayableHours, days, rate, management: management._id, staff: management.staff._id, venue: management.venue })
+        resolve({ weekStart, weekEnd, totalPayableHours, days, rate, management: management._id, staff: management.staff._id, employer: management.employer })
       } else {
         reject({ error: 'Management Missing'})
       }
