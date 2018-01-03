@@ -291,7 +291,14 @@ class EmployerController {
                       .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
                       .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
 
-    res.json({ status: true, staffs })
+    let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
+    let managements = {}
+    for (let position of positions) {
+      managements[position] = staffs.filter((management) => {
+        return (management.staff.position.includes(position))
+      })
+    }
+    res.json({ status: true, staffs, managements })
   }
 
   * trialStaffs (req, res) {
@@ -310,8 +317,14 @@ class EmployerController {
                         .populate('ratings')
                         .populate('tasks', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
                         .populate('suggestions', '_id description createdAt', null, { sort: { 'createdAt': -1 } })
-
-      return res.json({ status: true, staffs })
+      let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
+      let managements = {}
+      for (let position of positions) {
+        managements[position] = staffs.filter((management) => {
+          return (management.staff.position.includes(position))
+        })
+      }
+      return res.json({ status: true, staffs, managements })
     }
   }
 

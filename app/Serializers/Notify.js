@@ -56,6 +56,24 @@ class Notify {
     }
   }
 
+  * hired (staff, employer) {
+    let device = yield this.getDevice(staff.user._id)
+    if (device) {
+      return yield this.send(device, `${employer.name} hired you`, {employer})
+    } else {
+      return device
+    }
+  }
+
+  * trial (staff, employer) {
+    let device = yield this.getDevice(staff.user._id)
+    if (device) {
+      return yield this.send(device, `${employer.name} put you to trial for 7 days.`, {employer})
+    } else {
+      return device
+    }
+  }
+
 }
 
 module.exports = Notify

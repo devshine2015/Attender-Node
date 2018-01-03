@@ -16,7 +16,7 @@ let notify = new Notify()
 class StaffController {
 
   * getManagement (req) {
-    let management = yield StaffManagement.findOne({ _id: req.param('id') }).populate('staff')
+    let management = yield StaffManagement.findOne({ _id: req.param('id') }).populate('staff').populate('employer', '_id name')
     if (management) {
       return management
     }
@@ -120,7 +120,13 @@ class StaffController {
       venue.markModified('interested')
       venue.save()
     }
-    return res.json({ status: true, management: management })
+    res.json({ status: true, management: management })
+    yield StaffNotification.create({
+      employer: management.employer._id,
+      staffId: staff._id,
+      type: 'hired'
+    })
+    yield notify.hired(staff, management.employer)
   }
 
   * hire (req, res) {
@@ -129,7 +135,13 @@ class StaffController {
     management.trial = false
     management.hiredDate = moment().format()
     management.save()
-    return res.json({ status: true, management: management })
+    res.json({ status: true, management: management })
+    yield StaffNotification.create({
+      employer: management.employer._id,
+      staffId: staff._id,
+      type: 'hired'
+    })
+    yield notify.hired(staff, management.employer)
   }
 
   * trial (req, res) {
@@ -148,6 +160,13 @@ class StaffController {
       venue.save()
     }
     res.json({ status: true, management })
+    yield StaffNotification.create({
+      employer: venue,
+      staffId: staff._id,
+      type: 'trial'
+    })
+    yield notify.trial(staff, venue)
+
   }
 
   * removeStaff (req, res) {
