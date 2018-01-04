@@ -106,27 +106,27 @@ class StaffController {
 
   * directHire (req, res) {
     let staff = yield this.getStaff(req)
-    let venue = req.user.employer
+    let employer = req.user.employer
     let management = yield StaffManagement.create({
       staff: staff._id,
-      employer: venue._id,
+      employer: employer._id,
       trial: false,
       hired: true,
       hiredDate: moment().format()
     })
-    let s = venue.interested[staff._id]
+    let s = employer.interested[staff._id]
     if (s) {
       s.include = false
-      venue.markModified('interested')
-      venue.save()
+      employer.markModified('interested')
+      employer.save()
     }
     res.json({ status: true, management: management })
     yield StaffNotification.create({
-      employer: management.employer._id,
+      employer: employer._id,
       staffId: staff._id,
       type: 'hired'
     })
-    yield notify.hired(staff, management.employer)
+    yield notify.hired(staff, employer)
   }
 
   * hire (req, res) {

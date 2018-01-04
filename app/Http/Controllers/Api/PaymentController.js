@@ -170,7 +170,7 @@ module.exports = class PaymentController {
   * transactions (req, res) {
     let transactions = yield PromisePay.transactions(req.user.promiseId)
     if (transactions.items) {
-      return res.json({ status:true, transactions: transactions })
+      return res.json({ status: true, transactions })
     } else {
       return res.json({ status: false, messageCode: 'INTERNAL_SERVER_ERROR' })
     }
