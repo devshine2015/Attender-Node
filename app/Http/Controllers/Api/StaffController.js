@@ -120,7 +120,7 @@ class StaffController {
       employer.markModified('interested')
       employer.save()
     }
-    res.json({ status: true, management: management })
+    res.json({ status: true, management })
     yield StaffNotification.create({
       employer: employer._id,
       staffId: staff._id,
@@ -135,7 +135,7 @@ class StaffController {
     management.trial = false
     management.hiredDate = moment().format()
     management.save()
-    res.json({ status: true, management: management })
+    res.json({ status: true, management })
     yield StaffNotification.create({
       employer: management.employer._id,
       staffId: staff._id,
@@ -325,7 +325,7 @@ class StaffController {
     if (req.user.isStaff) {
       let notifications = yield StaffNotification.find({ staffId: req.user.staffId._id }).populate('eventId').populate('staffId').populate('employer').sort('-createdAt')
       res.json({ status: true, messageCode: 'SUCCESS', notifications })
-      yield StaffNotification.update({ opened: false, employer: req.user.staffId._id }, { opened: true }, { multi: true })
+      yield StaffNotification.update({ opened: false, staffId: req.user.staffId._id }, { opened: true }, { multi: true })
 
     } else {
      res.json({ status: false, messageCode: 'INVALID_PROFILE' })
