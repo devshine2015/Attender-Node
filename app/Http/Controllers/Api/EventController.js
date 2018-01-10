@@ -29,7 +29,7 @@ class EventController {
     let endDate = moment(filter).hours(23).minutes(59).seconds(59).milliseconds(999)
 
     if (startDate.isValid() && endDate.isValid()) {
-      let events = yield Event.find({ employer: req.user.employer._id, date: { gte: startDate, lt: endDate } }).populate('staffs').populate('employer', '_id name location locationName services type')
+      let events = yield Event.find({ employer: req.user.employer._id, date: { $gte: startDate, $lt: endDate } }).populate('staffs').populate('employer', '_id name location locationName services type')
       return res.json({ status: true, events })
 
     } else {
