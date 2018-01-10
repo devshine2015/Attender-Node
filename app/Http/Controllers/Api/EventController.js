@@ -28,7 +28,7 @@ class EventController {
     let startDate = moment(filter).hours(0).minutes(0).seconds(0).milliseconds(0)
     let endDate = moment(filter).hours(23).minutes(59).seconds(59).milliseconds(999)
 
-    if (date.isValid()) {
+    if (startDate.isValid() && endDate.isValid()) {
       let events = yield Event.find({ employer: req.user.employer._id, date: { gte: startDate, lt: endDate } }).populate('staffs').populate('employer', '_id name location locationName services type')
       return res.json({ status: true, events })
 
@@ -36,7 +36,7 @@ class EventController {
       return res.json({ status: false, messageCode: 'INVALID_DATE_FORMAT' })
 
     }
-    
+
   }
 
 
