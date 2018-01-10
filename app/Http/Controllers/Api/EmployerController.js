@@ -211,6 +211,7 @@ class EmployerController {
       types = types.split(',')
       venues = yield Employer.find({ isVenue: true, type: { $in: types }, services: { $in: services } })
     } else if (services && !types) {
+      services = services.split(',')
       venues = yield Employer.find({ isVenue: true, services: { $in: services } })
 
     } else if (types && !services) {
