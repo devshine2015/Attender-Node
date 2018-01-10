@@ -8,7 +8,7 @@ Route.get('api/managements', 'Api/GeneralController.managements')
 Route.get('api/timesheets', 'Api/GeneralController.timesheets')
 Route.get('api/staffs', 'Api/StaffController.index')
 
-Route.get('api/venues', 'Api/EmployerController.venues')
+Route.get('api/venues', 'Api/EmployerController.getVenues')
 Route.get('api/organizers', 'Api/EmployerController.organisers')
 
 Route.get('api/events', 'Api/EventController.index')

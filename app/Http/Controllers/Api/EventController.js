@@ -52,20 +52,27 @@ class EventController {
 
       let venues = yield Employer.find().where('location').nearSphere({ center: [long, lat], maxDistance: 5})
     } else {
-     events = yield Event.find({}).populate('employer')
+      if (types) {
+        types = types.split(',')
+        let organisers = yield Employer.find({ isOrganizer: true, eventType: { $in: types } })
+        let organisersCollection = organisers.map((org) => org._id.toString())
+        events = yield Event.find({ employer: { $in: organisersCollection }})
+      } else {
+        events = yield Event.find({}).populate('employer')
+      }
     }
-    if (types) {
-      types = types.split(',')
-      events = events.filter((event) => {
-          for (let type of types) {
-            let i = event.type.indexOf(type)
-            if (i >= 0) {
-              return true
-            }
-          }
-      })
-    }
-    res.json({ status: true, events: events, messageCode: 'SUCCESS' })
+    // if (types) {
+    //   types = types.split(',')
+    //   events = events.filter((event) => {
+    //       for (let type of types) {
+    //         let i = event.type.indexOf(type)
+    //         if (i >= 0) {
+    //           return true
+    //         }
+    //       }
+    //   })
+    // }
+    res.json({ status: true, events, messageCode: 'SUCCESS' })
   }
 
   * create (req, res) {

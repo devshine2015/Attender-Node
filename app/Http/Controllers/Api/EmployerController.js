@@ -201,32 +201,27 @@ class EmployerController {
 
   }
 
-
-
-
-
-
   * getVenues (req, res) {
+    let venues = []
     let services = req.input('services', false)
     let types = req.input('types', false)
 
     if (services && types) {
       services = services.split(',')
       types = types.split(',')
-      let venues = yield Employer.find({ isVenue: true, type: { $in: types }, services: { $in: services } })
-
+      venues = yield Employer.find({ isVenue: true, type: { $in: types }, services: { $in: services } })
     } else if (services && !types) {
-      let venues = yield Employer.find({ isVenue: true, services: { $in: services } })
+      venues = yield Employer.find({ isVenue: true, services: { $in: services } })
 
     } else if (types && !services) {
       types = types.split(',')
-      let venues = yield Employer.find({ isVenue: true, type: { $in: types } })
+      venues = yield Employer.find({ isVenue: true, type: { $in: types } })
 
     } else {
-      let venues = yield Employer.find({ isVenue: true })
+      venues = yield Employer.find({ isVenue: true })
     }
 
-    res.json({ status: true, venues: venues, messageCode: 'SUCCESS' })
+    return res.json({ status: true, venues, messageCode: 'SUCCESS' })
 
   }
 
