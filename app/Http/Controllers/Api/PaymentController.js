@@ -155,7 +155,7 @@ module.exports = class PaymentController {
       req.input('account_id', req.user.primaryAccount),
       req.input('amount', 0)
     )
-    return res.json({ status: true, messageCode: 'SUCCESS' })
+    return res.json({ status: true, withdraw, messageCode: 'SUCCESS' })
   }
 
   * deposit (req, res) {
