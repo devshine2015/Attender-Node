@@ -87,7 +87,7 @@ module.exports = {
   },
 
   withdraw: (id, amount, account_id) => {
-    return baseReq.post(`wallet_accounts/${id}/withdraw`, {amount:(amount * 100),account_id:account_id})
+    return baseReq.post(`wallet_accounts/${id}/withdraw`, {amount:(amount * 100),account_id})
   },
 
   deposit: (id, amount, account_id) => {
