@@ -10,6 +10,7 @@ const StaffNotification = use('App/Model/StaffNotification')
 const Validator = use('Validator')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
+const AHelpers = use('AHelpers')
 
 let notify = new Notify()
 
@@ -308,7 +309,16 @@ class StaffController {
       management.schedules = JSON.parse(req.input('schedules', '{}'))
       management.markModified('schedules')
       management.save()
-      return res.json({ status: true, messageCode: 'SUCCESS', management: management })
+      let nextWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
+      let lastWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
+      let timesheet = yield Timesheet.findOne({ management: management._id, weekStart, weekEnd, paymentStatus: 'unpaid' })
+      if (timesheet) {
+        let newTime = yield AHelpers.initializeTimesheet(management)
+        let update = yield Timesheet.update({ _id: timesheet._id }, { $set: newTime })
+        return res.json({ status: true, messageCode: 'UPDATED', management, update })
+      }
+
+      return res.json({ status: true, messageCode: 'SUCCESS', management })
     } else {
       return res.json({ status: false, messageCode: 'NOT_FOUND' })
     }

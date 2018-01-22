@@ -149,8 +149,9 @@ class GeneralController {
           //
       }
       yield notify.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
-      yield StaffNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', timesheet: timesheet._id, paymentStatus: item.state })
-      yield VenueNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', timesheet: timesheet._id, paymentStatus: item.state })
+      yield StaffNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
+      yield VenueNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
+
     } else {
       let receiver = yield User.findOne({ promiseId: item.related.sellers })
       let sender = yield User.findOne({ promiseId: item.related.buyers })
@@ -160,6 +161,7 @@ class GeneralController {
         yield notify.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
       }
     }
+
     return res.json({ status: true })
   }
 
