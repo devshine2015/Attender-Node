@@ -310,8 +310,8 @@ class StaffController {
       management.schedules = JSON.parse(req.input('schedules', '{}'))
       management.markModified('schedules')
       management.save()
-      let nextWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).add(1, 'weeks')
-      let lastWeek = moment().isoWeekday(1).hour(0).minute(0).second(0).millisecond(0).subtract(1, 'weeks')
+      let weekStart = moment().startOf('isoWeek').format()
+      let weekEnd = moment().endOf('isoWeek').format()
       let timesheet = yield Timesheet.findOne({ management: management._id, weekStart, weekEnd, paymentStatus: 'unpaid' })
       if (timesheet) {
         let newTime = yield AHelpers.initializeTimesheet(management)
