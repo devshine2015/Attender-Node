@@ -9,7 +9,7 @@ const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
 const Employer = use('App/Model/Employer')
 const StaffNotification = use('App/Model/StaffNotification')
-const VenueNotification = use('App/Model/VenueNotification')
+const EmployerNotification = use('App/Model/EmployerNotification')
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 const PromisePay = use('PromisePay')
@@ -150,14 +150,14 @@ class GeneralController {
       }
       yield notify.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
       yield StaffNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
-      yield VenueNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
+      yield EmployerNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
 
     } else {
       let receiver = yield User.findOne({ promiseId: item.related.sellers })
       let sender = yield User.findOne({ promiseId: item.related.buyers })
       if (receiver && sender) {
         yield StaffNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
-        yield VenueNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
+        yield EmployerNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
         yield notify.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
       }
     }
