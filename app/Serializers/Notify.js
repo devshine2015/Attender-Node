@@ -74,6 +74,38 @@ class Notify {
     }
   }
 
+  * transfer (staff, employer, amount, status) {
+    let staffDevice = yield this.getDevice(staff.user._id)
+    let employerDevice = yield this.getDevice(employer.user._id)
+    if (employerDevice) {
+      if (status == 'completed') {
+        yield this.send(employerDevice, `$${amount} was successfully transfered to ${staff.fullname}`, {staff})
+      } else {
+        yield this.send(employerDevice, `Failed to transfer ${amount} to ${staff.fullname}`, {staff})
+      }
+    }
+    if (staffDevice) {
+      yield this.send(staffDevice, `${employer.name} successfully transfered $${amount} to your account`, {employer})
+    }
+    return true
+  }
+
+  * payment (staff, employer, amount, status) {
+    let staffDevice = yield this.getDevice(staff.user)
+    let employerDevice = yield this.getDevice(employer.user)
+    if (staffDevice) {
+      yield this.send(staffDevice, `You successfully received $${amount} from ${employer.name} payment`, {employer})
+    }
+    if (employerDevice) {
+      if (status == 'paid') {
+        yield this.send(employerDevice, `Payment success with amount of ${amount} to ${staff.fullname}`, {staff})
+      } else {
+        yield this.send(employerDevice, `Payment failed with amount of ${amount} to ${staff.fullname}`, {staff})
+      }
+    }
+    return true
+  }
+
 }
 
 module.exports = Notify

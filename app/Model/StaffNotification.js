@@ -11,6 +11,8 @@ let staffNotificationSchema = mongoose.Schema({
   staffId: { type: ObjectId, ref: 'Staff' },
   type: { type: String, enum: ['message', 'transaction', 'payment', 'trial', 'hired'] },
   eventId: { type: ObjectId, ref: 'Event'},
+  timesheet: { type: ObjectId, ref: 'Timesheet'},
+  paymentStatus: { type: String },
   opened: { type: Boolean, default: false },
   viewed: { type: Boolean, default: false },
   viewedAt: { type: Date },
