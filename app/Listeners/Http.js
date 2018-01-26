@@ -103,4 +103,7 @@ Http.onStart = function () {
   View.global('venue_types', ['cafe', 'restaurant', 'bar', 'club', 'pub'])
   View.global('venue_services', ['alcohol', 'drinks', 'food', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel'])
   View.global('organiser_types', ['birthday', 'wedding', 'conference', 'music festival', 'family events'])
+  String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
 }

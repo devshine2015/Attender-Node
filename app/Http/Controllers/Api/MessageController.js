@@ -1,6 +1,7 @@
 'use strict'
 
 const Staff = use('App/Model/Staff')
+const StaffManagement = use('App/Model/StaffManagement')
 const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
 const moment = require('moment')
@@ -162,13 +163,36 @@ class MessageController {
           uselect: { $last: '$staff._id' },
           uname: { $last: '$staff.fullname' },
           uavatar: { $last: '$staff.avatar'},
-          msgId: { $last: '$_id'}
+          msgId: { $last: '$_id'},
+          position: { $last: '$staff.position' },
         }
       },{
         $sort: { latest: -1 }
       }
     )
-    res.json({ status: true, threads: threads })
+
+    // filter by position
+    let positions = String(req.input('positions', '')).split(',')
+    if (positions[0] != '') {
+      threads = threads.filter((thread) => {
+        for (let position of positions) {
+          if (thread.position.includes(position)) {
+            return true
+          }
+        }
+      })
+    }
+
+    // fetch meta data
+    yield threads.map(function * (thread) {
+      let management = yield StaffManagement.findOne({ staff: thread.uselect, hired: true, employer: {$ne: null} }).populate('employer')
+      thread['meta'] = (management) ? `${thread.position[0].capitalize()} ${(management.employer.isVenue) ? 'at' : 'of'} ${management.employer.name}` : null
+    })
+
+    res.json({ status: true, threads, positions })
+
+
+    // update messages as delivered -- performance wise (update after sending response)
     for (let thread of threads) {
       let message = yield Message.findOne({ _id: thread.msgId, delivered: false, receiver: req.user._id })
       if(message) {
@@ -176,6 +200,7 @@ class MessageController {
         yield message.save()
       }
     }
+
   }
 
   * restoreArchive (req, res) {
