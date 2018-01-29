@@ -37,6 +37,7 @@ class AuthController {
       })
       let emailToken = yield Hash.make(user.email)
       emailToken = emailToken.replace(/\//ig, '')
+      emailToken = emailToken.replace(/\./g, '')
       user.emailToken = emailToken
       user.save()
       yield req.jwt.generateToken(user)
