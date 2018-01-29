@@ -2,7 +2,9 @@
 
 const Route = use('Route')
 
+
 Route.get('api/users', 'Api/UserController.index')
+Route.get('api/employers', 'Api/EmployerController.index')
 Route.get('api/devices', 'Api/GeneralController.deviceList')
 Route.get('api/managements', 'Api/GeneralController.managements')
 Route.get('api/timesheets', 'Api/GeneralController.timesheets')
@@ -20,6 +22,7 @@ Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage')
 
 
 Route.group('api', function() {
+  Route.post('auth/resend', 'Api/AuthController.resend')
   Route.get('auth/current', 'Api/AuthController.current')
 
   // PAYMENT MANAGEMENT
@@ -128,6 +131,7 @@ Route.post('api/auth/register/google', 'Api/AuthController.googleReg')
 Route.post('api/auth/register/facebook', 'Api/AuthController.facebookReg')
 
 Route.post('api/auth/confirm', 'Api/AuthController.confirm')
+Route.post('api/auth/verify', 'Api/AuthController.verify')
 
 
 Route.group('manage', function() {

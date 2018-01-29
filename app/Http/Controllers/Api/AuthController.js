@@ -14,10 +14,15 @@ const PromisePay = use('PromisePay')
 class AuthController {
 
   * register (req, res) {
-    const validation = yield Validator.validateAll(req.all())
+    const validation = yield Validator.validateAll(req.all(), {
+                              fullname: 'required', email: 'required',
+                              password: 'required', mobile: 'required'
+                            })
+
     if (validation.fails()) {
       return res.json({ status: false, message: validation.messages() })
     }
+
     let mobile = req.input('mobile', '')
     let email = req.input('email', '')
     const user = yield User.findOne({ $or:[{'email':email}, {'mobile':mobile} ]})
@@ -30,13 +35,14 @@ class AuthController {
         email: email,
         password: yield Hash.make(req.input('password'))
       })
-      user.emailToken = yield Hash.make(user.email)
+      let emailToken = yield Hash.make(user.email)
+      emailToken = emailToken.replace(/\//ig, '')
+      user.emailToken = emailToken
       user.save()
       yield req.jwt.generateToken(user)
-      SendGrid.sendVerification(user, req)
-
+      res.json({ status: true, messageCode: 'EMAIL_VERIFY', token: user.token.token })
+      SendGrid.sendVerification(user)
     }
-    return res.json({ status: true, messageCode: 'EMAIL_VERIFY' })
   }
 
   * deviceLogin (req, res) {
@@ -202,6 +208,35 @@ class AuthController {
       } else {
         res.json({ status: false, messageCode: 'NOT_FOUND' })
       }
+    }
+  }
+
+  * resend (req, res) {
+    res.json({ status: true, messageCode: 'RESENT' })
+    SendGrid.sendVerification(req.user)
+  }
+
+  * verify (req, res) {
+    const validation = yield Validator.validateAll(req.all(), {token: 'required', verification: 'required'})
+    if (validation.fails()) {
+      return res.json({ status: false, message: validation.messages() })
+    }
+
+    let user = yield User.findOne({ emailToken: req.input('token', ''), verification: req.input('verification', ''), confirmed: false })
+
+    if (user) {
+      if (user.verified) {
+        return res.json({ status: false, message: 'Already Verified' })
+
+      } else {
+        user.verified = true
+        yield user.save()
+        return res.json({ status: true, message: 'Verified', token: user.token.token })
+      }
+
+    } else {
+      return res.json({ status: false, message: 'Not Found' })
+
     }
   }
 
