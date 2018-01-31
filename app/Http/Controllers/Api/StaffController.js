@@ -130,7 +130,7 @@ class StaffController {
       type: 'hired'
     })
     yield EmployerNotification.create({
-      employer: management.employer._id,
+      employer: employer._id,
       staffId: staff._id,
       type: 'hired'
     })
@@ -174,12 +174,12 @@ class StaffController {
     }
     res.json({ status: true, management })
     yield StaffNotification.create({
-      employer: venue,
+      employer: venue._id,
       staffId: staff._id,
       type: 'trial'
     })
     yield EmployerNotification.create({
-      employer: management.employer._id,
+      employer: venue._id,
       staffId: staff._id,
       type: 'trial'
     })
