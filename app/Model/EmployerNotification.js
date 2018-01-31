@@ -9,7 +9,7 @@ let employerNotificationSchema = mongoose.Schema({
 
   employer: { type: ObjectId, ref: 'Employer' },
   staffId: { type: ObjectId, ref: 'Staff' },
-  type: { type: String, enum: ['message', 'event-interest', 'venue-interest'] },
+  type: { type: String, enum: ['message', 'event-interest', 'venue-interest', 'transaction', 'payment', 'hired', 'trial'] },
   eventId: { type: ObjectId, ref: 'Event'},
   opened: { type: Boolean, default: false },
   viewed: { type: Boolean, default: false },

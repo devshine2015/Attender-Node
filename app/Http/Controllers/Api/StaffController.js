@@ -7,6 +7,7 @@ const Timesheet = use('App/Model/Timesheet')
 const Suggestion = use('App/Model/Suggestion')
 const StaffRating = use('App/Model/StaffRating')
 const StaffManagement = use('App/Model/StaffManagement')
+const EmployerNotification = use('App/Model/EmployerNotification')
 const StaffNotification = use('App/Model/StaffNotification')
 const Validator = use('Validator')
 const moment = require('moment')
@@ -128,6 +129,11 @@ class StaffController {
       staffId: staff._id,
       type: 'hired'
     })
+    yield EmployerNotification.create({
+      employer: management.employer._id,
+      staffId: staff._id,
+      type: 'hired'
+    })
     yield notify.hired(staff, employer)
   }
 
@@ -139,6 +145,11 @@ class StaffController {
     management.save()
     res.json({ status: true, management })
     yield StaffNotification.create({
+      employer: management.employer._id,
+      staffId: staff._id,
+      type: 'hired'
+    })
+    yield EmployerNotification.create({
       employer: management.employer._id,
       staffId: staff._id,
       type: 'hired'
@@ -164,6 +175,11 @@ class StaffController {
     res.json({ status: true, management })
     yield StaffNotification.create({
       employer: venue,
+      staffId: staff._id,
+      type: 'trial'
+    })
+    yield EmployerNotification.create({
+      employer: management.employer._id,
       staffId: staff._id,
       type: 'trial'
     })
