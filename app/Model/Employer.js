@@ -34,7 +34,9 @@ let employerSchema = mongoose.Schema({
 
 
   isOrganizer: { type: Boolean, default: false },
-  isVenue: { type: Boolean, default: false }
+  isVenue: { type: Boolean, default: false },
+
+  staffOfInterest: { type: Mixed, default: {staffs:[], frequncy: []} },
 
 }, {
   versionKey: false,

@@ -88,6 +88,7 @@ class GeneralController {
       let sorted = [req.user._id, user._id].sort()
       let conversation = _hash(sorted[0] + sorted[1])
       let exist = yield Message.findOne({ conversation: conversation })
+
       if (user.isStaff) {
         let management = yield StaffManagement.findOne({ venue: req.user.employer._id, staff: user.staffId })
         if (management) {
@@ -95,7 +96,10 @@ class GeneralController {
           trial = management.trial
         }
       }
-      return res.json({ status: true, exist: (exist) ? true : false, conversation, trial, hired })
+      let staff = yield Staff.findOne({ _id: user.staffId })
+      let currentManagement = yield StaffManagement.findOne({ staff: user.staffId, hired: true, employer: {$ne: null} }).populate('employer')
+      let meta = (currentManagement) ? `${staff.position[0].capitalize()} ${(currentManagement.employer.isVenue) ? 'at' : 'of'} ${currentManagement.employer.name}` : null
+      return res.json({ status: true, exist: (exist) ? true : false, conversation, trial, hired, meta })
     } else {
       return res.json({ status: false, messageCode: 'USER_NOT_FOUND' })
     }
