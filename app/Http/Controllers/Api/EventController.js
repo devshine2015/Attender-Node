@@ -156,9 +156,9 @@ class EventController {
   * interest (req, res) {
     let _event = yield this.getEvent(req, res)
     if (req.user.isStaff) {
-      _event.employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
-      _event.employer.markModified('interested')
-      _event.employer.save()
+      // _event.employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
+      // _event.employer.markModified('interested')
+      // _event.employer.save()
       _event.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
       _event.markModified('interested')
       _event.save()
