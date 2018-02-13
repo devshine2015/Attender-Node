@@ -25,6 +25,7 @@ module.exports = {
               let start = moment(sched.startTime, ['hh:mm A', 'hh A'])
               let end = moment(sched.endTime, ['hh:mm A', 'hh A'])
               let payableHours = (start.isValid() && end.isValid()) ? moment.duration(end.diff(start)).asHours() : 0
+              payableHours = payableHours > 0 ? payableHours + 24 : payableHours
               let _break = (management.schedules[week].length > 1) ? 0 : payableHours >= 6 ? 0.5 : 0
               totalPayableHours += payableHours
               day.schedules.push({
