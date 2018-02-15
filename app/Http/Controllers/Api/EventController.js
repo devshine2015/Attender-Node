@@ -157,18 +157,20 @@ class EventController {
     let _event = yield this.getEvent(req, res)
     if (req.user.isStaff) {
       console.log(_event, req)
-      _event.employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
-      _event.employer.markModified('interested')
-      _event.employer.save()
       _event.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
       _event.markModified('interested')
       _event.save()
-      let notification = yield EmployerNotification.create({
-        employer: _event.employer._id,
-        staffId: req.user.staffId._id,
-        eventId: _event._id,
-        type: 'event-interest'
-      })
+      if(_event.employer){
+        _event.employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
+        _event.employer.markModified('interested')
+        _event.employer.save()
+        let notification = yield EmployerNotification.create({
+          employer: _event.employer._id,
+          staffId: req.user.staffId._id,
+          eventId: _event._id,
+          type: 'event-interest'
+        })
+      }
       res.json({ status: true, event: _event })
       yield notify.eventInterest(req.user.staffId, _event)
     } else {
