@@ -150,6 +150,8 @@ class StaffController {
 
     * hire(req, res) {
         let staff = yield this.getStaff(req)
+        let employer = req.user.employer
+
         let management = yield this.getStaffManagement(req)
         console.log(staff)
         console.log(management)
@@ -159,12 +161,12 @@ class StaffController {
         management.save()
         res.json({status: true, management})
         yield StaffNotification.create({
-            employer: management.employer._id,
+            employer: employer._id,
             staffId: staff._id,
             type: 'hired'
         })
         yield EmployerNotification.create({
-            employer: management.employer._id,
+            employer: employer._id,
             staffId: staff._id,
             type: 'hired'
         })
