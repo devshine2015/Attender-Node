@@ -138,6 +138,7 @@ class StaffController {
   }
 
   * hire (req, res) {
+    let staff = yield this.getStaff(req)
     let management = yield this.getManagement(req)
     management.hired = true
     management.trial = false

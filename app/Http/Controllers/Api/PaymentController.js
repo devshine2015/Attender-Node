@@ -161,9 +161,9 @@ module.exports = class PaymentController {
 
   * deposit (req, res) {
     let withdraw = yield PromisePay.deposit(
-      id=req.user.promiseId,
-      account_id=req.input('account_id', req.user.primaryAccount ),
-      amount=req.input('amount', 0)
+      req.user.promiseId,
+      req.input('account_id', req.user.primaryAccount ),
+      req.input('amount', 0)
     )
     return res.json({ status: true, messageCode: 'SUCCESS' })
   }
