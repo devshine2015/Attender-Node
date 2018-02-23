@@ -140,6 +140,8 @@ class StaffController {
   * hire (req, res) {
     let staff = yield this.getStaff(req)
     let management = yield this.getManagement(req)
+      console.log(staff)
+      console.log(management)
     management.hired = true
     management.trial = false
     management.hiredDate = moment().format()
