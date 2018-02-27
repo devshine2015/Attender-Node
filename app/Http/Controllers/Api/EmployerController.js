@@ -268,6 +268,7 @@ class EmployerController {
           delete employer.interested[req.user.staffId._id]
           employer.markModified('interested')
           employer.save()
+          res.json({ status: true, venue: employer })
       }
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
