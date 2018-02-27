@@ -261,6 +261,7 @@ class EmployerController {
         staffId: req.user.staffId._id,
         type: 'venue-interest'
       })
+        console.log(req.user.isStaff)
       res.json({ status: true, venue: employer })
       yield notify.venueInterest(req.user.staffId, employer)
 
