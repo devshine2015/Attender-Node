@@ -252,20 +252,23 @@ class EmployerController {
 
   * interest (req, res) {
     let employer = yield this.getVenue(req)
-
-      console.log(req.user)
     if (req.user.isStaff) {
-      employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
-      employer.markModified('interested')
-      employer.save()
-      let notification = yield EmployerNotification.create({
-        employer: employer._id,
-        staffId: req.user.staffId._id,
-        type: 'venue-interest'
-      })
-      res.json({ status: true, venue: employer })
-      yield notify.venueInterest(req.user.staffId, employer)
-
+      if(employer.interested[req.user.staffId._id] == undefined){
+          employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
+          employer.markModified('interested')
+          employer.save()
+          let notification = yield EmployerNotification.create({
+              employer: employer._id,
+              staffId: req.user.staffId._id,
+              type: 'venue-interest'
+          })
+          res.json({ status: true, venue: employer })
+          yield notify.venueInterest(req.user.staffId, employer)
+      }else{
+          delete employer.interested[req.user.staffId._id]
+          employer.markModified('interested')
+          employer.save()
+      }
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }
