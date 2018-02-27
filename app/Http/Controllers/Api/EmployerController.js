@@ -252,6 +252,8 @@ class EmployerController {
 
   * interest (req, res) {
     let employer = yield this.getVenue(req)
+
+      console.log(req.user)
     if (req.user.isStaff) {
       employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
       employer.markModified('interested')
@@ -261,7 +263,6 @@ class EmployerController {
         staffId: req.user.staffId._id,
         type: 'venue-interest'
       })
-        console.log(req.user.isStaff)
       res.json({ status: true, venue: employer })
       yield notify.venueInterest(req.user.staffId, employer)
 
