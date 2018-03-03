@@ -118,7 +118,8 @@ class MessageController {
           latest: { $last: '$sentAt' },
           message: { $last: '$message' },
           delivered: { $last: '$delivered' },
-          seen: { $last: '$seen' },
+            seen: { $last: '$seen' },
+            staffId: { $last: '$staff' },
           usid: { $last: '$employer.user'},
           uselect: { $last: '$employer._id' },
           uname: { $last: '$employer.name' },
@@ -131,7 +132,7 @@ class MessageController {
     )
     console.log(threads)
     yield threads.map(function * (thread) {
-        let staff = yield Staff.findOne({_id: thread.staff}).populate('user', '_id fullname')
+        let staff = yield Staff.findOne({_id: thread.staffId}).populate('user', '_id fullname')
         thread['staff'] = (staff) ? staff : null
     })
     res.json({ status: true, threads: threads })
