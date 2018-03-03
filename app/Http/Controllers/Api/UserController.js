@@ -199,8 +199,8 @@ class UserController {
             qualifications = req.input('qualifications', '').split(',')
             skills = req.input('skills', '').split(',')
             experiences = JSON.parse(req.input('experiences', '{}'))
-            certificates = req.input('certificates', '').split(',')
-            licenses = req.input('licenses', '').split(',')
+            certificates = req.input('certificates', '').split(',').filter(item => item.length > 0)
+            licenses = req.input('licenses', '').split(',').filter(item => item.length > 0)
             languages = req.input('languages', '').split(',')
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
@@ -229,12 +229,11 @@ class UserController {
             staff.qualifications = qualifications || staff.qualifications
             staff.skills = skills || staff.skills
             staff.experiences = experiences || staff.experiences
-            staff.certificates = certificates.length > 0? certificates : staff.certificates
+            staff.certificates = certificates.length > 0 ? certificates : staff.certificates
             staff.availability = availability || staff.availability
-            staff.licenses = licenses.length > 0? licenses : staff.licenses
+            staff.licenses = licenses.length > 0 ? licenses : staff.licenses
             staff.languages = languages || staff.languages
             staff.save()
-            console.log(staff)
             req.user.avatar = avatar
             req.user.staffId = staff._id
             req.user.isStaff = true
