@@ -181,6 +181,7 @@ class UserController {
   }
 
   * saveStaffProfile (req, res) {
+    console.log(req)
     let description = [],
         position = [],
         qualifications = [],
@@ -205,6 +206,7 @@ class UserController {
       availability = JSON.parse(req.input('availability', '{}'))
       birthdate = new Date(req.input('birthdate'))
       avatar = req.input('avatar', '')
+        console.log(req.input('licenses', ''))
     } catch (e) {
       yield res.json({ status: false, messageCode: 'INVALID_INPUT'})
     }
