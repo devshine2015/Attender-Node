@@ -200,16 +200,18 @@ class UserController {
       skills = req.input('skills', '').split(',')
       experiences = JSON.parse(req.input('experiences', '{}'))
       certificates = req.input('certificates', '').split(',')
-      licenses = req.input('certificates', '').split(',')
+      licenses = req.input('licenses', '').split(',')
       languages = req.input('languages', '').split(',')
       availability = JSON.parse(req.input('availability', '{}'))
       birthdate = new Date(req.input('birthdate'))
       avatar = req.input('avatar', '')
+        console.log("input ",certificates)
     } catch (e) {
       yield res.json({ status: false, messageCode: 'INVALID_INPUT'})
     }
     if (req.user.isStaff) {
       let staff = yield Staff.findOne(req.user.staffId._id)
+        console.log("staff",staff.certificates)
       staff.avatar = avatar
       staff.email = req.user.email
       staff.mobile = req.user.mobile
