@@ -129,6 +129,11 @@ class MessageController {
         $sort: { latest: -1 }
       }
     )
+    console.log(threads)
+    yield threads.map(function * (thread) {
+        let staff = yield Staff.findOne({_id: thread.staff}).populate('user', '_id fullname')
+        thread['staff'] = (staff) ? staff : null
+    })
     res.json({ status: true, threads: threads })
     for (let thread of threads) {
       let message = yield Message.findOne({ _id: thread.msgId, delivered: false, receiver: req.user._id })
