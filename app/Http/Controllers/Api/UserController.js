@@ -205,13 +205,11 @@ class UserController {
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
             avatar = req.input('avatar', '')
-            console.log("input ", certificates)
         } catch (e) {
             yield res.json({status: false, messageCode: 'INVALID_INPUT'})
         }
         if (req.user.isStaff) {
             let staff = yield Staff.findOne(req.user.staffId._id)
-            console.log("staff", staff.certificates)
             staff.avatar = avatar
             staff.email = req.user.email
             staff.mobile = req.user.mobile
@@ -236,6 +234,7 @@ class UserController {
             staff.licenses = licenses.length > 0? licenses : staff.licenses
             staff.languages = languages || staff.languages
             staff.save()
+            console.log(staff)
             req.user.avatar = avatar
             req.user.staffId = staff._id
             req.user.isStaff = true
