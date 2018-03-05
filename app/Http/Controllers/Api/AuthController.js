@@ -26,6 +26,7 @@ class AuthController {
     let mobile = req.input('mobile', '')
     let email = req.input('email', '')
     const user = yield User.findOne({ $or:[{'email':email}, {'mobile':mobile} ]})
+      console.log(user)
     if (user) {
       return res.json({ status: false, messageCode: "USER_ALREADY_EXIST"})
     } else {
