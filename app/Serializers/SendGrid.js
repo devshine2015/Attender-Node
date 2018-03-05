@@ -5,7 +5,7 @@ const webHost = Env.get('WEB_HOST', '45.76.121.86')
 const webProtocol = Env.get('WEB_PROTOCOL', 'https')
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(Env.get('SENDGRID_API_KEY', ''));
-
+console.log(Env.get('SENDGRID_API_KEY', ''))
 module.exports = {
 
   sendVerification: (user) => {
