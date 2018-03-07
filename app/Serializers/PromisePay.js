@@ -12,6 +12,7 @@ let baseReq = {
   post: (uri, payload) => {
     return new Promise((resolve, reject) => {
        request.post({url: baseUrl + uri, form: payload,  headers: headers}, (err, res, body) => {
+         console.log(err, res)
          resolve(JSON.parse(body))
        })
     })
