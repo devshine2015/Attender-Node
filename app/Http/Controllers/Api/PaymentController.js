@@ -152,7 +152,7 @@ module.exports = class PaymentController {
   * withdraw (req, res) {
     console.log(req.user)
     let withdraw = yield PromisePay.withdraw(
-      req.user.walletId,
+      req.user.promiseId,
       req.input('account_id', req.user.primaryAccount),
       req.input('amount', 0)
     )
