@@ -99,6 +99,10 @@ module.exports = {
     return baseReq.get(`users/${id}/items`)
   },
 
+  kycapproved:(id) =>{
+    return baseReq.patch(`/users/${id}?type=identity_verified`)
+  },
+
   transfer: (from_user, to_user, amount, from, account_id) => {
     let transactionId = `TN-${uuidv4()}`
     let transactionAmount = (amount * 100)
