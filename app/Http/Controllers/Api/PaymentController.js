@@ -152,8 +152,8 @@ module.exports = class PaymentController {
   }
 
   * withdraw (req, res) {
-    const userAuth = yield User.findOne({ email: req.input('email') })
-    console.log(userAuth.walletId, req.user)
+    const user = yield User.findOne({ email: req.user.email })
+    console.log(user.walletId, req.user)
     let withdraw = yield PromisePay.withdraw(
       req.user.walletId,
       req.input('account_id', req.user.primaryAccount),
