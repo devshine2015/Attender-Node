@@ -100,6 +100,7 @@ module.exports = {
   },
 
   kycapproved:(id) =>{
+    console.log(id)
     return baseReq.patch(`users/${id}?type=identity_verified`)
   },
 
