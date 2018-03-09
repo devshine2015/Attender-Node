@@ -100,7 +100,7 @@ module.exports = {
   },
 
   kycapproved:(id) =>{
-    return baseReq.patch(`/users/${id}?type=identity_verified`)
+    return baseReq.patch(`users/${id}?type=identity_verified`)
   },
 
   transfer: (from_user, to_user, amount, from, account_id) => {
