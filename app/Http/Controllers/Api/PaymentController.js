@@ -6,7 +6,7 @@ const AHelpers = use('AHelpers')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
-const User = require('App/Model/User')
+const User = use('App/Model/User')
 
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
