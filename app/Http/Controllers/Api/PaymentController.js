@@ -6,6 +6,8 @@ const AHelpers = use('AHelpers')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
+const User = require('App/Model/User')
+
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
 
@@ -150,7 +152,8 @@ module.exports = class PaymentController {
   }
 
   * withdraw (req, res) {
-    console.log(req.user.walletId, req.user)
+    const userAuth = yield User.findOne({ email: req.input('email') })
+    console.log(userAuth.walletId, req.user)
     let withdraw = yield PromisePay.withdraw(
       req.user.walletId,
       req.input('account_id', req.user.primaryAccount),
