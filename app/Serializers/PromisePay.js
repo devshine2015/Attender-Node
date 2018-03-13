@@ -43,6 +43,10 @@ let baseReq = {
 
 module.exports = {
 
+  updateUser: (id, payload) => {
+    return baseReq.patch(`users/${id}`, payload)
+  },
+
   createUser: (payload) => {
     return baseReq.post('users', payload)
   },

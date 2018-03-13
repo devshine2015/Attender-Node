@@ -4,6 +4,8 @@ const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
 const VenueNotification = use('App/Model/VenueNotification')
+const User = use('App/Model/User')
+const PromisePay = use('PromisePay')
 
 let staffSchema = mongoose.Schema({
 
@@ -87,6 +89,18 @@ staffSchema.statics.rules = {
   mobile: 'required|max:50',
   fullname: 'required|alpha_numeric|min:5|max:45',
 }
+
+staffSchema.post('save', function(staff){
+  let user = staff.user
+    if (user.promisePay) {
+        PromisePay.updateUser(user.promiseId, {
+            dob: staff.birthdate
+        }).then((res)=>{
+            console.log(res)
+        })
+    }
+})
+
 staffSchema.post('remove', function(staff) {
   VenueNotification.remove({ staffId: staff._id }, function(err){})
 })
