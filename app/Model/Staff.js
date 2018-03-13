@@ -90,19 +90,6 @@ staffSchema.statics.rules = {
   fullname: 'required|alpha_numeric|min:5|max:45',
 }
 
-staffSchema.post('save', function(staff){
-  let user = staff.user
-    if (user.promisePay) {
-        let dob = new Date(staff.birthdate)
-        console.log(dob)
-        PromisePay.updateUser(user.promiseId, {
-            dob
-        }).then((res)=>{
-            console.log(res)
-        })
-    }
-})
-
 staffSchema.post('remove', function(staff) {
   VenueNotification.remove({ staffId: staff._id }, function(err){})
 })

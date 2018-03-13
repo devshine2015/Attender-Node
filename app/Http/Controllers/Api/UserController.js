@@ -4,6 +4,7 @@ const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
+const PromisePay = use('PromisePay')
 
 class UserController {
 
@@ -239,6 +240,16 @@ class UserController {
             req.user.isStaff = true
             req.user.hasProfile = true
             req.user.save()
+
+            if (req.user.promisePay) {
+                let dob = new Date(staff.birthdate)
+                console.log(dob)
+                PromisePay.updateUser(req.user.promiseId, {
+                    dob
+                }).then((res)=>{
+                    console.log(res)
+                })
+            }
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
         } else {
             if (req.user.hasProfile) {
