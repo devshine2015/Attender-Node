@@ -93,9 +93,10 @@ staffSchema.statics.rules = {
 staffSchema.post('save', function(staff){
   let user = staff.user
     if (user.promisePay) {
-        console.log(user)
+        let dob = new Date(staff.birthdate)
+        console.log(dob)
         PromisePay.updateUser(user.promiseId, {
-            dob: staff.birthdate
+            dob
         }).then((res)=>{
             console.log(res)
         })
