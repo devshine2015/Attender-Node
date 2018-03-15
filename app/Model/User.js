@@ -109,8 +109,7 @@ userSchema.post('save', function(user){
               id: promiseId,
               email: user.email,
               first_name: user.fullname,
-              country: 'AUS',
-              dob: new Date()
+              country: 'AUS'
           }).then((res)=>{
               user.promisePay = true
               user.promiseId = promiseId

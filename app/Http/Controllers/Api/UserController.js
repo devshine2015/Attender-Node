@@ -243,6 +243,7 @@ class UserController {
             req.user.save()
 
             console.log("2nd",staff.birthdate)
+            console.log("2nd",req.user.promisePay)
 
             if (req.user.promisePay) {
                 let dob = new Date(staff.birthdate)
