@@ -243,17 +243,26 @@ class UserController {
             req.user.save()
 
             console.log("2nd",staff.birthdate)
-            console.log("2nd",req.user.promisePay)
+            console.log("2nd",req.user)
+            var dd = birthdate.getDate();
+            var mm = birthdate.getMonth()+1; //January is 0!
 
-            if (req.user.promisePay) {
-                let dob = new Date(staff.birthdate)
-                console.log("3rd",dob)
-                PromisePay.updateUser(req.user.promiseId, {
-                    dob
-                }).then((res)=>{
-                    console.log(res)
-                })
+            var yyyy = birthdate.getFullYear();
+            if(dd<10){
+                dd='0'+dd;
             }
+            if(mm<10){
+                mm='0'+mm;
+            }
+            var dob = dd+'/'+mm+'/'+yyyy;
+            console.log("3rd",dob)
+
+            PromisePay.updateUser(req.user.promiseId, {
+                dob
+            }).then((res)=>{
+                console.log(res)
+            })
+
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
         } else {
             if (req.user.hasProfile) {
