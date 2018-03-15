@@ -206,6 +206,7 @@ class UserController {
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
             avatar = req.input('avatar', '')
+            console.log("1st ", birthdate)
         } catch (e) {
             yield res.json({status: false, messageCode: 'INVALID_INPUT'})
         }
@@ -241,9 +242,11 @@ class UserController {
             req.user.hasProfile = true
             req.user.save()
 
+            console.log("2nd",staff.birthdate)
+
             if (req.user.promisePay) {
                 let dob = new Date(staff.birthdate)
-                console.log(dob)
+                console.log("3rd",dob)
                 PromisePay.updateUser(req.user.promiseId, {
                     dob
                 }).then((res)=>{
