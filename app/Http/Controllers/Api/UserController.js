@@ -261,7 +261,7 @@ class UserController {
             PromisePay.updateUser(user.promiseId, {
                 dob
             }).then((res)=>{
-                yield PromisePay.kycapproved(user.promiseId)
+                PromisePay.kycapproved(user.promiseId)
             })
 
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
