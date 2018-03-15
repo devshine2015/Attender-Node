@@ -104,7 +104,7 @@ userSchema.statics.facebookSchema = {
 }
 userSchema.post('save', function(user){
   let promiseId = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${user._id}`
-  if (!user.promisePay) {
+  if (!user.promiseId) {
           PromisePay.createUser({
               id: promiseId,
               email: user.email,

@@ -236,14 +236,16 @@ class UserController {
             staff.licenses = licenses.length > 0 ? licenses : staff.licenses
             staff.languages = languages || staff.languages
             staff.save()
-            req.user.avatar = avatar
-            req.user.staffId = staff._id
-            req.user.isStaff = true
-            req.user.hasProfile = true
-            req.user.save()
 
-            console.log("2nd",staff.birthdate)
-            console.log("2nd",req.user)
+            let user = yield User.findOne(req.user._id)
+            user.avatar = avatar
+            user.staffId = staff._id
+            user.isStaff = true
+            user.hasProfile = true
+            user.save()
+
+            console.log("1st",staff)
+            console.log("2nd",user)
             var dd = birthdate.getDate();
             var mm = birthdate.getMonth()+1; //January is 0!
 
@@ -255,12 +257,11 @@ class UserController {
                 mm='0'+mm;
             }
             var dob = dd+'/'+mm+'/'+yyyy;
-            console.log("3rd",dob)
 
-            PromisePay.updateUser(req.user.promiseId, {
+            PromisePay.updateUser(user.promiseId, {
                 dob
             }).then((res)=>{
-                console.log(res)
+                yield PromisePay.kycapproved(user.promiseId)
             })
 
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
