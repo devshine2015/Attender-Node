@@ -333,7 +333,8 @@ class EmployerController {
   }
 
   * myStaffs (req, res) {
-    let managements = yield StaffManagement.find({ employer: req.user.employer._id, trial: false }).populate('staff')
+    let query = req.input('withTrial') ? { employer: req.user.employer._id } : { employer: req.user.employer._id, trial: false }
+    let managements = yield StaffManagement.find(query).populate('staff')
     let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
     let staffs = {}
     for (let position of positions) {
