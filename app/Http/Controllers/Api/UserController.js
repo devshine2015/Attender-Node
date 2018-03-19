@@ -236,7 +236,10 @@ class UserController {
             staff.availability = availability || staff.availability
             staff.licenses = licenses.length > 0 ? licenses : staff.licenses
             staff.languages = languages || staff.languages
-            staff.save()
+            staff.save((val1, val2)=>{
+                console.log("val1", val1)
+                console.log("val2", val2)
+            })
 
             console.log(staff)
             let user = yield User.findOne(req.user._id)
