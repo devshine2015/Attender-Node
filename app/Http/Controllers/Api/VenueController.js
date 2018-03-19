@@ -154,7 +154,7 @@ class VenueController {
       receiver: req.input('receiver'),
       message: req.input('message'),
       staff: staff._id,
-      venue: req.user.venueId._id
+      employer: req.user.employer._id
     })
     let thread = {
       _id: message.conversation,
@@ -167,6 +167,9 @@ class VenueController {
       uname: staff.fullname,
       uavatar: staff.avatar
     }
+    let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue')
+    yield notify.newMessage(m)
+    let update = yield Message.update({ conversation: thread.conversation }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
     res.json({ status: true, thread: thread })
   }
 
