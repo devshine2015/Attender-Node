@@ -229,9 +229,9 @@ class UserController {
             staff.preferredDistance = req.input('preferredDistance', staff.preferredDistance)
             staff.frequency = req.input('frequency', staff.frequency)
             staff.position = position || staff.position
-            console.log(Number.isNaN(req.input('startRate', staff.startRate)))
-            staff.startRate = Number.isNaN(req.input('startRate', staff.startRate))? staff.startRate: req.input('startRate', staff.startRate)
-            staff.endRate = Number.isNaN(req.input('endRate', staff.endRate))? staff.endRate: req.input('endRate', staff.endRate)
+            console.log(startRate, req.input('startRate', ""))
+            staff.startRate = startRate || staff.startRate
+            staff.endRate = endRate || staff.endRate
             staff.rateBadge = req.input('rateBadge', staff.rateBadge)
             staff.rateType = req.input('rateType', staff.rateType)
             staff.qualifications = qualifications || staff.qualifications
