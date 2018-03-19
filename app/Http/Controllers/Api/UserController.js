@@ -230,6 +230,7 @@ class UserController {
             staff.frequency = req.input('frequency', staff.frequency)
             staff.position = position || staff.position
             console.log(startRate, req.input('startRate', ""))
+            console.log(Number.isNaN(req.input('startRate', "")), Number.isNaN(1))
             staff.startRate = startRate || staff.startRate
             staff.endRate = endRate || staff.endRate
             staff.rateBadge = req.input('rateBadge', staff.rateBadge)
