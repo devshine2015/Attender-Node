@@ -192,7 +192,9 @@ class UserController {
             licenses = [],
             languages = [],
             birthdate = '',
-            avatar = ''
+            avatar = '',
+            startRate='',
+            endRate=''
 
         try {
             description = req.input('description', '').split(',')
@@ -206,6 +208,8 @@ class UserController {
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
             avatar = req.input('avatar', '')
+            startRate = isNaN(req.input('startRate', ""))? "": req.input('startRate', "")
+            endRate = isNaN(req.input('endRate', ""))? "": req.input('endRate', "")
             console.log("1st ", birthdate)
         } catch (e) {
             yield res.json({status: false, messageCode: 'INVALID_INPUT'})
@@ -225,8 +229,10 @@ class UserController {
             staff.preferredDistance = req.input('preferredDistance', staff.preferredDistance)
             staff.frequency = req.input('frequency', staff.frequency)
             staff.position = position || staff.position
-            staff.startRate = Number.isNaN(req.input('startRate', staff.startRate))? staff.startRate: req.input('startRate', staff.startRate)
-            staff.endRate = Number.isNaN(req.input('endRate', staff.endRate))? staff.endRate: req.input('endRate', staff.endRate)
+            console.log(startRate, req.input('startRate', ""))
+            console.log(isNaN(req.input('startRate', "")), isNaN(1))
+            staff.startRate = startRate || staff.startRate
+            staff.endRate = endRate || staff.endRate
             staff.rateBadge = req.input('rateBadge', staff.rateBadge)
             staff.rateType = req.input('rateType', staff.rateType)
             staff.qualifications = qualifications || staff.qualifications
