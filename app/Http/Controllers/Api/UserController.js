@@ -208,8 +208,8 @@ class UserController {
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
             avatar = req.input('avatar', '')
-            startRate = Number.isNaN(req.input('startRate', ""))? "": req.input('startRate', "")
-            endRate = Number.isNaN(req.input('endRate', ""))? "": req.input('endRate', "")
+            startRate = isNaN(req.input('startRate', ""))? "": req.input('startRate', "")
+            endRate = isNaN(req.input('endRate', ""))? "": req.input('endRate', "")
             console.log("1st ", birthdate)
         } catch (e) {
             yield res.json({status: false, messageCode: 'INVALID_INPUT'})
@@ -230,7 +230,7 @@ class UserController {
             staff.frequency = req.input('frequency', staff.frequency)
             staff.position = position || staff.position
             console.log(startRate, req.input('startRate', ""))
-            console.log(Number.isNaN(req.input('startRate', "")), Number.isNaN(1))
+            console.log(isNaN(req.input('startRate', "")), isNaN(1))
             staff.startRate = startRate || staff.startRate
             staff.endRate = endRate || staff.endRate
             staff.rateBadge = req.input('rateBadge', staff.rateBadge)
