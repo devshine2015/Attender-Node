@@ -4,8 +4,6 @@ const mongoose = use('Mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
 const VenueNotification = use('App/Model/VenueNotification')
-const User = use('App/Model/User')
-const PromisePay = use('PromisePay')
 
 let staffSchema = mongoose.Schema({
 

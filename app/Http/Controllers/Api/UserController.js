@@ -212,6 +212,7 @@ class UserController {
         }
         if (req.user.isStaff) {
             let staff = yield Staff.findOne(req.user.staffId._id)
+            console.log(avatar)
             staff.avatar = avatar
             staff.email = req.user.email
             staff.mobile = req.user.mobile
@@ -237,6 +238,7 @@ class UserController {
             staff.languages = languages || staff.languages
             staff.save()
 
+            console.log(staff)
             let user = yield User.findOne(req.user._id)
             user.avatar = avatar
             user.staffId = staff._id
