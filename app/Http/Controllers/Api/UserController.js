@@ -315,6 +315,31 @@ class UserController {
         }
     }
 
+    * changeEmail (req, res) {
+    let oldEmail = req.input('oldEmail')
+    let newEmail = req.input('newEmail')
+
+    if (oldEmail != req.user.email) {
+        return res.json({ status: false, message: 'Old email doesn\'t match' })
+    }
+
+    if (oldEmail == newEmail) {
+        return res.json({ status: false, message: 'New email must not match with old email' })
+    }
+  
+    let user = yield User.findOne({ email: oldEmail})
+  
+    if (user) {
+      user.verified = false
+      user.email = newEmail
+      user.save()
+  
+      return res.json({ status: true, message: 'Email Changed' })
+    } else {
+      return res.json({ status: false, message: 'Not Found' })
+    }
+  }
+
 }
 
 module.exports = UserController
