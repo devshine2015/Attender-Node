@@ -5,6 +5,7 @@ const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
 const PromisePay = use('PromisePay')
+const Hash = use('Hash')
 
 class UserController {
 
@@ -327,7 +328,7 @@ class UserController {
         return res.json({ status: false, message: 'New email must not match with old email' })
     }
   
-    let user = yield User.findOne({ email: oldEmail})
+    let user = yield User.findOne({ email: req.user.email})
   
     if (user) {
       user.verified = false
@@ -339,6 +340,26 @@ class UserController {
       return res.json({ status: false, message: 'Not Found' })
     }
   }
+
+  * changePassword (req, res) {
+  let newPassword = req.input('newPassword')
+  let newPasswordConfirm = req.input('newPasswordConfirm')
+
+  if (newPassword != newPasswordConfirm) {
+      return res.json({ status: false, message: 'Passwords don\'t match' })
+  }
+
+  let user = yield User.findOne({ email: req.user.email})
+
+  if (user) {
+    user.password = yield Hash.make(newPassword)
+    user.save()
+
+    return res.json({ status: true, message: 'Password Changed' })
+  } else {
+    return res.json({ status: false, message: 'Not Found' })
+  }
+}
 
 }
 

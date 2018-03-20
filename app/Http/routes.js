@@ -115,6 +115,7 @@ Route.group('api', function() {
 
   // USER API MANAGEMENT
   Route.post('user/profile/change-email', 'Api/UserController.changeEmail')
+  Route.post('user/profile/change-password', 'Api/UserController.changePassword')
 
   // EVENT API MANAGEMENT
   Route.get('events', 'Api/EventController.index')
