@@ -63,7 +63,6 @@ Route.group('api', function() {
   // STAFF API MANAGEMENT
   Route.get('my-managements', 'Api/StaffController.myManagements')
   Route.get('staff/:id/show', 'Api/StaffController.showStaff')
-  Route.get('staff/:id/task', 'Api/StaffController.getTask')
   Route.get('staff/:id/managements', 'Api/StaffController.getManagements')
   Route.get('staff/:id/reviews', 'Api/StaffController.getReviews')
   Route.get('staff-notifications', 'Api/StaffController.notifications')
