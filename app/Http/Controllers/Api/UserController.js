@@ -6,6 +6,7 @@ const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
 const PromisePay = use('PromisePay')
 const Hash = use('Hash')
+const Validator = use('Validator')
 
 class UserController {
 
@@ -359,6 +360,29 @@ class UserController {
   } else {
     return res.json({ status: false, message: 'Not Found' })
   }
+}
+
+* deactivateUser (req, res) {
+    const user = yield User.findOne({ email: req.user.email})
+    let password = req.input('password') 
+    const account = {
+        email: req.user.email,
+        password: password
+    }
+
+    const validation = yield Validator.validateAll(account, User.loginRules)
+    if (validation.fails()) {
+      return res.json({ status: false, message: 'Invalid input' })
+    } else {
+      if (Hash.verify(password, user.password)) {
+        user.isActive = false;
+        user.save()
+
+        return res.json({ status: true, message: 'Deactivated' })
+      }  else {
+        return res.json({ status: false, message: 'Incorrect password' })
+      }
+    }
 }
 
 }

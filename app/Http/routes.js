@@ -68,6 +68,7 @@ Route.group('api', function() {
 
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
+  Route.post('user/profile/deactivate-user', 'Api/UserController.deactivateUser')
   Route.get('trial-staffs', 'Api/EmployerController.trialStaffs')
   Route.get('active-staffs', 'Api/EmployerController.activeStaffs')
 
