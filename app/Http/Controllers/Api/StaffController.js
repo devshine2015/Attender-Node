@@ -256,8 +256,7 @@ class StaffController {
                 console.log("err",err)
                 console.log("data",data)
             })
-            console.log("snotify",snotify)
-            console.log("enotify",enotify)
+
             let response = yield notify.task(staff, employer)
             console.log(response)
         } else {
