@@ -5,6 +5,7 @@ const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
 const PromisePay = use('PromisePay')
+const Hash = use('Hash')
 
 class UserController {
 
@@ -314,6 +315,51 @@ class UserController {
             yield res.json({status: true, messageCode: 'CREATED', data: staff})
         }
     }
+
+    * changeEmail (req, res) {
+    let oldEmail = req.input('oldEmail')
+    let newEmail = req.input('newEmail')
+
+    if (oldEmail != req.user.email) {
+        return res.json({ status: false, message: 'Old email doesn\'t match' })
+    }
+
+    if (oldEmail == newEmail) {
+        return res.json({ status: false, message: 'New email must not match with old email' })
+    }
+  
+    let user = yield User.findOne({ email: req.user.email})
+  
+    if (user) {
+      user.verified = false
+      user.email = newEmail
+      user.save()
+  
+      return res.json({ status: true, message: 'Email Changed' })
+    } else {
+      return res.json({ status: false, message: 'Not Found' })
+    }
+  }
+
+  * changePassword (req, res) {
+  let newPassword = req.input('newPassword')
+  let newPasswordConfirm = req.input('newPasswordConfirm')
+
+  if (newPassword != newPasswordConfirm) {
+      return res.json({ status: false, message: 'Passwords don\'t match' })
+  }
+
+  let user = yield User.findOne({ email: req.user.email})
+
+  if (user) {
+    user.password = yield Hash.make(newPassword)
+    user.save()
+
+    return res.json({ status: true, message: 'Password Changed' })
+  } else {
+    return res.json({ status: false, message: 'Not Found' })
+  }
+}
 
 }
 
