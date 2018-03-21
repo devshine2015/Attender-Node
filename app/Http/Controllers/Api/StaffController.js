@@ -234,7 +234,7 @@ class StaffController {
 
             res.json({status: true, management})
 
-            let staff = yield this.getStaff(req)
+            let staff = yield Staff.findOne({_id: management.staff}).populate('user', '_id fullname')
             let employer = req.user.employer
 
             console.log("staff",staff)
