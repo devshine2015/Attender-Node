@@ -251,8 +251,8 @@ class StaffController {
                 staffId: staff._id,
                 type: 'task'
             })
-            yield notify.task(staff, management.employer)
-
+            let response = yield notify.task(staff, management.employer)
+            console.log(response)
         } else {
             res.json({status: false, messageCode: 'NOT_FOUND'})
         }
