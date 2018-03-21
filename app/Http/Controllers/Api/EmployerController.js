@@ -6,10 +6,10 @@ const Employer = use('App/Model/Employer')
 const StaffManagement = use('App/Model/StaffManagement')
 const EmployerNotification = use('App/Model/EmployerNotification')
 
-// const Notify = use('App/Serializers/Notify')
+const Notify = use('App/Serializers/Notify')
 
 
-// let notify = new Notify()
+let notify = new Notify()
 
 
 
@@ -265,7 +265,7 @@ class EmployerController {
               type: 'venue-interest'
           })
           res.json({ status: true, venue: employer })
-          // yield notify.venueInterest(req.user.staffId, employer)
+          yield notify.venueInterest(req.user.staffId, employer)
       }else{
           delete employer.interested[req.user._id]
           employer.markModified('interested')
@@ -333,7 +333,8 @@ class EmployerController {
   }
 
   * myStaffs (req, res) {
-    let managements = yield StaffManagement.find({ employer: req.user.employer._id, trial: false }).populate('staff')
+    let query = req.input('withTrial', false) ? { employer: req.user.employer._id } : { employer: req.user.employer._id, trial: false }
+    let managements = yield StaffManagement.find(query).populate('staff')
     let positions = ['bartender', 'manager', 'waiter', 'chef', 'kitchen', 'barback', 'host']
     let staffs = {}
     for (let position of positions) {
@@ -355,7 +356,7 @@ class EmployerController {
     })
     res.json({ status: true })
     let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue')
-    // yield notify.newMessage(m)
+    yield notify.newMessage(m)
     let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
   }
 

@@ -24,6 +24,7 @@ Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage')
 Route.group('api', function() {
   Route.post('auth/resend', 'Api/AuthController.resend')
   Route.get('auth/current', 'Api/AuthController.current')
+  Route.post('auth/change-email', 'Api/AuthController.changeEmail')
 
   // PAYMENT MANAGEMENT
   Route.get('earnings', 'Api/PaymentController.earnings')
@@ -69,6 +70,7 @@ Route.group('api', function() {
 
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
+  Route.post('user/profile/deactivate-user', 'Api/UserController.deactivateUser')
   Route.get('trial-staffs', 'Api/EmployerController.trialStaffs')
   Route.get('active-staffs', 'Api/EmployerController.activeStaffs')
 
@@ -114,6 +116,10 @@ Route.group('api', function() {
   Route.get('user/profile/organizer', 'Api/EmployerController.getOrganizerProfile')
   Route.post('user/profile/organizer', 'Api/EmployerController.saveOrganizerProfile')
 
+  // USER API MANAGEMENT
+  Route.post('user/profile/change-email', 'Api/UserController.changeEmail')
+  Route.post('user/profile/change-password', 'Api/UserController.changePassword')
+
   // EVENT API MANAGEMENT
   Route.get('events', 'Api/EventController.index')
   Route.post('my-events', 'Api/EventController.myEvents')
@@ -156,6 +162,7 @@ Route.group('user', function(){
   Route.get('logout', 'Web/AuthController.logout')
   Route.get('verify-email', 'Web/AuthController.verify')
   Route.get('profile-setup', 'Web/AuthController.setupProfile')
+  Route.post('profile-setup', 'Web/AuthController.saveProfile')
   Route.post('profile-setup', 'Web/AuthController.saveProfile')
   Route.post('save-staff-profile', 'Web/StaffController.save')
   Route.post('save-venue-profile', 'Web/VenueController.save')

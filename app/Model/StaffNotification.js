@@ -9,7 +9,7 @@ let staffNotificationSchema = mongoose.Schema({
 
   employer: { type: ObjectId, ref: 'Employer' },
   staffId: { type: ObjectId, ref: 'Staff' },
-  type: { type: String, enum: ['message', 'transaction', 'payment', 'trial', 'hired'] },
+  type: { type: String, enum: ['message', 'transaction', 'payment', 'trial', 'hired', 'task'] },
   eventId: { type: ObjectId, ref: 'Event'},
   timesheet: { type: ObjectId, ref: 'Timesheet'},
   paymentStatus: { type: String },

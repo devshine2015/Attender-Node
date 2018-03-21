@@ -231,11 +231,29 @@ class StaffController {
             management.assignments = assignments
             management.markModified('assignments')
             management.save()
-            return res.json({status: true, management})
-        } else {
-            return res.json({status: false, messageCode: 'NOT_FOUND'})
-        }
 
+            res.json({status: true, management})
+
+            let staff = yield Staff.findOne({_id: management.staff}).populate('user', '_id fullname')
+            let employer = req.user.employer
+
+            console.log("staff",staff)
+            console.log("employer",employer)
+
+            yield StaffNotification.create({
+                employer: employer._id,
+                staffId: staff._id,
+                type: 'task'
+            }, function (err, data) {
+                console.log("err",err)
+                console.log("data",data)
+            })
+
+            let response = yield notify.task(staff, employer)
+            console.log(response)
+        } else {
+            res.json({status: false, messageCode: 'NOT_FOUND'})
+        }
     }
 
     * addTask(req, res) {

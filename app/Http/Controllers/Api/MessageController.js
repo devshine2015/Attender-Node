@@ -166,6 +166,7 @@ class MessageController {
           delivered: { $last: '$delivered' },
           seen: { $last: '$seen' },
           usid: { $last: '$staff.user'},
+            staffId: { $last: '$staff' },
           uselect: { $last: '$staff._id' },
           uname: { $last: '$staff.fullname' },
           uavatar: { $last: '$staff.avatar'},
@@ -177,6 +178,10 @@ class MessageController {
       }
     )
 
+    yield threads.map(function * (thread) {
+        let staff = yield Staff.findOne({_id: thread.staffId}).populate('user', '_id fullname')
+        thread['staff'] = (staff) ? staff : null
+    })
     // filter by position
     let positions = String(req.input('positions', '')).split(',')
     if (positions[0] != '') {

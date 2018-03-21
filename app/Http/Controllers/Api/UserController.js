@@ -4,6 +4,9 @@ const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
+const PromisePay = use('PromisePay')
+const Hash = use('Hash')
+const Validator = use('Validator')
 
 class UserController {
 
@@ -191,7 +194,9 @@ class UserController {
             licenses = [],
             languages = [],
             birthdate = '',
-            avatar = ''
+            avatar = '',
+            startRate='',
+            endRate=''
 
         try {
             description = req.input('description', '').split(',')
@@ -205,11 +210,15 @@ class UserController {
             availability = JSON.parse(req.input('availability', '{}'))
             birthdate = new Date(req.input('birthdate'))
             avatar = req.input('avatar', '')
+            startRate = isNaN(req.input('startRate', ""))? "": req.input('startRate', "")
+            endRate = isNaN(req.input('endRate', ""))? "": req.input('endRate', "")
+            console.log("1st ", birthdate)
         } catch (e) {
             yield res.json({status: false, messageCode: 'INVALID_INPUT'})
         }
         if (req.user.isStaff) {
             let staff = yield Staff.findOne(req.user.staffId._id)
+            console.log(avatar)
             staff.avatar = avatar
             staff.email = req.user.email
             staff.mobile = req.user.mobile
@@ -222,8 +231,10 @@ class UserController {
             staff.preferredDistance = req.input('preferredDistance', staff.preferredDistance)
             staff.frequency = req.input('frequency', staff.frequency)
             staff.position = position || staff.position
-            staff.startRate = req.input('startRate', staff.startRate)
-            staff.endRate = req.input('endRate', staff.endRate)
+            console.log(startRate, req.input('startRate', ""))
+            console.log(isNaN(req.input('startRate', "")), isNaN(1))
+            staff.startRate = startRate || staff.startRate
+            staff.endRate = endRate || staff.endRate
             staff.rateBadge = req.input('rateBadge', staff.rateBadge)
             staff.rateType = req.input('rateType', staff.rateType)
             staff.qualifications = qualifications || staff.qualifications
@@ -233,12 +244,39 @@ class UserController {
             staff.availability = availability || staff.availability
             staff.licenses = licenses.length > 0 ? licenses : staff.licenses
             staff.languages = languages || staff.languages
-            staff.save()
-            req.user.avatar = avatar
-            req.user.staffId = staff._id
-            req.user.isStaff = true
-            req.user.hasProfile = true
-            req.user.save()
+            staff.save((val1, val2)=>{
+                console.log("val1", val1)
+                console.log("val2", val2)
+            })
+
+            console.log(staff)
+            let user = yield User.findOne(req.user._id)
+            user.avatar = avatar
+            user.staffId = staff._id
+            user.isStaff = true
+            user.hasProfile = true
+            user.save()
+
+            console.log("1st",staff)
+            console.log("2nd",user)
+            var dd = birthdate.getDate();
+            var mm = birthdate.getMonth()+1; //January is 0!
+
+            var yyyy = birthdate.getFullYear();
+            if(dd<10){
+                dd='0'+dd;
+            }
+            if(mm<10){
+                mm='0'+mm;
+            }
+            var dob = dd+'/'+mm+'/'+yyyy;
+
+            PromisePay.updateUser(user.promiseId, {
+                dob
+            }).then((res)=>{
+                PromisePay.kycapproved(user.promiseId)
+            })
+
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
         } else {
             if (req.user.hasProfile) {
@@ -278,6 +316,74 @@ class UserController {
             yield res.json({status: true, messageCode: 'CREATED', data: staff})
         }
     }
+
+    * changeEmail (req, res) {
+    let oldEmail = req.input('oldEmail')
+    let newEmail = req.input('newEmail')
+
+    if (oldEmail != req.user.email) {
+        return res.json({ status: false, message: 'Old email doesn\'t match' })
+    }
+
+    if (oldEmail == newEmail) {
+        return res.json({ status: false, message: 'New email must not match with old email' })
+    }
+  
+    let user = yield User.findOne({ email: req.user.email})
+  
+    if (user) {
+      user.verified = false
+      user.email = newEmail
+      user.save()
+  
+      return res.json({ status: true, message: 'Email Changed' })
+    } else {
+      return res.json({ status: false, message: 'Not Found' })
+    }
+  }
+
+  * changePassword (req, res) {
+  let newPassword = req.input('newPassword')
+  let newPasswordConfirm = req.input('newPasswordConfirm')
+
+  if (newPassword != newPasswordConfirm) {
+      return res.json({ status: false, message: 'Passwords don\'t match' })
+  }
+
+  let user = yield User.findOne({ email: req.user.email})
+
+  if (user) {
+    user.password = yield Hash.make(newPassword)
+    user.save()
+
+    return res.json({ status: true, message: 'Password Changed' })
+  } else {
+    return res.json({ status: false, message: 'Not Found' })
+  }
+}
+
+* deactivateUser (req, res) {
+    const user = yield User.findOne({ email: req.user.email})
+    let password = req.input('password') 
+    const account = {
+        email: req.user.email,
+        password: password
+    }
+
+    const validation = yield Validator.validateAll(account, User.loginRules)
+    if (validation.fails()) {
+      return res.json({ status: false, message: 'Invalid input' })
+    } else {
+      if (Hash.verify(password, user.password)) {
+        user.isActive = false;
+        user.save()
+
+        return res.json({ status: true, message: 'Deactivated' })
+      }  else {
+        return res.json({ status: false, message: 'Incorrect password' })
+      }
+    }
+}
 
 }
 

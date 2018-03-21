@@ -104,17 +104,17 @@ userSchema.statics.facebookSchema = {
 }
 userSchema.post('save', function(user){
   let promiseId = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${user._id}`
-  if (!user.promisePay) {
-    PromisePay.createUser({
-      id: promiseId,
-      email: user.email,
-      first_name: user.fullname,
-      country: 'AUS'
-    }).then((res)=>{
-      user.promisePay = true
-      user.promiseId = promiseId
-      user.save()
-    })
+  if (!user.promiseId) {
+          PromisePay.createUser({
+              id: promiseId,
+              email: user.email,
+              first_name: user.fullname,
+              country: 'AUS'
+          }).then((res)=>{
+              user.promisePay = true
+              user.promiseId = promiseId
+              user.save()
+          })
   }
   if (!user.walletId && user.promisePay) {
     PromisePay.wallet(user.promiseId).then((res)=>{
