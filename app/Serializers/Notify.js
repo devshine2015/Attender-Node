@@ -56,6 +56,15 @@ class Notify {
     }
   }
 
+  * task (staff, employer) {
+      let device = yield this.getDevice(staff.user._id)
+      if (device) {
+          return yield this.send(device, `${employer.name} updated your task`, {employer})
+      } else {
+          return device
+      }
+  }
+
   * hired (staff, employer) {
     let device = yield this.getDevice(staff.user._id)
     if (device) {

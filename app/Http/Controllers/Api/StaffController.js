@@ -232,10 +232,23 @@ class StaffController {
             management.markModified('assignments')
             management.save()
             return res.json({status: true, management})
+            let staff = yield this.getStaff(req)
+            let employer = req.user.employer
+
+            yield StaffNotification.create({
+                employer: employer._id,
+                staffId: staff._id,
+                type: 'task'
+            })
+            yield EmployerNotification.create({
+                employer: employer._id,
+                staffId: staff._id,
+                type: 'task'
+            })
+            yield notify.task(staff, management.employer)
         } else {
             return res.json({status: false, messageCode: 'NOT_FOUND'})
         }
-
     }
 
     * addTask(req, res) {
