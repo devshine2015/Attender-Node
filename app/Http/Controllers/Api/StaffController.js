@@ -239,21 +239,26 @@ class StaffController {
 
             console.log("staff",staff)
             console.log("employer",employer)
-            console.log("management.employer",management.employer)
 
-            let snotify = yield StaffNotification.create({
+            yield StaffNotification.create({
                 employer: employer._id,
                 staffId: staff._id,
                 type: 'task'
+            }, function (err, data) {
+                console.log("err",err)
+                console.log("data",data)
             })
-            let enotify = yield EmployerNotification.create({
+            yield EmployerNotification.create({
                 employer: employer._id,
                 staffId: staff._id,
                 type: 'task'
+            }, function (err, data) {
+                console.log("err",err)
+                console.log("data",data)
             })
             console.log("snotify",snotify)
             console.log("enotify",enotify)
-            let response = yield notify.task(staff, management.employer)
+            let response = yield notify.task(staff, employer)
             console.log(response)
         } else {
             res.json({status: false, messageCode: 'NOT_FOUND'})
