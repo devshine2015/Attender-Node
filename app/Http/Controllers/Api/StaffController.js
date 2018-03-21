@@ -237,6 +237,10 @@ class StaffController {
             let staff = yield this.getStaff(req)
             let employer = req.user.employer
 
+            console.log("staff",staff)
+            console.log("employer",employer)
+            console.log("management.employer",management.employer)
+
             yield StaffNotification.create({
                 employer: employer._id,
                 staffId: staff._id,
