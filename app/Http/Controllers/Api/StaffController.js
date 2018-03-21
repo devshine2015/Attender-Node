@@ -248,14 +248,6 @@ class StaffController {
                 console.log("err",err)
                 console.log("data",data)
             })
-            yield EmployerNotification.create({
-                employer: employer._id,
-                staffId: staff._id,
-                type: 'task'
-            }, function (err, data) {
-                console.log("err",err)
-                console.log("data",data)
-            })
 
             let response = yield notify.task(staff, employer)
             console.log(response)
