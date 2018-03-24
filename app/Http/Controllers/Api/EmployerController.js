@@ -256,10 +256,7 @@ class EmployerController {
       if(employer.interested[req.user.staffId._id] == undefined){
           employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
           employer.markModified('interested')
-          employer.save((data1,data2)=>{
-              console.log("data1",data1)
-              console.log("data2",data2)
-          })
+          employer.save()
           let notification = yield EmployerNotification.create({
               employer: employer._id,
               staffId: req.user.staffId._id,
