@@ -43,6 +43,7 @@ Route.group('api', function() {
 
   Route.post('transfer', 'Api/PaymentController.transfer')
 
+
   // MESSAGING API MANAGEMENT
   Route.get('conversation/:convo', 'Api/MessageController.conversation')
   Route.post('conversation/:convo/delete', 'Api/MessageController.deleteConversation')
