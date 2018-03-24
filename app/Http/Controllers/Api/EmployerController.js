@@ -252,9 +252,11 @@ class EmployerController {
 
   * interest (req, res) {
     let employer = yield this.getVenue(req)
-    
-    console.log(employer)
+
+      console.log(employer)
+      console.log("req.user.isStaff",req.user.isStaff)
     if (req.user.isStaff) { console.log(req.user._id);
+        console.log("employer.interested[req.user._id]",employer.interested[req.user._id])
       if(employer.interested[req.user._id] == undefined){
           employer.interested[req.user._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
           employer.markModified('interested')

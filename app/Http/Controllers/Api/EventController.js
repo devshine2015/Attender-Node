@@ -157,8 +157,10 @@ class EventController {
     let _event = yield this.getEvent(req, res)
       console.log(_event)
 
+      console.log("req.user.isStaff",req.user.isStaff)
       if (req.user.isStaff) {
-      console.log(_event, req)
+        console.log(req.user._id);
+        console.log("employer.interested[req.user._id]",_event.interested[req.user._id])
       _event.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date() }
       _event.markModified('interested')
       _event.save((data1, data2)=>{
