@@ -26,7 +26,7 @@ class StaffController {
     }
 
     * getStaffManagement(req) {
-        let management = yield StaffManagement.findOne({staff: req.param('id')}).populate('staff').populate('employer', '_id name')
+        let management = yield StaffManagement.findOne({staff: req.param('id'), employer: req.auth.request.user.employer._id}).populate('staff').populate('employer', '_id name')
         if (management) {
             return management
         }
