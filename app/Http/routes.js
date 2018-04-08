@@ -24,10 +24,11 @@ Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middlewar
 Route.group('subscription', function() {
   Route.get('all', 'Api/SubscriptionController.index')
   Route.post('all', 'Api/SubscriptionController.index')
+  Route.get('check', 'Api/SubscriptionController.check')
   Route.post('subscribe', 'Api/SubscriptionController.subscribe')
   Route.post('cancel', 'Api/SubscriptionController.cancel')
+  
 }).prefix('api/subscription').middleware('guard')
-
 
 Route.group('api', function() {
   

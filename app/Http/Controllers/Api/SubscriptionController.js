@@ -10,18 +10,45 @@ const Notify = use('App/Serializers/Notify')
 class SubscriptionController {
   * index(req, res) {
     const employerId = req.auth.request.user.employer._id;
-    const staffId = req._body.staffId;
-    const subscriptions = yield Subscription.find();
+    const subscriptionType = req._body.subscriptionType;
+    const subscriptions = yield Subscription.find({
+      employerId,
+      type: subscriptionType,
+    }).populate('staffId', 'fullname');
     if (!subscriptions) {
       return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
     }
     return res.json({status: true, subscriptions});
   }
 
+  * check(req, res) {
+    const employerId = req.auth.request.user.employer._id;
+    const subscription = yield Subscription.findOne({
+      employerId: employerId,
+      type: 'ACCOUNT_PREMIUM',
+    });
+    if (subscription) {
+      const currentDate = moment();
+      const dateRange = moment().range(subscription.purchaseDate, subscription.expireDate);
+      const range = dateRange.contains(currentDate);
+      if (!range) {
+        return res.json({status: false, messageCode: 'CANCELLED_SUBSCRIPTION', message: 'Please renew subscription to access functionality.'})
+      }
+    }
+    if (!subscription) {
+      return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
+    }
+    return res.json({status: true, subscription});
+  }
+
   * subscribe(req, res) {
     const employerId = req.auth.request.user.employer._id;
     const staffId = req._body.staffId;
     const subscriptionType = req._body.subscriptionType;
+    let price = 49;
+    if (subscriptionType === 'MANAGE_STAFF') {
+      price = 3;
+    }
     const currentDate = moment();
     const subscription = new Subscription({
       type: subscriptionType,
@@ -37,7 +64,7 @@ class SubscriptionController {
           status: 'subscribe',
         }
       ],
-      price: 49,
+      price: price,
     });
     try {
       yield subscription.save();
