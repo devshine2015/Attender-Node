@@ -3,25 +3,35 @@
 const Route = use('Route')
 
 
-Route.get('api/users', 'Api/UserController.index')
-Route.get('api/employers', 'Api/EmployerController.index')
-Route.get('api/devices', 'Api/GeneralController.deviceList')
-Route.get('api/managements', 'Api/GeneralController.managements')
-Route.get('api/timesheets', 'Api/GeneralController.timesheets')
-Route.get('api/staffs', 'Api/StaffController.index')
+Route.get('api/users', 'Api/UserController.index').middleware('guard')
+Route.get('api/employers', 'Api/EmployerController.index').middleware('guard')
+Route.get('api/devices', 'Api/GeneralController.deviceList').middleware('guard')
+Route.get('api/managements', 'Api/GeneralController.managements').middleware('guard')
+Route.get('api/timesheets', 'Api/GeneralController.timesheets').middleware('guard')
+Route.get('api/staffs', 'Api/StaffController.index').middleware('guard')
 
-Route.get('api/venues', 'Api/EmployerController.getVenues')
-Route.get('api/organizers', 'Api/EmployerController.organisers')
+Route.get('api/venues', 'Api/EmployerController.getVenues').middleware('guard')
+Route.get('api/organizers', 'Api/EmployerController.organisers').middleware('guard')
 
-Route.get('api/events', 'Api/EventController.index')
-Route.get('api/messages', 'Api/GeneralController.messages')
+Route.get('api/events', 'Api/EventController.index').middleware('guard')
+Route.get('api/messages', 'Api/GeneralController.messages').middleware('guard')
 
-Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEventInterest')
-Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest')
-Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage')
+Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEventInterest').middleware('guard')
+Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest').middleware('guard')
+Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
 
+// SUBSCRIPTION
+Route.group('subscription', function() {
+  Route.get('all', 'Api/SubscriptionController.index')
+  Route.post('all', 'Api/SubscriptionController.index')
+  Route.get('check', 'Api/SubscriptionController.check')
+  Route.post('subscribe', 'Api/SubscriptionController.subscribe')
+  Route.post('cancel', 'Api/SubscriptionController.cancel')
+  
+}).prefix('api/subscription').middleware('guard')
 
 Route.group('api', function() {
+  
   Route.post('auth/resend', 'Api/AuthController.resend')
   Route.get('auth/current', 'Api/AuthController.current')
   Route.post('auth/change-email', 'Api/AuthController.changeEmail')
@@ -186,14 +196,15 @@ Route.group('nonadmin', function() {
   Route.post('manage/login', 'Admin/AuthController.login')
 }).middleware('nonadmin')
 
-Route.get('seed', 'Admin/SeedController.create')
-Route.get('calendar', 'Api/EventController.calendar')
-Route.post('send-test', 'Api/GeneralController.sendNotif')
-Route.get('staffs', 'Api/GeneralController.staffs')
-Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTimesheet')
-Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet')
-Route.post('timesheet/:id/:action', 'Api/PaymentController.updateTimesheet')
-Route.post('save-staff-assignment/:id', 'Api/StaffController.saveAssignment')
+// Not Good to seed via rest. --Vince :-D
+// Route.get('seed', 'Admin/SeedController.create')
+Route.get('calendar', 'Api/EventController.calendar').middleware('guard')
+Route.post('send-test', 'Api/GeneralController.sendNotif').middleware('guard')
+Route.get('staffs', 'Api/GeneralController.staffs').middleware('guard')
+Route.get('management/:id/timesheet/current', 'Api/PaymentController.currentTimesheet').middleware('guard')
+Route.get('timesheet/:id', 'Api/PaymentController.getTimesheet').middleware('guard')
+Route.post('timesheet/:id/:action', 'Api/PaymentController.updateTimesheet').middleware('guard')
+Route.post('save-staff-assignment/:id', 'Api/StaffController.saveAssignment').middleware('guard')
 
 
 Route.group('promisepay-callbacks', function() {
