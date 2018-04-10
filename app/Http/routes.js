@@ -20,15 +20,29 @@ Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEv
 Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest').middleware('guard')
 Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
 
-// SUBSCRIPTION
+// SUBSCRIPTION 
+// middleware('guard') is Active please put {"X-request-token": "XXXXXX"} on Request Header
 Route.group('subscription', function() {
+  /*
+  * Subscription Types:
+  * - ACCOUNT_PREMIUM
+  * - MANAGE_STAFF
+  * get('all', {subscriptionType: 'ACCOUNT_PREMIUM'});
+  */
   Route.get('all', 'Api/SubscriptionController.index')
-  Route.post('all', 'Api/SubscriptionController.index')
+  // get('check', {subscriptionType: 'ACCOUNT_PREMIUM'});
   Route.get('check', 'Api/SubscriptionController.check')
+  /*
+  * post('subscribe', {subscriptionType: 'ACCOUNT_PREMIUM'});
+  * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  */
   Route.post('subscribe', 'Api/SubscriptionController.subscribe')
+  /*
+  * post('cancel', {subscriptionType: 'ACCOUNT_PREMIUM'});
+  * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  */
   Route.post('cancel', 'Api/SubscriptionController.cancel')
-  
-}).prefix('api/subscription').middleware('guard')
+}).prefix('api/subscription').middleware('guard') 
 
 Route.group('api', function() {
   
