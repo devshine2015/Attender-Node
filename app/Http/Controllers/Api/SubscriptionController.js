@@ -9,8 +9,9 @@ const Notify = use('App/Serializers/Notify')
 
 class SubscriptionController {
   * index(req, res) {
+    const data = req.all();
     const employerId = req.auth.request.user.employer._id;
-    const subscriptionType = req._body.subscriptionType;
+    const subscriptionType = data.subscriptionType;
     const subscriptions = yield Subscription.find({
       employerId,
       type: subscriptionType,
@@ -22,10 +23,12 @@ class SubscriptionController {
   }
 
   * check(req, res) {
+    const data = req.all();
     const employerId = req.auth.request.user.employer._id;
+    const subscriptionType = data.subscriptionType;
     const subscription = yield Subscription.findOne({
       employerId: employerId,
-      type: 'ACCOUNT_PREMIUM',
+      type: subscriptionType,
     });
     if (subscription) {
       const currentDate = moment();
@@ -39,6 +42,11 @@ class SubscriptionController {
       return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
     }
     return res.json({status: true, subscription});
+  }
+
+  * checkStaff(req, res) {
+    console.log(req);
+    return res.json(req);
   }
 
   * subscribe(req, res) {
