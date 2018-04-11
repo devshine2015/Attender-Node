@@ -45,8 +45,27 @@ class SubscriptionController {
   }
 
   * checkStaff(req, res) {
-    console.log(req);
-    return res.json(req);
+    const data = req.all();
+    const employerId = req.auth.request.user.employer._id;
+    const subscriptionType = data.subscriptionType;
+    const staffId = data.staffId;
+    const subscription = yield Subscription.findOne({
+      employerId: employerId,
+      staffId: staffId,
+      type: subscriptionType,
+    });
+    if (subscription) {
+      const currentDate = moment();
+      const dateRange = moment().range(subscription.purchaseDate, subscription.expireDate);
+      const range = dateRange.contains(currentDate);
+      if (!range) {
+        return res.json({status: false, messageCode: 'CANCELLED_SUBSCRIPTION', message: 'Please renew subscription to access functionality.'})
+      }
+    }
+    if (!subscription) {
+      return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
+    }
+    return res.json({status: true, subscription});
   }
 
   * subscribe(req, res) {

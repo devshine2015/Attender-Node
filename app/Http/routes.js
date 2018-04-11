@@ -32,6 +32,8 @@ Route.group('subscription', function() {
   Route.get('all', 'Api/SubscriptionController.index')
   // get('check', {subscriptionType: 'ACCOUNT_PREMIUM'});
   Route.get('check', 'Api/SubscriptionController.check')
+  // get('checkStaff', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXXX});
+  Route.get('checkStaff', 'Api/SubscriptionController.checkStaff')
   /*
   * post('subscribe', {subscriptionType: 'ACCOUNT_PREMIUM'});
   * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
