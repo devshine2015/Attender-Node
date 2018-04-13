@@ -148,6 +148,51 @@ module.exports = {
     } else {
       return false
     }
+  },
+
+  transferWithFee: (from_user, to_user, amount, from, account_id, fee_id) => {
+    let transactionId = `TN-${uuidv4()}`
+    let transactionAmount = (amount * 100)
+    if (from == 'card') {
+      return false
+    } else if (from == 'bank') {
+      return new Promise((resolve, reject) => {
+        baseReq.post('direct_debit_authorities', {account_id:account_id, amount:transactionAmount}).then((res) => {
+          resolve(res)
+        })
+      }).then((res) => {
+        if (!res.errors) {
+          let payload = {
+            amount: transactionAmount,
+            currency: 'AUD',
+            payment_type: 4,
+            seller_id: to_user,
+            buyer_id: from_user,
+            id: transactionId,
+            name: 'Transfer of Funds',
+            description: 'Transfer from',
+            fee_ids: fee_id,
+          }
+          return new Promise((resolve, reject) => {
+             baseReq.post('items', payload).then((res) => {
+               resolve(res)
+             })
+          }).then((res) => {
+            if (!res.errors) {
+              return baseReq.patch(`items/${transactionId}/make_payment`, {account_id:account_id})
+            } else {
+              return res
+            }
+          })
+        } else {
+          return res
+        }
+      })
+    } else {
+      return false
+    }
   }
+
+
 
 }

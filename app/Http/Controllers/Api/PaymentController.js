@@ -270,6 +270,24 @@ module.exports = class PaymentController {
                     } else {
                         return res.json({status: false, errors: transfer.errors})
                     }
+                case 'make_payment_with_fee':
+                    let transfer = yield PromisePay.transferWithFee(
+                        `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
+                        `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
+                        req.input('amount', 0),
+                        'bank',
+                        req.input('account_id', ''),
+                        req.input('fee_id', ''),
+                    )
+                    if (transfer.items) {
+                        timesheet.transactionId = transfer.items.id
+                        timesheet.mutable = false
+                        timesheet.paymentStatus = 'pending'
+                        timesheet.save()
+                        return res.json({status: true, messageCode: 'PAYMENT_PENDING', timesheet})
+                    } else {
+                        return res.json({status: false, errors: transfer.errors})
+                    }
                 default:
                     return res.json({status: false, messageCode: 'INVALID_ACTION'})
             }
