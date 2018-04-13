@@ -123,7 +123,7 @@ class AuthController {
           yield res.redirect('back')
         }
       }
-      return yield res.redirect('/')
+      return yield res.redirect('./manage/')
     }
   }
 
