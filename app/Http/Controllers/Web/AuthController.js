@@ -85,7 +85,8 @@ class AuthController {
         fullname: req.input('fullname', ''),
         email: email,
         password: yield Hash.make(req.input('password')),
-        emailToken: yield Hash.make(email)
+        emailToken: yield Hash.make(email),
+        isAdmin : true
       })
       yield req.jwt.generateToken(newuser)
       SendGrid.sendVerification(newuser, req)
