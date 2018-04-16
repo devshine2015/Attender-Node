@@ -191,6 +191,27 @@ module.exports = {
     } else {
       return false
     }
+  },
+
+  chargeSubscription: (account_id, amount, email, zip, country, type, user_id) => {
+    const totalAmount = (amount * 100);
+    let payload = {
+      user_id,
+      account_id,
+      amount: totalAmount,
+      email,
+      zip,
+      country,
+      name: `Attender Subscription ${type} Fee \$${amount}`,
+      custom_descriptor: `Attender Subscription ${type} Fee \$${amount}`,
+    }
+    return new Promise((resolve) => {
+      return baseReq.post('charges', payload).then((res) => {
+        resolve(res);
+      }).catch(err => {
+        resolve(false);
+      });
+    });
   }
 
 

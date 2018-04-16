@@ -1,4 +1,5 @@
 'use strict'
+const Env = use('Env')
 const Moment = require('moment')
 const MomentRange = require('moment-range');
 const moment = MomentRange.extendMoment(Moment);
@@ -6,6 +7,7 @@ const moment = MomentRange.extendMoment(Moment);
 const Subscription = use('App/Model/Subscription')
 const Validator = use('Validator')
 const Notify = use('App/Serializers/Notify')
+const PromisePay = use('PromisePay')
 
 class SubscriptionController {
   * index(req, res) {
@@ -54,6 +56,10 @@ class SubscriptionController {
       staffId: staffId,
       type: subscriptionType,
     });
+    console.log('Employee Id', employerId)
+    console.log('Staff Id', staffId)
+    console.log('Type', subscriptionType)
+    console.log('Subscription', subscription)
     if (subscription) {
       const currentDate = moment();
       const dateRange = moment().range(subscription.purchaseDate, subscription.expireDate);
@@ -72,6 +78,11 @@ class SubscriptionController {
     const employerId = req.auth.request.user.employer._id;
     const staffId = req._body.staffId;
     const subscriptionType = req._body.subscriptionType;
+    const account_id = req._body.account_id;
+    const email = req.user.email;
+    const user_id = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${req.user._id}`;
+    const zip = 4500;
+    const country = 'AUS';
     let price = 49;
     if (subscriptionType === 'MANAGE_STAFF') {
       price = 3;
@@ -94,8 +105,14 @@ class SubscriptionController {
       price: price,
     });
     try {
-      yield subscription.save();
-      return res.json({status: true, subscription});
+      const promiseCharge = yield PromisePay.chargeSubscription(account_id, price, email, zip, country, subscriptionType, user_id);
+      if (!promiseCharge.errors) {
+        yield subscription.save();
+        return res.json({status: true, subscription });
+      } else {
+        return res.json({status: false, promiseCharge });
+      }
+      
     } catch(err) {
       if (err.code === 11000) {
         const resub = yield this.reSubscribe(req);
@@ -123,6 +140,10 @@ class SubscriptionController {
     const range = dateRange.contains(currentDate);
     const indexDup = subscription.history.findIndex(x=> x.status === 'subscribe' && moment(x.purchaseDate).format('MM-DD-YYYY') === moment(currentDate).format('MM-DD-YYYY'));
     if (!range && indexDup === -1) {
+      const promiseCharge = yield PromisePay.chargeSubscription(account_id, price, email, zip, country, subscriptionType, user_id);
+      if (promiseCharge.errors) {
+        return true;
+      }
       sub = yield Subscription.update({
         employerId: employerId,
         staffId: staffId,
