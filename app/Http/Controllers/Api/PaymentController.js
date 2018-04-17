@@ -1,12 +1,13 @@
 'use strict'
-const Env = use('Env')
+
 const moment = require('moment')
-const uuidv4 = require('uuid/v4');
+const uuidv4 = require('uuid/v4')
 const AHelpers = use('AHelpers')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
 const User = use('App/Model/User')
+const Env = use('Env')
 
 const StaffManagement = use('App/Model/StaffManagement')
 const Timesheet = use('App/Model/Timesheet')
