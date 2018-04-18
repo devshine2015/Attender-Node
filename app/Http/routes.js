@@ -36,14 +36,19 @@ Route.group('subscription', function() {
   Route.get('checkStaff', 'Api/SubscriptionController.checkStaff')
   /*
   * post('subscribe', {subscriptionType: 'ACCOUNT_PREMIUM'});
-  * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});
   */
   Route.post('subscribe', 'Api/SubscriptionController.subscribe')
   /*
   * post('cancel', {subscriptionType: 'ACCOUNT_PREMIUM'});
-  * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});
   */
   Route.post('cancel', 'Api/SubscriptionController.cancel')
+  /*
+  * post('defaultPayment', {method: 'BANK', number: 'XXXX XXXX XXXX XXXX', promiseID: 'XXXX-XXXXXX-XXXXX-XXXXX'});
+  */
+  Route.post('defaultPayment', 'Api/SubscriptionController.defaultPayment');
+  Route.get('getDefaultPayment', 'Api/SubscriptionController.getDefaultPayment');
 }).prefix('api/subscription').middleware('guard') 
 
 Route.group('api', function() {

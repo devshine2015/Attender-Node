@@ -5,6 +5,7 @@ const MomentRange = require('moment-range');
 const moment = MomentRange.extendMoment(Moment);
 
 const Subscription = use('App/Model/Subscription')
+const DefaultPaymentMethod = use('App/Model/DefaultPaymentMethod')
 const Validator = use('Validator')
 const Notify = use('App/Serializers/Notify')
 const PromisePay = use('PromisePay')
@@ -72,6 +73,61 @@ class SubscriptionController {
       return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
     }
     return res.json({status: true, subscription});
+  }
+
+  * getDefaultPayment(req, res) {
+    const userId = req.auth.request.user._id;
+    const defaultPaymentMethod = yield DefaultPaymentMethod.findOne({
+      userId,
+    });
+    return res.json({ status: true, defaultPaymentMethod });
+  }
+
+  * defaultPayment(req, res) {
+    const userId = req.auth.request.user._id;
+    const method = req._body.method;
+    const number = req._body.number;
+    const promiseID = req._body.promiseID;
+    
+    const defaultPaymentMethod = new DefaultPaymentMethod({
+      userId,
+      method,
+      number,
+      promiseID,
+    });
+    try {
+      yield defaultPaymentMethod.save();
+      return res.json({ status: true, defaultPaymentMethod });
+    } catch(err) {
+      if (err.code === 11000) {
+        const updateDefault = yield this.updateDefaultPayment(req);
+        if (updateDefault) {
+          return res.json({ status: true, defaultPaymentMethod });
+        }
+      }
+      return res.json({status: false, messageCode: 'ERROR_DEFAULT_PAYMENT_METHOD', message: 'Error Setting Default Payment Method', err})
+    }
+  }
+
+  * updateDefaultPayment(req) {
+    const userId = req.auth.request.user._id;
+    const method = req._body.method;
+    const number = req._body.number;
+    const promiseID = req._body.promiseID;
+
+    const defaultPaymentMethod = yield DefaultPaymentMethod.findOne({
+      userId,
+    });
+
+    defaultPaymentMethod.method = method;
+    defaultPaymentMethod.number = number;
+    defaultPaymentMethod.promiseID = promiseID;
+    try {
+      defaultPaymentMethod.save();
+      return true;
+    } catch(err) {
+      return false;
+    }
   }
 
   * subscribe(req, res) {
