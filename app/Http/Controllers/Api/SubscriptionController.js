@@ -57,10 +57,7 @@ class SubscriptionController {
       staffId: staffId,
       type: subscriptionType,
     });
-    console.log('Employee Id', employerId)
-    console.log('Staff Id', staffId)
-    console.log('Type', subscriptionType)
-    console.log('Subscription', subscription)
+    
     if (subscription) {
       const currentDate = moment();
       const dateRange = moment().range(subscription.purchaseDate, subscription.expireDate);
