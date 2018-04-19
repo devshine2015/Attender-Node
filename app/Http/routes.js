@@ -9,6 +9,8 @@ Route.get('api/devices', 'Api/GeneralController.deviceList').middleware('guard')
 Route.get('api/managements', 'Api/GeneralController.managements').middleware('guard')
 Route.get('api/timesheets', 'Api/GeneralController.timesheets').middleware('guard')
 Route.get('api/staffs', 'Api/StaffController.index').middleware('guard')
+Route.get('api/staffByPrice', 'Api/StaffController.staffByPrice').middleware('guard')
+Route.get('api/staffByAvailability', 'Api/StaffController.staffByPrice').middleware('guard')
 
 Route.get('api/venues', 'Api/EmployerController.getVenues').middleware('guard')
 Route.get('api/organizers', 'Api/EmployerController.organisers').middleware('guard')
@@ -19,6 +21,7 @@ Route.get('api/messages', 'Api/GeneralController.messages').middleware('guard')
 Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEventInterest').middleware('guard')
 Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest').middleware('guard')
 Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
+
 
 // SUBSCRIPTION 
 // middleware('guard') is Active please put {"X-request-token": "XXXXXX"} on Request Header
