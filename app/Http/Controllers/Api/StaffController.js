@@ -125,12 +125,14 @@ class StaffController {
                 $lte: priceMax,
             },
         }).populate('user', '_id fullname email mobile staffId');
-        return res.json({ status: true, staffs, priceMin});
+        return res.json({ status: true, staffs });
     }
 
     * staffByAvailability(req, res) {
-        let days = req.input('days', false);
-        return res.json({ status: true, days });
+        let days = req._body.days;
+        let staffs = [];
+        staffs = yield Staff.find(days).populate('user', '_id fullname email mobile staffId');
+        return res.json({ status: true, staffs, days, 'availability.monday.afternoon': true });
     }
 
 // startRate: { $lte: parseInt(rates[0]) }, endRate: { $gte: parseInt(rates[1]) }

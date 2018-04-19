@@ -10,7 +10,7 @@ Route.get('api/managements', 'Api/GeneralController.managements').middleware('gu
 Route.get('api/timesheets', 'Api/GeneralController.timesheets').middleware('guard')
 Route.get('api/staffs', 'Api/StaffController.index').middleware('guard')
 Route.get('api/staffByPrice', 'Api/StaffController.staffByPrice').middleware('guard')
-Route.get('api/staffByAvailability', 'Api/StaffController.staffByPrice').middleware('guard')
+Route.post('api/staffByAvailability', 'Api/StaffController.staffByAvailability').middleware('guard')
 
 Route.get('api/venues', 'Api/EmployerController.getVenues').middleware('guard')
 Route.get('api/organizers', 'Api/EmployerController.organisers').middleware('guard')
