@@ -109,7 +109,30 @@ class StaffController {
             staffs = yield Staff.find({}).populate('user', '_id fullname email mobile staffId')
             return res.json({status: true, staffs, messageCode: 'SUCCESS', filtered: false})
         }
+    }
 
+    * staffByPrice(req, res) {
+        let priceMin = req.input('priceMin', false);
+        let priceMax = req.input('priceMax', false);
+        priceMin = parseInt(priceMin, 10);
+        priceMax = parseInt(priceMax, 10)
+        let staffs = [];
+        staffs = yield Staff.find({
+            startRate: {
+                $gte: priceMin,
+            },
+            endRate: {
+                $lte: priceMax,
+            },
+        }).populate('user', '_id fullname email mobile staffId');
+        return res.json({ status: true, staffs });
+    }
+
+    * staffByAvailability(req, res) {
+        let days = req._body.days;
+        let staffs = [];
+        staffs = yield Staff.find(days).populate('user', '_id fullname email mobile staffId');
+        return res.json({ status: true, staffs, days, 'availability.monday.afternoon': true });
     }
 
 // startRate: { $lte: parseInt(rates[0]) }, endRate: { $gte: parseInt(rates[1]) }

@@ -9,6 +9,8 @@ Route.get('api/devices', 'Api/GeneralController.deviceList').middleware('guard')
 Route.get('api/managements', 'Api/GeneralController.managements').middleware('guard')
 Route.get('api/timesheets', 'Api/GeneralController.timesheets').middleware('guard')
 Route.get('api/staffs', 'Api/StaffController.index').middleware('guard')
+Route.get('api/staffByPrice', 'Api/StaffController.staffByPrice').middleware('guard')
+Route.post('api/staffByAvailability', 'Api/StaffController.staffByAvailability').middleware('guard')
 
 Route.get('api/venues', 'Api/EmployerController.getVenues').middleware('guard')
 Route.get('api/organizers', 'Api/EmployerController.organisers').middleware('guard')
@@ -19,6 +21,7 @@ Route.get('api/messages', 'Api/GeneralController.messages').middleware('guard')
 Route.get('api/push-interest/event/:event/:staff', 'Api/GeneralController.pushEventInterest').middleware('guard')
 Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVenueInterest').middleware('guard')
 Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
+
 
 // SUBSCRIPTION 
 // middleware('guard') is Active please put {"X-request-token": "XXXXXX"} on Request Header
@@ -36,14 +39,19 @@ Route.group('subscription', function() {
   Route.get('checkStaff', 'Api/SubscriptionController.checkStaff')
   /*
   * post('subscribe', {subscriptionType: 'ACCOUNT_PREMIUM'});
-  * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});
   */
   Route.post('subscribe', 'Api/SubscriptionController.subscribe')
   /*
   * post('cancel', {subscriptionType: 'ACCOUNT_PREMIUM'});
-  * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX });
+  * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});
   */
   Route.post('cancel', 'Api/SubscriptionController.cancel')
+  /*
+  * post('defaultPayment', {method: 'BANK', number: 'XXXX XXXX XXXX XXXX', promiseID: 'XXXX-XXXXXX-XXXXX-XXXXX'});
+  */
+  Route.post('defaultPayment', 'Api/SubscriptionController.defaultPayment');
+  Route.get('getDefaultPayment', 'Api/SubscriptionController.getDefaultPayment');
 }).prefix('api/subscription').middleware('guard') 
 
 Route.group('api', function() {
