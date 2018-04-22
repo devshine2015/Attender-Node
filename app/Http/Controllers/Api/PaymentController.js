@@ -276,7 +276,7 @@ module.exports = class PaymentController {
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
                         req.input('amount', 0),
-                        'bank',
+                        req.input('type', 0),
                         req.input('account_id', ''),
                         req.input('fee_id', ''),
                     )
