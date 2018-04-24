@@ -291,7 +291,11 @@ module.exports = class PaymentController {
                     } else {
                         return res.json({status: false, errors: transferWithFee.errors})
                     }
+<<<<<<< HEAD
+                    break;
+=======
                 break;
+>>>>>>> master
                 default:
                     return res.json({status: false, messageCode: 'INVALID_ACTION'})
             }
