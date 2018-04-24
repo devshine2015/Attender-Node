@@ -254,6 +254,7 @@ module.exports = class PaymentController {
                     let days = JSON.parse(req.input('days', JSON.stringify(timesheet.days)))
                     timesheet.days = days
                     timesheet.save()
+                    break;
                 case 'make_payment':
                     let transfer = yield PromisePay.transfer(
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
@@ -271,8 +272,9 @@ module.exports = class PaymentController {
                     } else {
                         return res.json({status: false, errors: transfer.errors})
                     }
+                    break;
                 case 'make_payment_with_fee':
-                    let transfer = yield PromisePay.transferWithFee(
+                    let transferWithFee = yield PromisePay.transferWithFee(
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
                         req.input('amount', 0),
@@ -280,15 +282,16 @@ module.exports = class PaymentController {
                         req.input('account_id', ''),
                         req.input('fee_id', ''),
                     )
-                    if (transfer.items) {
-                        timesheet.transactionId = transfer.items.id
+                    if (transferWithFee.items) {
+                        timesheet.transactionId = transferWithFee.items.id
                         timesheet.mutable = false
                         timesheet.paymentStatus = 'pending'
                         timesheet.save()
                         return res.json({status: true, messageCode: 'PAYMENT_PENDING', timesheet})
                     } else {
-                        return res.json({status: false, errors: transfer.errors})
+                        return res.json({status: false, errors: transferWithFee.errors})
                     }
+                    break;
                 default:
                     return res.json({status: false, messageCode: 'INVALID_ACTION'})
             }
