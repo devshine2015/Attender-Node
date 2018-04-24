@@ -280,7 +280,7 @@ module.exports = class PaymentController {
                         req.input('amount', 0),
                         req.input('type', 0),
                         req.input('account_id', ''),
-                        req.input('fee_id', ''),
+                        req.input('fee_id', '')
                     )
                     if (transferWithFee.items) {
                         timesheet.transactionId = transferWithFee.items.id
@@ -291,7 +291,11 @@ module.exports = class PaymentController {
                     } else {
                         return res.json({status: false, errors: transferWithFee.errors})
                     }
+<<<<<<< HEAD
                     break;
+=======
+                break;
+>>>>>>> master
                 default:
                     return res.json({status: false, messageCode: 'INVALID_ACTION'})
             }
