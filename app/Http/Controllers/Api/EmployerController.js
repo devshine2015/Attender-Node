@@ -70,7 +70,8 @@ class EmployerController {
         numberEmployees = req.input('numberEmployees', 0),
         services = [],
         socialMedia = [],
-        locationName = req.input('locationName', '')
+        locationName = req.input('locationName', ''),
+        staffOfInterest = {}
 
     try {
       type = req.input('type', '').split(',')
@@ -78,6 +79,7 @@ class EmployerController {
       services = req.input('services', '').split(',')
       openingHours = JSON.parse(req.input('openingHours', '{}'))
       socialMedia = req.input('socialMedia', '').split(',')
+      staffOfInterest = JSON.parse(req.input('staffOfInterest', '{}'))
     } catch (e) {
       console.log(e);
       yield res.json({ status: false, messageCode: 'INVALID_INPUT'})
@@ -120,7 +122,8 @@ class EmployerController {
         numberEmployees: numberEmployees,
         services: services,
         socialMedia: socialMedia,
-        isVenue: true
+        isVenue: true,
+        staffOfInterest: staffOfInterest
       })
       req.user.employer = employer._id
       req.user.isVenue = true
