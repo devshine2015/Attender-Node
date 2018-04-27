@@ -30,10 +30,9 @@ class EmployerController {
     return res.json({ venues })
   }
 
-
-
   * getVenue (req, res) {
-    return yield Employer.findOne({ _id: req.param('id'), isVenue: true })
+    let venue = yield Employer.findOne({ _id: req.param('id'), isVenue: true })
+    return res.json({ status: true, venue, messageCode: 'SUCCESS' })
   }
 
   * getOrganiser (req, res) {
