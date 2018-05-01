@@ -30,10 +30,9 @@ class EmployerController {
     return res.json({ venues })
   }
 
-
-
   * getVenue (req, res) {
-    return yield Employer.findOne({ _id: req.param('id'), isVenue: true })
+    let venue = yield Employer.findOne({ _id: req.param('id'), isVenue: true })
+    return res.json({ status: true, venue, messageCode: 'SUCCESS' })
   }
 
   * getOrganiser (req, res) {
@@ -254,7 +253,7 @@ class EmployerController {
   }
 
   * interest (req, res) {
-    let employer = yield this.getVenue(req)
+    let employer = yield Employer.findOne({ _id: req.param('id'), isVenue: true })
     if (req.user.isStaff) { console.log(req.user._id);
       if(employer.interested[req.user.staffId._id] == undefined){
           employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }

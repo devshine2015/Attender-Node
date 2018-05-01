@@ -13,6 +13,8 @@ Route.get('api/staffByPrice', 'Api/StaffController.staffByPrice').middleware('gu
 Route.post('api/staffByAvailability', 'Api/StaffController.staffByAvailability').middleware('guard')
 
 Route.get('api/venues', 'Api/EmployerController.getVenues').middleware('guard')
+Route.get('api/venues/:id', 'Api/EmployerController.getVenue').middleware('guard')
+
 Route.get('api/organizers', 'Api/EmployerController.organisers').middleware('guard')
 
 Route.get('api/events', 'Api/EventController.index').middleware('guard')
