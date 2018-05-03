@@ -74,16 +74,14 @@ class EmployerController {
 
     try {
       type = req.input('type', '').split(',')
-      location = req.input('location', '').split(',')
+      // location = req.input('location', '').split(',')
       services = req.input('services', '').split(',')
       openingHours = JSON.parse(req.input('openingHours', '{}'))
       socialMedia = req.input('socialMedia', '').split(',')
       staffOfInterest = JSON.parse(req.input('staffOfInterest', '{}'))
     } catch (e) {
-      console.log(e);
       yield res.json({ status: false, messageCode: 'INVALID_INPUT'})
     }
-
     if (req.user.isEmployer) {
       let employer = req.user.employer
       employer.name = name || employer.name
@@ -100,6 +98,7 @@ class EmployerController {
       employer.services = services || employer.services
       employer.socialMedia = socialMedia || employer.socialMedia
       employer.save()
+      employer = yield Employer.update(employer)
       yield res.json({ status: true, messageCode: 'UPDATED', data: employer })
 
     } else {
