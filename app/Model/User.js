@@ -13,6 +13,7 @@ const Env = use('Env')
 
 let userSchema = mongoose.Schema({
   fullname: String,
+  lastname: String,
   email: { type: String, unique: true},
   mobile: { type: String },
   password: String,
@@ -81,6 +82,7 @@ userSchema.statics.loginRules = {
 
 userSchema.statics.registerRules = {
   fullname: 'required|string|max:255',
+  lastname: 'required|string|max:255',
   email:    'required|email|min:5|max:50',
   password: 'required|string|min:6|max:20',
   mobile:   'required|max:50',
@@ -109,6 +111,7 @@ userSchema.post('save', function(user){
               id: promiseId,
               email: user.email,
               first_name: user.fullname,
+              last_name: user.lastname,
               country: 'AUS'
           }).then((res)=>{
               user.promisePay = true

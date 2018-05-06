@@ -34,6 +34,7 @@ class AuthController {
       let user = yield User.create({
         mobile: mobile,
         fullname: req.input('fullname', ''),
+        lastname: req.input('lastname', ''),
         email: email,
         password: yield Hash.make(req.input('password')),
         verified: true,

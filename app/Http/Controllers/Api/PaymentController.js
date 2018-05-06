@@ -26,7 +26,7 @@ module.exports = class PaymentController {
             wallet = {balance: 0, label: `$0`}
         }
 
-        return res.json({banks, wallet})
+        return res.json({banks, wallet, promiseWallet})
     }
 
     * cards(req, res) {
@@ -162,7 +162,7 @@ module.exports = class PaymentController {
             req.input('amount', 0),
             req.input('account_id', req.user.primaryAccount)
         )
-        return res.json({status: true, withdraw, messageCode: 'SUCCESS'})
+        return res.json({status: true, withdraw, messageCode: 'SUCCESS', approved})
     }
 
     * deposit(req, res) {
@@ -239,7 +239,7 @@ module.exports = class PaymentController {
     }
 
     * updateTimesheet(req, res) {
-        let timesheet = yield Timesheet.findOne({_id: req.param('id')}).populate('staff').populate('employer')
+        let timesheet = yield Timesheet.findOne({_id: req.param('id')}).populate('staff').populate('employer');
         if (timesheet) {
             switch (req.param('action')) {
                 case 'rate':
@@ -278,7 +278,7 @@ module.exports = class PaymentController {
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.employer.user}`,
                         `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${timesheet.staff.user}`,
                         req.input('amount', 0),
-                        req.input('type', 0),
+                        req.input('type', ''),
                         req.input('account_id', ''),
                         req.input('fee_id', '')
                     )
@@ -289,8 +289,9 @@ module.exports = class PaymentController {
                         timesheet.save()
                         return res.json({status: true, messageCode: 'PAYMENT_PENDING', timesheet})
                     } else {
-                        return res.json({status: false, errors: transferWithFee.errors})
+                        return res.json({status: false, errors: transferWithFee.errors, errornow: 'Here'})
                     }
+                    // return res.json({ status: false, type: req.input('type', 'bank')});
                     break;
                 default:
                     return res.json({status: false, messageCode: 'INVALID_ACTION'})
