@@ -44,6 +44,7 @@ Route.group('subscription', function() {
   * post('subscribe', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});
   */
   Route.post('subscribe', 'Api/SubscriptionController.subscribe')
+  Route.post('resubscribe', 'Api/SubscriptionController.reSubscribeStatus')
   /*
   * post('cancel', {subscriptionType: 'ACCOUNT_PREMIUM'});
   * post('cancel', {subscriptionType: 'MANAGE_STAFF', staffId: XXXXXXXXXX});

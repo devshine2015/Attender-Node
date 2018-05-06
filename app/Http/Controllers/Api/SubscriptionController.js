@@ -178,6 +178,31 @@ class SubscriptionController {
     }
   }
 
+  * reSubscribeStatus(req, res) {
+    const employerId = req.auth.request.user.employer._id;
+    const staffId = req._body.staffId;
+    const subscriptionType = req._body.subscriptionType;
+    const subscription = yield Subscription.findOne({
+      employerId: employerId,
+      staffId: staffId, // '5abb2e50f4c0ff128c4ddad5'
+      type: subscriptionType,
+    });
+    yield Subscription.update({
+      employerId: employerId,
+      staffId: staffId,
+      type: subscriptionType,
+    },
+    {
+      $set: {
+        status: 'subscribe',
+      },
+    }).then(d => {
+      return res.json({status: true, d});
+    }).catch(err => {
+      return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No Subscription'})
+    });
+  }
+
   * reSubscribe(req) {
     let sub = false;
     const employerId = req.auth.request.user.employer._id;
@@ -240,8 +265,8 @@ class SubscriptionController {
     if (!subscription || subscription.length <= 0) {
       return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No Subscription'})
     }
-    const indexDup = subscription.history.findIndex(x=> x.status === 'cancel' && moment(x.cancelDate).format('MM-DD-YYYY') === moment(currentDate).format('MM-DD-YYYY'));
-    if (indexDup !== -1) {
+    // const indexDup = subscription.history.findIndex(x=> x.status === 'cancel' && moment(x.cancelDate).format('MM-DD-YYYY') === moment(currentDate).format('MM-DD-YYYY'));
+    if (subscription.status === 'cancel') {
       return res.json({status: false, messageCode: 'SUBSCRIPTION_ALREADY_CANCELED', message: 'You already canceled your subscription'})
     } 
     yield Subscription.update({

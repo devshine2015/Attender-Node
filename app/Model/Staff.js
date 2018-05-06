@@ -9,6 +9,7 @@ let staffSchema = mongoose.Schema({
 
   user: { type: ObjectId, ref: 'User' },
   fullname: String,
+  lastname: String,
   email: { type: String, unique: true, index: true },
   mobile: String,
   bio: String,

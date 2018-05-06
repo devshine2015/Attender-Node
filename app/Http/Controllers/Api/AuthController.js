@@ -30,11 +30,15 @@ class AuthController {
     if (user) {
       return res.json({ status: false, messageCode: "USER_ALREADY_EXIST"})
     } else {
+      // TODO: Removed Confirmation Email on Registration
       let user = yield User.create({
         mobile: mobile,
         fullname: req.input('fullname', ''),
+        lastname: req.input('lastname', ''),
         email: email,
-        password: yield Hash.make(req.input('password'))
+        password: yield Hash.make(req.input('password')),
+        verified: true,
+        confirmed: true
       })
       let emailToken = yield Hash.make(user.email)
       emailToken = emailToken.replace(/\//ig, '')

@@ -223,6 +223,7 @@ class UserController {
             staff.email = req.user.email
             staff.mobile = req.user.mobile
             staff.fullname = req.input('fullname', req.user.fullname)
+            staff.lastname = req.input('lastname', req.user.lastname)
             staff.bio = req.input('bio', '') || staff.bio
             staff.description = description || staff.description
             staff.gender = req.input('gender', staff.gender)
@@ -272,6 +273,8 @@ class UserController {
             var dob = dd+'/'+mm+'/'+yyyy;
 
             PromisePay.updateUser(user.promiseId, {
+                last_name: staff.lastname,
+                first_name: staff.fullname,
                 dob
             }).then((res)=>{
                 PromisePay.kycapproved(user.promiseId)
