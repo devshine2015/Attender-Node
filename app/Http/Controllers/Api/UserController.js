@@ -291,7 +291,7 @@ class UserController {
                 email: req.user.email,
                 mobile: req.user.mobile,
                 fullname: req.input('fullname', req.user.fullname),
-                lastname = req.input('lastname', req.user.lastname),
+                lastname: req.input('lastname', req.user.lastname),
                 bio: req.input('bio', ''),
                 description: description,
                 gender: req.input('gender'),
