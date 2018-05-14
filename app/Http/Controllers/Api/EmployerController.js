@@ -98,7 +98,7 @@ class EmployerController {
       employer.services = services || employer.services
       employer.socialMedia = socialMedia || employer.socialMedia
       employer.save()
-      employer = yield Employer.update(employer)
+      // employer = yield Employer.update(employer)
       yield res.json({ status: true, messageCode: 'UPDATED', data: employer })
 
     } else {
