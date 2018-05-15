@@ -26,19 +26,17 @@ class AuthController {
     let mobile = req.input('mobile', '')
     let email = req.input('email', '')
     const user = yield User.findOne({ $or:[{'email':email}, {'mobile':mobile} ]})
-      console.log(user)
     if (user) {
       return res.json({ status: false, messageCode: "USER_ALREADY_EXIST"})
     } else {
-      // TODO: Removed Confirmation Email on Registration
       let user = yield User.create({
         mobile: mobile,
         fullname: req.input('fullname', ''),
         lastname: req.input('lastname', ''),
         email: email,
         password: yield Hash.make(req.input('password')),
-        verified: true,
-        confirmed: true
+        // verified: true,
+        // confirmed: true
       })
       let emailToken = yield Hash.make(user.email)
       emailToken = emailToken.replace(/\//ig, '')
@@ -46,8 +44,9 @@ class AuthController {
       user.emailToken = emailToken
       user.save()
       yield req.jwt.generateToken(user)
-      res.json({ status: true, messageCode: 'EMAIL_VERIFY', token: user.token.token })
       SendGrid.sendVerification(user)
+      return res.json({ status: true, messageCode: 'EMAIL_VERIFY', token: user.token.token })
+      
     }
   }
 
@@ -93,17 +92,18 @@ class AuthController {
   }
 
   * confirm (req, res) {
-    let user = yield User.findOne({ email: req.input('email', ''), confirmed: false })
-    if (user) {
-      if (user.verified) {
-        user.confirmed = true
-        user.save()
-        yield req.jwt.generateToken(user)
-        res.json({ status: true, messageCode: 'VERIFIED_EMAIL', token: user.token.token })
-      }
-    } else {
-      res.json({ status: false, messageCode: 'NOT_FOUND' })
-    }
+    return res.json({ status: false, messageCode: req.input('email', '') })
+    // let user = yield User.findOne({ email: req.input('email', ''), confirmed: false })
+    // if (user) {
+    //   if (user.verified) {
+    //     user.confirmed = true
+    //     user.save()
+    //     yield req.jwt.generateToken(user)
+    //     return res.json({ status: true, messageCode: 'VERIFIED_EMAIL', token: user.token.token })
+    //   }
+    // } else {
+    //   return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    // }
   }
 
   * current (req, res) {
@@ -243,6 +243,25 @@ class AuthController {
     } else {
       return res.json({ status: false, message: 'Not Found' })
 
+    }
+  }
+
+  * verifyEmail (req, res) {
+
+    let user = yield User.findOne({ emailToken: req.param('token', ''), verification: req.param('verification', ''), confirmed: false })
+
+    if (user) {
+      if (user.verified) {
+        return res.json({ status: false, message: 'Already Verified' })
+
+      } else {
+        user.verified = true
+        yield user.save()
+        return res.json({ status: true, message: 'Verified', token: user.token.token, name: `${user.lastname ? user.lastname + ', ' : ''}${user.fullname}` })
+      }
+
+    } else {
+      return res.json({ status: false, message: 'Not Found' })
     }
   }
 
