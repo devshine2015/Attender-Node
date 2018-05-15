@@ -9,7 +9,8 @@ console.log(Env.get('SENDGRID_API_KEY', ''))
 module.exports = {
 
   sendVerification: (user) => {
-    let _url = `${webProtocol}://${webHost}/confirm/${user.verification}/${user.emailToken}`
+    // let _url = `${webProtocol}://${webHost}/api/verify/${user.verification}/${user.emailToken}`
+    let _url = `attenderapp://verify/${user.verification}/${user.emailToken}`;
     let _html = `<h3>Welcome to Attender ${user.fullname}</h3>
                 Click <a href="${_url}" target="_blank">confirm</a> to verify your email`
     sgMail.send({
