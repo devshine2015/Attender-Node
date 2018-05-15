@@ -11,7 +11,7 @@ let gcm = require('node-gcm')
 */
 let iOSoptions = {
   token: {
-    key: "/Users/vimwarrior/Projects/DripCreatives/attender-node/AuthKey_QV5FPHCBMD.p8",
+    key: "/AuthKey_QV5FPHCBMD.p8",
     keyId: Env.get('APN_KEY', 'QV5FPHCBMD'),
     teamId: Env.get('APN_TEAM_ID', 'WFXCBU48U4')
   },
