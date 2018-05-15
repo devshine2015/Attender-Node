@@ -3,8 +3,8 @@ const Env = use('Env')
 const https = require('https')
 const uuidv4 = require('uuid/v4');
 const request = require('request')
-const promiseAuth = Env.get('PROMISE_AUTH', 'dG9tQGF0dGVuZGVyLmNvbS5hdTpXM2xjb21lMQ==')
-const baseUrl =  Env.get('PROMISE_BASE_URL','https://test.api.promisepay.com/')
+const promiseAuth = 'dG9tQGF0dGVuZGVyLmNvbS5hdTpXM2xjb21lMQ==';
+const baseUrl =  'https://secure.api.promisepay.com/'; // Env.get('PROMISE_BASE_URL','https://test.api.promisepay.com/')
 const headers = { 'Authorization': `Basic ${promiseAuth}`, 'Content-Type': 'application/json'}
 
 
