@@ -92,18 +92,17 @@ class AuthController {
   }
 
   * confirm (req, res) {
-    return res.json({ status: false, messageCode: req.input('email', '') })
-    // let user = yield User.findOne({ email: req.input('email', ''), confirmed: false })
-    // if (user) {
-    //   if (user.verified) {
-    //     user.confirmed = true
-    //     user.save()
-    //     yield req.jwt.generateToken(user)
-    //     return res.json({ status: true, messageCode: 'VERIFIED_EMAIL', token: user.token.token })
-    //   }
-    // } else {
-    //   return res.json({ status: false, messageCode: 'NOT_FOUND' })
-    // }
+    let user = yield User.findOne({ email: req.input('email', ''), confirmed: false })
+    if (user) {
+      if (user.verified) {
+        user.confirmed = true
+        user.save()
+        yield req.jwt.generateToken(user)
+        return res.json({ status: true, messageCode: 'VERIFIED_EMAIL', token: user.token.token })
+      }
+    } else {
+      return res.json({ status: false, messageCode: 'NOT_FOUND' })
+    }
   }
 
   * current (req, res) {
