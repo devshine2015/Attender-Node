@@ -264,6 +264,10 @@ class AuthController {
     }
   }
 
+  * redirect (req, res) {
+    return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
+  }
+
 
 }
 

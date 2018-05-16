@@ -177,6 +177,7 @@ Route.post('api/auth/register/facebook', 'Api/AuthController.facebookReg')
 Route.post('api/auth/confirm', 'Api/AuthController.confirm')
 Route.post('api/auth/verify', 'Api/AuthController.verify')
 Route.get('api/verify/:verification/:token', 'Api/AuthController.verifyEmail')
+Route.get('api/redirect/:verification/:token', 'Api/AuthController.redirect')
 
 Route.group('manage', function() {
   Route.get('/', 'Admin/HomeController.index')
