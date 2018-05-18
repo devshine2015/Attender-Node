@@ -26,6 +26,12 @@ let staffSchema = mongoose.Schema({
   state: String,
   zip: String,
 
+  first_name: String,
+  last_name: String,
+  dob: String,
+  government_number: String,
+  address_line1: String,
+
   position: [String],
   responseRate: Number,
 

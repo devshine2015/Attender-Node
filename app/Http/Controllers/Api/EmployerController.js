@@ -128,7 +128,7 @@ class EmployerController {
       req.user.isEmployer = true
       req.user.hasProfile = true
       req.user.save()
-      yield res.json({ status: true, messageCode: 'CREATED', data: employer })
+      yield res.json({ status: true, messageCode: 'CREATED', data: employer, user: req.user })
     }
   }
 
@@ -196,7 +196,7 @@ class EmployerController {
       req.user.isOrganizer = true
       req.user.hasProfile = true
       req.user.save()
-      yield res.json({ status: true, messageCode: 'CREATED', data: employer })
+      yield res.json({ status: true, messageCode: 'CREATED', data: employer, user: req.user })
     }
 
 

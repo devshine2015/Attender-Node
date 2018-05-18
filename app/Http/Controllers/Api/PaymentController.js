@@ -116,6 +116,11 @@ module.exports = class PaymentController {
 
     }
 
+    * setPayoutAccount(req, res) {
+        const status = yield PromisePay.setPayoutAccount(req.user.promiseId, req.input('account_id', ''));
+        return res.json(status);
+    }
+
     * removeBank(req, res) {
         let bank = yield Bank.findOne({promiseId: req.param('id')})
         if (bank) {

@@ -58,6 +58,9 @@ Route.group('subscription', function() {
 }).prefix('api/subscription').middleware('guard') 
 
 Route.group('api', function() {
+
+  Route.get('assembly/user', 'Api/UserController.userAccount')
+  Route.patch('assembly/user', 'Api/UserController.userUpdateAccount')
   
   Route.post('auth/resend', 'Api/AuthController.resend')
   Route.get('auth/current', 'Api/AuthController.current')

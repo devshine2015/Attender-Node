@@ -255,6 +255,7 @@ class AuthController {
 
       } else {
         user.verified = true
+        user.confirmed = true
         yield user.save()
         return res.json({ status: true, message: 'Verified', token: user.token.token, name: `${user.lastname ? user.lastname + ', ' : ''}${user.fullname}` })
       }
