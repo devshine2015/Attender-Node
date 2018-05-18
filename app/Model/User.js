@@ -25,7 +25,15 @@ let userSchema = mongoose.Schema({
 
   isEmployer: { type: Boolean, default: false },
   employer: { type: ObjectId, ref: 'Employer' },
-
+  first_name: String,
+  last_name: String,
+  dob: String,
+  government_number: String,
+  mobile: String,
+  address_line1: String,
+  city: String,
+  state: String,
+  zip: String,
 
   isVenue: { type: Boolean, default: false},
   venueId: { type: ObjectId, ref: 'Venue' },
@@ -112,6 +120,7 @@ userSchema.post('save', function(user){
               email: user.email,
               first_name: user.fullname,
               last_name: user.lastname,
+              mobile: user.mobile,
               country: 'AUS'
           }).then((res)=>{
               user.promisePay = true
