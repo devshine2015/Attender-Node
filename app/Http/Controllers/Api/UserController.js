@@ -341,12 +341,12 @@ class UserController {
             }
             var dob = dd+'/'+mm+'/'+yyyy;
 
-            PromisePay.updateUser(user.promiseId, {
+            PromisePay.updateUser(req.user.promiseId, {
                 last_name: staff.lastname,
                 first_name: staff.fullname,
                 dob
             }).then((res)=>{
-                PromisePay.kycapproved(user.promiseId)
+                PromisePay.kycapproved(req.user.promiseId)
             })
 
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
