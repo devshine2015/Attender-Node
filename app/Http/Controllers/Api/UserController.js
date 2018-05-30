@@ -306,7 +306,6 @@ class UserController {
                 console.log("val2", val2)
             })
 
-            console.log(staff)
             // let user = yield User.findOne(req.user._id)
             // user.avatar = avatar
             // user.staffId = staff._id
@@ -330,8 +329,6 @@ class UserController {
                 console.log(err);
             });
 
-            console.log("1st",staff)
-            console.log("2nd",user)
             var dd = birthdate.getDate();
             var mm = birthdate.getMonth()+1; //January is 0!
 
