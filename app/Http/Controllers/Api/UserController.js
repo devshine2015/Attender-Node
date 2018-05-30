@@ -320,7 +320,7 @@ class UserController {
             {
                 $set: {
                     avatar: avatar,
-                    staffId = staff._id,
+                    staffId: staff._id,
                     isStaff: true,
                     hasProfile: true,
                 },
