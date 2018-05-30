@@ -23,36 +23,51 @@ class UserController {
 
     * userUpdateAccount(req, res) {
         const assembly_user = yield PromisePay.updateUser(req.user.promiseId, req._body);
-        const user = yield User.findOne(req.user._id);
-        const staff = yield Staff.findOne({ user: req.user._id});
-        if (staff) {
-            staff.fullname = req._body.first_name;
-            staff.lastname = req._body.last_name;
-            staff.first_name = req._body.first_name;
-            staff.last_name = req._body.last_name;
-            staff.dob = req._body.dob;
-            staff.government_number = req._body.government_number;
-            staff.mobile = req._body.mobile;
-            staff.address_line1 = req._body.address_line1;
-            staff.city = req._body.city;
-            staff.state = req._body.state;
-            staff.zip = req._body.zip;
-            staff.save();
-        }
-        user.fullname = req._body.first_name;
-        user.lastname = req._body.last_name;
-        user.first_name = req._body.first_name;
-        user.last_name = req._body.last_name;
-        user.dob = req._body.dob;
-        user.government_number = req._body.government_number;
-        user.mobile = req._body.mobile;
-        user.address_line1 = req._body.address_line1;
-        user.city = req._body.city;
-        user.state = req._body.state;
-        user.zip = req._body.zip;
-        user.save();
-        const userStaff = yield User.findOne(req.user._id).populate('staffId');
-        return res.json({userStaff, assembly_user});
+        yield Staff.update({
+            user: req.user._id
+        },
+        {
+            $set: {
+                fullname: req._body.first_name,
+                lastname: req._body.last_name,
+                first_name: req._body.first_name,
+                last_name: req._body.last_name,
+                dob: req._body.dob,
+                government_number: req._body.government_number,
+                mobile: req._body.mobile,
+                address_line1: req._body.address_line1,
+                city: req._body.city,
+                state: req._body.state,
+                zip: req._body.zip
+            },
+        }).then(d => {
+            console.log(d);
+        }).catch(err => {
+            console.log(err);
+        });
+        yield User.update({
+            _id: req.user._id
+        },
+        {
+            $set: {
+                fullname: req._body.first_name,
+                lastname: req._body.last_name,
+                first_name: req._body.first_name,
+                last_name: req._body.last_name,
+                dob: req._body.dob,
+                government_number: req._body.government_number,
+                mobile: req._body.mobile,
+                address_line1: req._body.address_line1,
+                city: req._body.city,
+                state: req._body.state,
+                zip: req._body.zip
+            },
+        }).then(d => {
+            const userStaff = yield User.findOne(req.user._id).populate('staffId');
+            return res.json({userStaff, assembly_user});
+        }).catch(err => {
+            return res.json({status: false, messageCode: 'UPDATE_PROFILE_FAILED', message: 'Porfile Update failed'})
+        });
     }
 
     // GENERAL
