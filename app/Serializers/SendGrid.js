@@ -10,10 +10,9 @@ module.exports = {
 
   sendVerification: (user) => {
     let _url = `${webProtocol}://${webHost}/api/redirect/${user.verification}/${user.emailToken}`;
-    let _urlWeb = `http://45.76.121.86/confirm/${user.verification}/${user.emailToken}`;
-    // let _url = `attenderapp://verify/${user.verification}/${user.emailToken}`;
+    // let _urlWeb = `http://45.76.121.86/confirm/${user.verification}/${user.emailToken}`;
+    // let _url = `attenderapp://verify/${user.verification}/${user.emailToken}`; Click <a href="${_urlWeb}" target="_blank">confirm</a> to verify your email on web <br/><br/>
     let _html = `<h3>Welcome to Attender ${user.fullname}</h3>
-                Click <a href="${_urlWeb}" target="_blank">confirm</a> to verify your email on web <br/><br/>
                 Click <a href="${_url}" target="_blank">Open Attender App</a> to verify your email on mobile
                 `
     sgMail.send({
