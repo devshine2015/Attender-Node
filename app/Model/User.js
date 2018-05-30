@@ -5,7 +5,6 @@ const PromisePay = use('PromisePay')
 const Staff = use('App/Model/Staff')
 // const Message = use('App/Model/Message')
 const StaffManagement = use('App/Model/StaffManagement')
-const UserModel = use('App/Model/User')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
@@ -130,15 +129,9 @@ userSchema.post('save', function(user){
           })
   }
   if (!user.walletId && user.promisePay) {
-   
     PromisePay.wallet(user.promiseId).then((res)=>{
-      UserModel.update({ _id: user._id }, {
-        $set: {
-          walletId: res.wallet_accounts.id
-        }
-      });
-      // user.walletId = res.wallet_accounts.id
-      // user.save()
+      user.walletId = res.wallet_accounts.id
+      user.save()
     })
   }
 })
