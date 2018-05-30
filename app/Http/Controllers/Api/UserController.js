@@ -307,12 +307,28 @@ class UserController {
             })
 
             console.log(staff)
-            let user = yield User.findOne(req.user._id)
-            user.avatar = avatar
-            user.staffId = staff._id
-            user.isStaff = true
-            user.hasProfile = true
-            user.save()
+            // let user = yield User.findOne(req.user._id)
+            // user.avatar = avatar
+            // user.staffId = staff._id
+            // user.isStaff = true
+            // user.hasProfile = true
+            // user.save()
+
+            yield User.update({
+                _id: req.user._id
+            },
+            {
+                $set: {
+                    avatar: avatar,
+                    staffId = staff._id,
+                    isStaff: true,
+                    hasProfile: true,
+                },
+            }).then(d => {
+                console.log(d);
+            }).catch(err => {
+                console.log(err);
+            });
 
             console.log("1st",staff)
             console.log("2nd",user)
