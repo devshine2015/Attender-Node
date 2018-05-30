@@ -23,7 +23,7 @@ class UserController {
 
     * userUpdateAccount(req, res) {
         const assembly_user = yield PromisePay.updateUser(req.user.promiseId, req._body);
-        const user = yield User.findOne(req.user._id).populate('staffId');
+        
         yield Staff.update({
             user: req.user._id
         },
@@ -64,11 +64,12 @@ class UserController {
                 zip: req._body.zip
             },
         }).then(d => {
-            
-            return res.json({user, assembly_user});
+            console.log(d);
         }).catch(err => {
-            return res.json({status: false, messageCode: 'UPDATE_PROFILE_FAILED', message: 'Porfile Update failed'})
+            console.log(err);
         });
+        const user = yield User.findOne(req.user._id).populate('staffId');
+        return res.json({user, assembly_user});
     }
 
     // GENERAL
