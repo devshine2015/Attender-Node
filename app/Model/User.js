@@ -113,6 +113,7 @@ userSchema.statics.facebookSchema = {
   accessToken: 'required'
 }
 userSchema.post('save', function(user){
+  const self = this;
   let promiseId = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${user._id}`
   if (!user.promiseId) {
           PromisePay.createUser({
@@ -129,9 +130,9 @@ userSchema.post('save', function(user){
           })
   }
   if (!user.walletId && user.promisePay) {
-    const self = this;
+   
     PromisePay.wallet(user.promiseId).then((res)=>{
-      self.update({ id:_user._id }, {
+      self.update({
         $set: {
           walletId: res.wallet_accounts.id
         }
