@@ -23,6 +23,7 @@ class UserController {
 
     * userUpdateAccount(req, res) {
         const assembly_user = yield PromisePay.updateUser(req.user.promiseId, req._body);
+        const user = yield User.findOne(req.user._id);
         const staff = yield Staff.findOne({ user: req.user._id});
         if (staff) {
             staff.fullname = req._body.first_name;
@@ -38,18 +39,18 @@ class UserController {
             staff.zip = req._body.zip;
             staff.save();
         }
-        req.user.fullname = req._body.first_name;
-        req.user.lastname = req._body.last_name;
-        req.user.first_name = req._body.first_name;
-        req.user.last_name = req._body.last_name;
-        req.user.dob = req._body.dob;
-        req.user.government_number = req._body.government_number;
-        req.user.mobile = req._body.mobile;
-        req.user.address_line1 = req._body.address_line1;
-        req.user.city = req._body.city;
-        req.user.state = req._body.state;
-        req.user.zip = req._body.zip;
-        req.user.save();
+        user.fullname = req._body.first_name;
+        user.lastname = req._body.last_name;
+        user.first_name = req._body.first_name;
+        user.last_name = req._body.last_name;
+        user.dob = req._body.dob;
+        user.government_number = req._body.government_number;
+        user.mobile = req._body.mobile;
+        user.address_line1 = req._body.address_line1;
+        user.city = req._body.city;
+        user.state = req._body.state;
+        user.zip = req._body.zip;
+        user.save();
         const userStaff = yield User.findOne(req.user._id).populate('staffId');
         return res.json({userStaff, assembly_user});
     }
