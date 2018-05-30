@@ -5,6 +5,7 @@ const PromisePay = use('PromisePay')
 const Staff = use('App/Model/Staff')
 // const Message = use('App/Model/Message')
 const StaffManagement = use('App/Model/StaffManagement')
+const UserModel = use('App/Model/User')
 const randomstring = require("randomstring")
 const ObjectId = mongoose.Schema.Types.ObjectId
 const Mixed = mongoose.Schema.Types.Mixed
@@ -113,7 +114,6 @@ userSchema.statics.facebookSchema = {
   accessToken: 'required'
 }
 userSchema.post('save', function(user){
-  const self = this;
   let promiseId = `${Env.get('PROMISE_ID_PREFIX', 'beta-v1-acc-')}${user._id}`
   if (!user.promiseId) {
           PromisePay.createUser({
@@ -132,7 +132,7 @@ userSchema.post('save', function(user){
   if (!user.walletId && user.promisePay) {
    
     PromisePay.wallet(user.promiseId).then((res)=>{
-      self.update({
+      UserModel.update({ _id: user._id }, {
         $set: {
           walletId: res.wallet_accounts.id
         }
@@ -160,4 +160,4 @@ userSchema.post('remove', function(user) {
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
 
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);
