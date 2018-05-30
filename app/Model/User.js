@@ -129,9 +129,15 @@ userSchema.post('save', function(user){
           })
   }
   if (!user.walletId && user.promisePay) {
+    const self = this;
     PromisePay.wallet(user.promiseId).then((res)=>{
-      user.walletId = res.wallet_accounts.id
-      user.save()
+      self.update({ id:_user._id }, {
+        $set: {
+          walletId: res.wallet_accounts.id
+        }
+      });
+      // user.walletId = res.wallet_accounts.id
+      // user.save()
     })
   }
 })
