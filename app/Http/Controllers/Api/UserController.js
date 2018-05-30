@@ -368,11 +368,12 @@ class UserController {
                 licenses: licenses,
                 languages: languages,
             })
-            req.user.avatar = avatar
-            req.user.staffId = staff._id
-            req.user.isStaff = true
-            req.user.hasProfile = true
-            req.user.save()
+            let user = yield User.findOne(req.user._id)
+            user.avatar = avatar
+            user.staffId = staff._id
+            user.isStaff = true
+            user.hasProfile = true
+            user.save()
             yield res.json({status: true, messageCode: 'CREATED', data: staff})
         }
     }
