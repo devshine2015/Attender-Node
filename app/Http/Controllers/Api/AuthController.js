@@ -144,7 +144,17 @@ class AuthController {
     } else {
       let exist = yield User.findOne({'email': req.input('email')})
       if (exist) {
-        return res.json({ status: false, messageCode: 'EMAIL_ALREADY_EXIST'})
+        yield User.update(
+          { _id: exist._id },
+          { 
+            $set: {
+              isSocialLogin: true,
+              googleAuth: req.all(),
+            } 
+          }
+        );
+        yield req.jwt.generateToken(exist)
+        return res.json({ status: true, messageCode: 'SUCCESS', token: exist.token.token })
       } else {
         let newuser = yield User.create({
           fullname: req.input('name'),
