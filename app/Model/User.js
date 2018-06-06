@@ -136,6 +136,15 @@ userSchema.post('save', function(user){
   }
 })
 
+userSchema.post('update', function(user){
+  if (!user.walletId && user.promisePay) {
+    PromisePay.wallet(user.promiseId).then((res)=>{
+      user.walletId = res.wallet_accounts.id
+      user.save()
+    })
+  }
+})
+
 userSchema.post('remove', function(user) {
 
  if (user.isStaff) {
@@ -153,4 +162,4 @@ userSchema.post('remove', function(user) {
 userSchema.statics.visibleFields = ['fullname', 'email', 'mobile'].join(' ')
 
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

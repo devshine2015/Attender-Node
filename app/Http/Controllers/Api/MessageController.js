@@ -16,13 +16,18 @@ class MessageController {
                         .populate('staff', '_id fullname avatar')
                         .populate('employer', '_id name image')
     res.json({ status: true, messages: messages })
-    let message = yield Message.find({conversation: req.param('convo', ''), receiver: req.user._id, seen: false }).sort('-sentAt').limit(1)
-    if (message.length > 0) {
-      message[0].seen = true
-      message[0].seenAt = moment().format()
-      yield message[0].save()
-    }
-
+    yield Message.update(
+      {conversation: req.param('convo', ''), receiver: req.user._id, seen: false },
+      { 
+        $set: {
+          seen: true,
+          seenAt: moment().format()
+        }
+      },
+      {
+        multi: true,
+      }
+    );
   }
 
   * deleteConversation (req, res) {

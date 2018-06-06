@@ -23,7 +23,7 @@ class UserController {
 
     * userUpdateAccount(req, res) {
         const assembly_user = yield PromisePay.updateUser(req.user.promiseId, req._body);
-        const userStaff = yield User.findOne(req.user._id).populate('staffId');
+        
         yield Staff.update({
             user: req.user._id
         },
@@ -64,11 +64,12 @@ class UserController {
                 zip: req._body.zip
             },
         }).then(d => {
-            
-            return res.json({userStaff, assembly_user});
+            console.log(d);
         }).catch(err => {
-            return res.json({status: false, messageCode: 'UPDATE_PROFILE_FAILED', message: 'Porfile Update failed'})
+            console.log(err);
         });
+        const user = yield User.findOne(req.user._id).populate('staffId');
+        return res.json({user, assembly_user});
     }
 
     // GENERAL
@@ -306,16 +307,29 @@ class UserController {
                 console.log("val2", val2)
             })
 
-            console.log(staff)
-            let user = yield User.findOne(req.user._id)
-            user.avatar = avatar
-            user.staffId = staff._id
-            user.isStaff = true
-            user.hasProfile = true
-            user.save()
+            // let user = yield User.findOne(req.user._id)
+            // user.avatar = avatar
+            // user.staffId = staff._id
+            // user.isStaff = true
+            // user.hasProfile = true
+            // user.save()
 
-            console.log("1st",staff)
-            console.log("2nd",user)
+            yield User.update({
+                _id: req.user._id
+            },
+            {
+                $set: {
+                    avatar: avatar,
+                    staffId: staff._id,
+                    isStaff: true,
+                    hasProfile: true,
+                },
+            }).then(d => {
+                console.log(d);
+            }).catch(err => {
+                console.log(err);
+            });
+
             var dd = birthdate.getDate();
             var mm = birthdate.getMonth()+1; //January is 0!
 
@@ -328,12 +342,12 @@ class UserController {
             }
             var dob = dd+'/'+mm+'/'+yyyy;
 
-            PromisePay.updateUser(user.promiseId, {
+            PromisePay.updateUser(req.user.promiseId, {
                 last_name: staff.lastname,
                 first_name: staff.fullname,
                 dob
             }).then((res)=>{
-                PromisePay.kycapproved(user.promiseId)
+                PromisePay.kycapproved(req.user.promiseId)
             })
 
             yield res.json({status: true, messageCode: 'UPDATED', data: staff})
@@ -368,11 +382,27 @@ class UserController {
                 licenses: licenses,
                 languages: languages,
             })
-            req.user.avatar = avatar
-            req.user.staffId = staff._id
-            req.user.isStaff = true
-            req.user.hasProfile = true
-            req.user.save()
+            // let user = yield User.findOne(req.user._id)
+            // user.avatar = avatar
+            // user.staffId = staff._id
+            // user.isStaff = true
+            // user.hasProfile = true
+            // user.save()
+            yield User.update({
+                _id: req.user._id
+            },
+            {
+                $set: {
+                    avatar: avatar,
+                    staffId: staff._id,
+                    isStaff: true,
+                    hasProfile: true,
+                },
+            }).then(d => {
+                console.log(d);
+            }).catch(err => {
+                console.log(err);
+            });
             yield res.json({status: true, messageCode: 'CREATED', data: staff})
         }
     }
