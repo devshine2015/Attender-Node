@@ -23,6 +23,9 @@ class MessageController {
           seen: true,
           seenAt: moment().format()
         }
+      },
+      {
+        multi: true,
       }
     );
   }
