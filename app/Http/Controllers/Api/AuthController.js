@@ -278,13 +278,14 @@ class AuthController {
   }
 
   * redirect (req, res) {
+
     const md = new MobileDetect(req.request.headers['user-agent'])
     
     if(md.mobile()) {
       return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
     }
     else {
-      return res.redirect(`${window.location.protocol}://${window.location.hostname}/api/auth/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
+      return res.redirect(`https://${req.request.headers.host}/api/auth/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
     }
   }
 
