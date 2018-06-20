@@ -284,7 +284,7 @@ class AuthController {
       return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
     }
     else {
-      return res.redirect(`${location.protocol}://${window.location.hostname}/api/auth/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
+      return res.redirect(`${window.location.protocol}://${window.location.hostname}/api/auth/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
     }
   }
 
