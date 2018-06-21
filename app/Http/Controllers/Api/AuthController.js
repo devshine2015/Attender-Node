@@ -285,7 +285,7 @@ class AuthController {
       return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
     }
     else {
-      return res.redirect(`https://${req.request.headers.host}/api/auth/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
+      return res.redirect(`http://stagingapp.attender.com.au/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
     }
   }
 
