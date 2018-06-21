@@ -27,7 +27,10 @@ class SubscriptionController {
 
   * check(req, res) {
     const data = req.all();
-    const employerId = req.auth.request.user.employer._id;
+    if(typeof req.auth.request.user.employer !== 'undefined') {
+      const employerId = req.auth.request.user.employer._id;  
+    }
+    
     const subscriptionType = data.subscriptionType;
     const subscription = yield Subscription.findOne({
       employerId: employerId,
