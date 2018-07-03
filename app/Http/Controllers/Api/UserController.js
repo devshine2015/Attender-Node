@@ -4,6 +4,7 @@ const Message = use('App/Model/Message')
 const Venue = use('App/Model/Venue')
 const Staff = use('App/Model/Staff')
 const Organizer = use('App/Model/Organizer')
+const Player = use('App/Model/Player')
 const PromisePay = use('PromisePay')
 const Hash = use('Hash')
 const Validator = use('Validator')
@@ -19,6 +20,15 @@ class UserController {
         const assembly_user = yield PromisePay.getUser(req.user.promiseId);
         const user = yield User.findOne(req.user._id).populate('staffId');
         return res.json({ user , assembly_user});
+    }
+
+    * userUpdatePlayerId(req, res) {
+        const player = yield Player.create({
+            userId: req.user._id,
+            playerId: req._body.playerId,
+        });
+        player.save();
+        return  res.json({status: true, messageCode: 'Update PlayerId'})
     }
 
     * userUpdateAccount(req, res) {
