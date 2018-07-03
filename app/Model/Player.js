@@ -10,6 +10,6 @@ const playerSchema = mongoose.Schema({
   timestamps: true
 })
 
-playerSchema.index({ deviceId: 1 }, { unique: true });
+playerSchema.index({ userId: 1, playerId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Player', playerSchema)
