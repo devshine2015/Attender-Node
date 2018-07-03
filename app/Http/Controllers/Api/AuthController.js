@@ -1,4 +1,5 @@
 'use strict'
+
 const _ = require('lodash')
 const User = use('App/Model/User')
 const EmployerNotification = use('App/Model/EmployerNotification')
@@ -10,6 +11,7 @@ const Validator = use('Validator')
 const SendGrid = use('SendGrid')
 const Twilio = use('Twilio')
 const PromisePay = use('PromisePay')
+const MobileDetect = require('mobile-detect')
 
 class AuthController {
 
@@ -276,7 +278,15 @@ class AuthController {
   }
 
   * redirect (req, res) {
-    return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
+
+    const md = new MobileDetect(req.request.headers['user-agent'])
+    
+    if(md.mobile()) {
+      return res.redirect(`attenderapp://verify/${req.param('verification', '')}/${req.param('token', '')}`)
+    }
+    else {
+      return res.redirect(`http://stagingapp.attender.com.au/confirm/${req.param('verification', '')}/${req.param('token', '')}`)
+    }
   }
 
 
