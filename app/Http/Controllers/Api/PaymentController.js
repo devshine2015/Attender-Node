@@ -3,6 +3,7 @@
 const moment = require('moment')
 const uuidv4 = require('uuid/v4')
 const AHelpers = use('AHelpers')
+const SendGrid = use('SendGrid')
 const PromisePay = use('PromisePay')
 const Card = use('App/Model/Card')
 const Bank = use('App/Model/Bank')
@@ -165,6 +166,7 @@ module.exports = class PaymentController {
             req.input('amount', 0),
             req.input('account_id', req.user.primaryAccount)
         )
+        SendGrid.sendWithdrawMoney(true)
         return res.json({status: true, withdraw, messageCode: 'SUCCESS'})
     }
 

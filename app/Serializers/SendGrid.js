@@ -40,5 +40,22 @@ module.exports = {
     })
   }
 
-
+  sendWithdrawMoney: (isSend) => {
+    let _html = `<h3>Attender</h3>
+                <p>You have successfully transfered your money  to your bank.</p>
+                `
+    if(!isSend) {
+        _html = `<h3>Attender</h3>
+                <p>There was a problem transferring money to your bank.</p>
+                `
+    }
+    sgMail.send({
+      to: user.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  }
 }
