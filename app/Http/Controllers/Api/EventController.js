@@ -9,7 +9,7 @@ const Validator = use('Validator')
 const VenueNotification = use('App/Model/VenueNotification')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
-
+const SendGrid = use('SendGrid')
 let notify = new Notify()
 
 class EventController {
