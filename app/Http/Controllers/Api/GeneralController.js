@@ -40,6 +40,7 @@ class GeneralController {
     let venue = yield Venue.findOne({ _id: req.param('venue') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
     yield notify.venueInterest(staff, venue)
+    SendGrid.venueInterest(staff, venue)
     return res.json({ status: true })
   }
 

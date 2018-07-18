@@ -10,6 +10,7 @@ const Organizer = use('App/Model/Organizer')
 const Event = use('App/Model/Event')
 const VenueNotification = use('App/Model/VenueNotification')
 const Validator = use('Validator')
+const SendGrid = use('SendGrid')
 const Notify = use('App/Serializers/Notify')
 
 let notify = new Notify()
@@ -85,6 +86,7 @@ class VenueController {
       })
       res.json({ status: true, venue: _venue })
       yield notify.venueInterest(req.user.staffId, _venue)
+      SendGrid.venueInterest(req.user.staffId, _venue)
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }

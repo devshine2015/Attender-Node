@@ -5,7 +5,7 @@ const Message = use('App/Model/Message')
 const Employer = use('App/Model/Employer')
 const StaffManagement = use('App/Model/StaffManagement')
 const EmployerNotification = use('App/Model/EmployerNotification')
-
+const SendGrid = use('SendGrid')
 const Notify = use('App/Serializers/Notify')
 
 
@@ -265,6 +265,7 @@ class EmployerController {
           })
           res.json({ status: true, venue: employer })
           yield notify.venueInterest(req.user.staffId, employer)
+          SendGrid.venueInterest(req.user.staffId, employer)
       }else{
           delete employer.interested[req.user.staffId._id]
           employer.markModified('interested')

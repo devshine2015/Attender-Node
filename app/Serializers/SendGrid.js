@@ -129,7 +129,20 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
-    
+  },
+
+  venueInterest : (staff, $venue) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${staff.fullname} is interested to your venue ${$venue.name}</p>
+                `
+    sgMail.send({
+      to: venue.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
   }
 
 }
