@@ -170,6 +170,7 @@ class StaffController {
             type: 'hired'
         })
         yield notify.hired(staff, employer)
+        SendGrid.hired(staff, employer)
     }
 
     * hire(req, res) {
@@ -195,6 +196,7 @@ class StaffController {
             type: 'hired'
         })
         yield notify.hired(staff, management.employer)
+        SendGrid.hired(staff, management.employer)
     }
 
     * trial(req, res) {

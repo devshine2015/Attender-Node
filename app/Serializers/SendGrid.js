@@ -101,5 +101,22 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
+  },
+
+  hired : (staff, employer) => {
+
+    let _html = `<h3>Attender</h3>
+                  <p>${employer.name} hired you</p>
+                `
+    sgMail.send({
+      to: staff.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+    
   }
+
 }
