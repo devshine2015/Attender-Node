@@ -38,7 +38,7 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
-  }
+  },
 
   sendWithdrawMoney: (isSend) => {
     let _html = `<h3>Attender</h3>
@@ -57,5 +57,34 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
-  }
+  },
+
+  // sendJobOffer: (user) => {
+  //   let _html = `<h3>Attender</h3>
+  //               <p>You have a new job offer. Please check your account on : </p>
+  //               `
+   
+  //   sgMail.send({
+  //     to: user.email,
+  //     fromname: 'Attender',
+  //     from: 'tom@attender.com',
+  //     subject: 'Password Reset',
+  //     text: 'Attender',
+  //     html: _html
+  //   })
+  // },
+
+  trial : (staff, employer) => {
+    let _html = `<h3>Attender</h3>
+                <p>${employer.name} put you to trial for 7 days.</p>
+                `
+   
+    sgMail.send({
+      to: employer.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
 }

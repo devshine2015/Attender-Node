@@ -13,6 +13,7 @@ const Validator = use('Validator')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
 const AHelpers = use('AHelpers')
+const SendGrid = use('SendGrid')
 
 let notify = new Notify()
 
@@ -223,6 +224,7 @@ class StaffController {
             type: 'trial'
         })
         yield notify.trial(staff, venue)
+        SendGrid.trial(staff, venue)
 
     }
 
