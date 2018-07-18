@@ -87,4 +87,19 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
+  },
+
+  transfer : (staff, employer, amount, status) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${employer.name} successfully transfered $${amount} to your account</p>
+                `
+    sgMail.send({
+      to: staff.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  }
 }

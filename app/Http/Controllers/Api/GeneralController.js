@@ -16,6 +16,7 @@ const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
 const Notify = use('App/Serializers/Notify')
 const _hash = require('../../../Serializers/BaseHash');
+const SendGrid = use('SendGrid')
 let notify = new Notify()
 
 class GeneralController {
@@ -163,6 +164,7 @@ class GeneralController {
         yield StaffNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
         yield EmployerNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
         yield notify.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
+        SendGrid.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
       }
     }
 
