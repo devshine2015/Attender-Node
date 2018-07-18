@@ -143,6 +143,27 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
+  },
+
+  payment : (staff, employer, amount, status) => {
+    let _html = ''
+    if (status == 'paid') {
+      _html = `<h3>Attender</h3>
+                  <p>Payment transfer success with amount of ${amount} to ${staff.fullname}</p>
+              `
+    } else {
+      _html = `<h3>Attender</h3>
+                  <p>Payment failed with amount of ${amount} to ${staff.fullname}</p>
+              `
+    }
+    sgMail.send({
+      to: employer.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
   }
 
 }

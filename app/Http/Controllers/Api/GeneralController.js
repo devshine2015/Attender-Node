@@ -156,6 +156,7 @@ class GeneralController {
           //
       }
       yield notify.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
+      SendGrid.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
       yield StaffNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
       yield EmployerNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
 
