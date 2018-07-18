@@ -104,12 +104,25 @@ module.exports = {
   },
 
   hired : (staff, employer) => {
-
     let _html = `<h3>Attender</h3>
                   <p>${employer.name} hired you</p>
                 `
     sgMail.send({
       to: staff.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  eventInterest : (staff, $event) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${staff.fullname} is interested to your event ${$event.name}</p>
+                `
+    sgMail.send({
+      to: event.email,
       fromname: 'Attender',
       from: 'tom@attender.com',
       subject: 'Password Reset',

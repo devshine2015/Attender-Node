@@ -47,6 +47,7 @@ class GeneralController {
     let $event = yield Event.findOne({ _id: req.param('event') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
     yield notify.eventInterest(staff, $event)
+    SendGrid.eventInterest(staff, $event)
     return res.json({ status: true })
   }
 
