@@ -5,9 +5,9 @@ const Message = use('App/Model/Message')
 const Employer = use('App/Model/Employer')
 const StaffManagement = use('App/Model/StaffManagement')
 const EmployerNotification = use('App/Model/EmployerNotification')
-
+const Player = use('App/Model/Player')
 const Notify = use('App/Serializers/Notify')
-
+const OneSignal = use('OneSignal')
 
 let notify = new Notify()
 
@@ -357,6 +357,13 @@ class EmployerController {
     let m = yield Message.findOne({ _id: message._id }).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue')
     yield notify.newMessage(m)
     let update = yield Message.update({ conversation: req.param('convo', '') }, { $pull: { archivedTo: { $in: [req.user._id, req.input('receiver')] } } }, { multi: true })
+    const player = yield Player.find({ userId: req.input('receiver') });
+    if (player && player.length > 0) {
+      const ids = player.map((p) => {
+        return p.playerId;
+      });
+      OneSignal.sendPushNotification(m.employer.name, ids, true);
+    }
   }
 
 }

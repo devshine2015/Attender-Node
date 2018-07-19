@@ -25,6 +25,7 @@ Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVe
 Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
 
 
+Route.get('test/notify', 'Api/SubscriptionController.test')
 // SUBSCRIPTION 
 // middleware('guard') is Active please put {"X-request-token": "XXXXXX"} on Request Header
 Route.group('subscription', function() {

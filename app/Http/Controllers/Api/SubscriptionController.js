@@ -9,6 +9,7 @@ const DefaultPaymentMethod = use('App/Model/DefaultPaymentMethod')
 const Validator = use('Validator')
 const Notify = use('App/Serializers/Notify')
 const PromisePay = use('PromisePay')
+const OneSignal = use('OneSignal');
 
 class SubscriptionController {
   * index(req, res) {
@@ -23,6 +24,10 @@ class SubscriptionController {
       return res.json({status: false, messageCode: 'NO_SUBSCRIPTION', message: 'No list of Subscription'})
     }
     return res.json({status: true, subscriptions});
+  }
+
+  * test(req, res) {
+    return res.json({ status: 'Hello World'});
   }
 
   * check(req, res) {

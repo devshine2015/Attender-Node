@@ -69,6 +69,7 @@ const aliases = {
   AHelpers: 'App/Serializers/AHelpers',
   PushNotification: 'App/Serializers/PushNotification',
   PromisePay: 'App/Serializers/PromisePay',
+  OneSignal: 'App/Serializers/OneSignal',
   SendGrid: 'App/Serializers/SendGrid',
   Twilio: 'App/Serializers/Twilio',
   Command: 'Adonis/Src/Command',
