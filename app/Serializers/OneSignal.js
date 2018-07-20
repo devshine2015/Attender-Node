@@ -44,7 +44,8 @@ module.exports = {
         app_id: "e9f7cb2d-430c-4105-8762-daf7b029f60b",
         contents: {"en": "Tap this notification to view."},
         headings: {"en": heading},
-        include_player_ids: ids
+        include_player_ids: ids,
+        large_icon: "https://api.attender.com.au/attender_icon.png"
     };
 
     return sendNotification(message);
