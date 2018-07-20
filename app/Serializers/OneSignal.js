@@ -42,7 +42,7 @@ module.exports = {
     }
     const message = { 
         app_id: "e9f7cb2d-430c-4105-8762-daf7b029f60b",
-        contents: {"en": "On tap, we would like it to take you to messages"},
+        contents: {"en": "Tap this notification to view."},
         headings: {"en": heading},
         include_player_ids: ids
     };
