@@ -16,6 +16,7 @@ const PromisePay = use('PromisePay')
 const PushNotification = use('PushNotification')
 const Notify = use('App/Serializers/Notify')
 const _hash = require('../../../Serializers/BaseHash');
+const SendGrid = use('SendGrid')
 let notify = new Notify()
 
 class GeneralController {
@@ -39,6 +40,7 @@ class GeneralController {
     let venue = yield Venue.findOne({ _id: req.param('venue') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
     yield notify.venueInterest(staff, venue)
+    SendGrid.venueInterest(staff, venue)
     return res.json({ status: true })
   }
 
@@ -46,6 +48,7 @@ class GeneralController {
     let $event = yield Event.findOne({ _id: req.param('event') })
     let staff = yield Staff.findOne({ _id: req.param('staff') })
     yield notify.eventInterest(staff, $event)
+    SendGrid.eventInterest(staff, $event)
     return res.json({ status: true })
   }
 
@@ -153,6 +156,7 @@ class GeneralController {
           //
       }
       yield notify.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
+      SendGrid.payment(timesheet.staff, timesheet.employer, (item.amount/100), timesheet.paymentStatus)
       yield StaffNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
       yield EmployerNotification.create({ employer: timesheet.employer._id, staffId: timesheet.staff._id, type: 'payment', timesheet: timesheet._id, paymentStatus: item.state })
 
@@ -163,6 +167,7 @@ class GeneralController {
         yield StaffNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
         yield EmployerNotification.create({ employer: sender.employer, staffId: receiver.staffId, type: 'transaction', paymentStatus: item.state })
         yield notify.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
+        SendGrid.transfer(receiver.staff, sender.employer, (item.amount/100), item.state)
       }
     }
 

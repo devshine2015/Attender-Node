@@ -9,7 +9,7 @@ const Validator = use('Validator')
 const VenueNotification = use('App/Model/VenueNotification')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
-
+const SendGrid = use('SendGrid')
 let notify = new Notify()
 
 class EventController {
@@ -194,6 +194,7 @@ class EventController {
             }
             res.json({status: true, event: _event})
             yield notify.eventInterest(req.user.staffId, _event)
+            SendGrid.eventInterest(req.user.staffId, _event)
         } else {
             return res.json({status: false, messageCode: 'INVALID_PROFILE'})
         }

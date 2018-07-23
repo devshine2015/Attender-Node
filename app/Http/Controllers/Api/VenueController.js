@@ -10,6 +10,7 @@ const Organizer = use('App/Model/Organizer')
 const Event = use('App/Model/Event')
 const VenueNotification = use('App/Model/VenueNotification')
 const Validator = use('Validator')
+const SendGrid = use('SendGrid')
 const Notify = use('App/Serializers/Notify')
 
 let notify = new Notify()
@@ -39,7 +40,7 @@ class VenueController {
     if (types) {
       types = types.split(',')
       venues = venues.filter((venue) => {
-          for (let type of types) {
+          for (let typeof types) {
             let i = venue.type.indexOf(type)
             if (i >= 0) {
               return true
@@ -85,6 +86,7 @@ class VenueController {
       })
       res.json({ status: true, venue: _venue })
       yield notify.venueInterest(req.user.staffId, _venue)
+      SendGrid.venueInterest(req.user.staffId, _venue)
     } else {
       return res.json({ status: false, messageCode: 'INVALID_PROFILE' })
     }

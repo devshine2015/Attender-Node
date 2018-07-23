@@ -38,7 +38,7 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
-  }
+  },
 
   sendWithdrawMoney: (isSend) => {
     let _html = `<h3>Attender</h3>
@@ -57,5 +57,113 @@ module.exports = {
       text: 'Attender',
       html: _html
     })
+  },
+
+  // sendJobOffer: (user) => {
+  //   let _html = `<h3>Attender</h3>
+  //               <p>You have a new job offer. Please check your account on : </p>
+  //               `
+   
+  //   sgMail.send({
+  //     to: user.email,
+  //     fromname: 'Attender',
+  //     from: 'tom@attender.com',
+  //     subject: 'Password Reset',
+  //     text: 'Attender',
+  //     html: _html
+  //   })
+  // },
+
+  trial : (staff, employer) => {
+    let _html = `<h3>Attender</h3>
+                <p>${employer.name} put you to trial for 7 days.</p>
+                `
+   
+    sgMail.send({
+      to: employer.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  transfer : (staff, employer, amount, status) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${employer.name} successfully transfered $${amount} to your account</p>
+                `
+    sgMail.send({
+      to: staff.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  hired : (staff, employer) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${employer.name} hired you</p>
+                `
+    sgMail.send({
+      to: staff.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  eventInterest : (staff, $event) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${staff.fullname} is interested to your event ${$event.name}</p>
+                `
+    sgMail.send({
+      to: event.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  venueInterest : (staff, $venue) => {
+    let _html = `<h3>Attender</h3>
+                  <p>${staff.fullname} is interested to your venue ${$venue.name}</p>
+                `
+    sgMail.send({
+      to: venue.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
+  },
+
+  payment : (staff, employer, amount, status) => {
+    let _html = ''
+    if (status == 'paid') {
+      _html = `<h3>Attender</h3>
+                  <p>Payment transfer success with amount of ${amount} to ${staff.fullname}</p>
+              `
+    } else {
+      _html = `<h3>Attender</h3>
+                  <p>Payment failed with amount of ${amount} to ${staff.fullname}</p>
+              `
+    }
+    sgMail.send({
+      to: employer.email,
+      fromname: 'Attender',
+      from: 'tom@attender.com',
+      subject: 'Password Reset',
+      text: 'Attender',
+      html: _html
+    })
   }
+
 }

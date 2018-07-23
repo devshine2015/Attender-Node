@@ -15,6 +15,7 @@ const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
 const AHelpers = use('AHelpers')
 const OneSignal = use('OneSignal')
+const SendGrid = use('SendGrid')
 
 let notify = new Notify()
 
@@ -171,6 +172,7 @@ class StaffController {
             type: 'hired'
         })
         yield notify.hired(staff, employer)
+        SendGrid.hired(staff, employer)
     }
 
     * hire(req, res) {
@@ -196,6 +198,7 @@ class StaffController {
             type: 'hired'
         })
         yield notify.hired(staff, management.employer)
+        SendGrid.hired(staff, management.employer)
     }
 
     * trial(req, res) {
@@ -225,6 +228,7 @@ class StaffController {
             type: 'trial'
         })
         yield notify.trial(staff, venue)
+        SendGrid.trial(staff, venue)
 
     }
 
