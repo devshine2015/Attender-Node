@@ -1,6 +1,7 @@
 'use strict'
 const Venue = use('App/Model/Venue')
 const Message = use('App/Model/Message')
+const Player = use('App/Model/Player')
 const Staff = use('App/Model/Staff')
 const Task = use('App/Model/Task')
 const Timesheet = use('App/Model/Timesheet')
@@ -13,6 +14,7 @@ const Validator = use('Validator')
 const moment = require('moment')
 const Notify = use('App/Serializers/Notify')
 const AHelpers = use('AHelpers')
+const OneSignal = use('OneSignal')
 
 let notify = new Notify()
 
@@ -241,10 +243,19 @@ class StaffController {
             staff: req.user.staffId._id,
             employer: req.input('venue', '')
         })
+
+        
         res.json({status: true})
         let m = yield Message.findOne({_id: message._id}).populate('staff', 'fullname').populate('employer', 'name').populate('sender', '_id isStaff isVenue isEmployer isOrganizer')
         yield notify.newMessage(m)
         let update = yield Message.update({conversation: req.param('convo', '')}, {$pull: {archivedTo: {$in: [req.user._id, req.input('receiver')]}}}, {multi: true})
+        const player = yield Player.find({ userId: req.input('receiver') });
+        if (player && player.length > 0) {
+          const ids = player.map((p) => {
+            return p.playerId;
+          });
+          OneSignal.sendPushNotification(m.staff.fullname, ids, false);
+        }
     }
 
     * saveAssignment(req, res) {

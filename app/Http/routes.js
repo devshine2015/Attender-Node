@@ -25,6 +25,7 @@ Route.get('api/push-interest/venue/:venue/:staff', 'Api/GeneralController.pushVe
 Route.get('api/push-message/:id', 'Api/GeneralController.pushMessage').middleware('guard')
 
 
+Route.get('test/notify', 'Api/SubscriptionController.test')
 // SUBSCRIPTION 
 // middleware('guard') is Active please put {"X-request-token": "XXXXXX"} on Request Header
 Route.group('subscription', function() {
@@ -110,6 +111,7 @@ Route.group('api', function() {
   Route.get('user/profile/staff', 'Api/UserController.getStaffProfile')
   Route.post('user/profile/staff', 'Api/UserController.saveStaffProfile')
   Route.post('user/profile/deactivate-user', 'Api/UserController.deactivateUser')
+  Route.post('user/profile/playerId', 'Api/UserController.userUpdatePlayerId')
   Route.get('trial-staffs', 'Api/EmployerController.trialStaffs')
   Route.get('active-staffs', 'Api/EmployerController.activeStaffs')
 
