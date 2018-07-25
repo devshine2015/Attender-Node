@@ -1,7 +1,7 @@
 'use strict'
 const Env = use('Env')
 const domain = Env.get('MAILGUN_DOMAIN', '')
-const webHost = Env.get('WEB_HOST', '45.76.121.86')
+const webHost = Env.get('WEB_HOST', 'staging.attender.com.au')
 const webProtocol = Env.get('WEB_PROTOCOL', 'https')
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(Env.get('SENDGRID_API_KEY', ''));
