@@ -5,7 +5,6 @@ const webHost = Env.get('WEB_HOST', 'staging.attender.com.au')
 const webProtocol = Env.get('WEB_PROTOCOL', 'https')
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(Env.get('SENDGRID_API_KEY', ''));
-console.log(Env.get('SENDGRID_API_KEY', ''))
 module.exports = {
 
   sendVerification: (user) => {
