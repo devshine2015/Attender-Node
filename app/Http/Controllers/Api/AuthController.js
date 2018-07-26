@@ -229,8 +229,8 @@ class AuthController {
   }
 
   * resend (req, res) {
-    res.json({ status: true, messageCode: 'RESENT' })
     SendGrid.sendVerification(req.user)
+    res.json({ status: true, messageCode: 'RESENT' })
   }
 
   * verify (req, res) {
