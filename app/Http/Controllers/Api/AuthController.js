@@ -229,7 +229,10 @@ class AuthController {
   }
 
   * resend (req, res) {
-    SendGrid.sendVerification(req.user)
+    let mobile = req.input('mobile','')
+    let email = req.input('email','')
+    const user = yield User.findOne({ $or:[{'email':email}, {'mobile':mobile} ]})
+    SendGrid.sendVerification(user)
     res.json({ status: true, messageCode: 'RESENT' })
   }
 

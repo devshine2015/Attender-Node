@@ -58,12 +58,14 @@ Route.group('subscription', function() {
   Route.get('getDefaultPayment', 'Api/SubscriptionController.getDefaultPayment');
 }).prefix('api/subscription').middleware('guard') 
 
+Route.post('api/auth/resend', 'Api/AuthController.resend')
+
 Route.group('api', function() {
 
   Route.get('assembly/user', 'Api/UserController.userAccount')
   Route.patch('assembly/user', 'Api/UserController.userUpdateAccount')
   
-  Route.post('auth/resend', 'Api/AuthController.resend')
+  
   Route.get('auth/current', 'Api/AuthController.current')
   Route.post('auth/change-email', 'Api/AuthController.changeEmail')
 
