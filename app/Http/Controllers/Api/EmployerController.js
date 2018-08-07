@@ -163,7 +163,6 @@ class EmployerController {
       console.log(e)
       yield res.json({ status: false, messageCode: 'INVALID_INPUT' })
     }
-
     if (req.user.isEmployer) {
       let employer = req.user.employer
       employer.name = name || employer.name
@@ -184,6 +183,7 @@ class EmployerController {
       let employer = yield Employer.create({
         user: req.user._id,
         name: name,
+        companyName : companyName,
         isCompany: isCompany,
         location: location,
         locationName: locationName,
