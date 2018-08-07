@@ -115,7 +115,7 @@ class AuthController {
     if (req.user.isEmployer) {
       newNotifications = yield EmployerNotification.find({ employer: req.user.employer._id, opened: false }).count()
     } else if (req.user.isStaff) {
-      newNotifications = yield StaffNotification.find({ staffId: req.user.staffId._id, opened: false }).count()
+      newNotifications = yield StaffNotification.find({ staffId: req.user._id, opened: false }).count()
     }
 
     if (deviceToken && deviceType) { // save device token --- override old token
