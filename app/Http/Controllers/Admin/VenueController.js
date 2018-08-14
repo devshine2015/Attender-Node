@@ -28,7 +28,6 @@ module.exports = class VenueController {
 
   * index (req, res) {
     let venues = yield Employer.find({isVenue : true}).populate('user')
-    console.log(venues)
     yield res.sendView('venue/index', { venues: venues })
   }
 

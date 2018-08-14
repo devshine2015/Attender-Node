@@ -19,7 +19,7 @@
               </thead>
               <tbody>
               {% for venue in venues %}
-                  <tr>
+                  <tr id="ud{{venue._id}}">
                       <td>{{ venue.name }}</td>
                       <td>{{ venue.managerName }}</td>
                       <td style="max-width: 100px;">
