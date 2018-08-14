@@ -9,10 +9,10 @@ module.exports = class VenueController {
   * getVenue (req) {
     let venue = yield Employer.findOne({ _id: req.param('id') }).populate('user')
     if (venue) {
-      venue.weekdayStart = moment(venue.openingHours.Weekdays.startWeekDays).format('LT')
-      venue.weekdayEnd = moment(venue.openingHours.Weekdays.endWeekDays).format('LT')
-      venue.weekendStart = moment(venue.openingHours.Weekends.startWeekEnds).format('LT')
-      venue.weekendEnd = moment(venue.openingHours.Weekends.endWeekEnds).format('LT')
+      venue.weekdayStart = moment(venue.openingHours.monday.start).format('LT')
+      venue.weekdayEnd = moment(venue.openingHours.monday.end).format('LT')
+      venue.weekendStart = moment(venue.openingHours.sunday.start).format('LT')
+      venue.weekendEnd = moment(venue.openingHours.sunday.end).format('LT')
       return venue
     }
 
