@@ -1,0 +1,124 @@
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" name="name" class="form-control" id="name" required value="{{ event.name | title }}">
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="description">Description</label>
+      <input type="text" name="description" class="form-control" id="description" required value="{{ event.description }}">
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="date">Date</label>
+      <input type="text" name="date" class="form-control" id="date" required value="{{ event.date }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="isOrganizer">Is Organizer</label>
+      <input type="text" name="isOrganizer" class="form-control" id="isOrganizer" required value="{{ event.isOrganizer }}">
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="isVenue">Is Venue</label>
+      <input type="text" name="isVenue" class="form-control" id="isVenue" required value="{{ event.isVenue }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="staffs">Staffs</label>
+      <select class="form-control select2-multiple" name="staffs" id="typesSelect"  multiple>
+        {% for staff in event.staffs %}
+          <option value="{{staff}}">{{ staff | title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="types">Interests</label>
+      <select class="form-control select2-multiple" name="staffInterest" id="typesSelect"  multiple>
+        {% for interest in event.staffInterest %}
+          <option value="{{interest.staff}}">{{ interest.staff | title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-12">
+      <label for="type">Type</label>
+      <select class="form-control select2-multiple" name="type" id="typesSelect"  multiple>
+        {% for _type in event.type %}
+          <option value="{{_type}}">{{ _type | title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <label>Opening Hours</label>
+    </div>
+    <div class="col-sm-6">
+      <div class="bootstrap-timepicker">
+        <div class="form-group">
+          <label class="text-muted">Monday - Friday</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <input name="weekday-start" type="text" class="form-control timepicker" value="{{ event.weekdayStart }}" />
+            </div>
+            <div class="col-xs-6">
+              <input name="weekday-end" type="text" class="form-control timepicker" value="{{ event.weekdayEnd }}" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="bootstrap-timepicker">
+        <div class="form-group">
+          <label class="text-muted">Saturday - Sunday</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <input name="weekend-start" type="text" class="form-control timepicker" value="{{ event.weekendStart }}" />
+            </div>
+            <div class="col-xs-6">
+              <input name="weekend-end" type="text" class="form-control timepicker" value="{{ event.weekendEnd }}" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="text/javascript">
+    $(function() {
+
+      let user = $('#userSelect').val()
+      $('#viewUser').attr("href", "/manage/users/" + user)
+
+      $('#typesSelect').select2().val("{{ event.type | safe }}".split(',')).trigger("change")
+      $('#servicesSelect').select2().val("{{ event.services | safe }}".split(',')).trigger("change")
+      $('#userSelect').select2()
+
+      $('#userSelect').on('change', function() {
+        $('#viewUser').attr("href", "/manage/users/" + this.value)
+      })
+
+      $('.timepicker').timepicker({
+        showInputs: false
+      })
+
+      let services = ['alcohol', 'pokies', 'cocktails', 'breakfast', 'lunch', 'dinner', 'hotel']
+      let types = ['restaurant', 'cafe', 'bar', 'club', 'pub']
+      $('#types').on('beforeItemAdd', function(event) {
+        event.item = event.item.toLowerCase()
+       if (types.indexOf(event.item) < 0) {
+         event.cancel = true
+       }
+      })
+      $('#services').on('beforeItemAdd', function(event) {
+        event.item = event.item.toLowerCase()
+       if (services.indexOf(event.item) < 0) {
+         event.cancel = true
+       }
+      })
+
+    })
+
+</script>

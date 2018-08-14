@@ -20,7 +20,7 @@
               </thead>
               <tbody>
               {% for event in events %}
-                  <tr>
+                  <tr id="ud{{event._id}}">
                       <td>{{ event.name }}</td>
                       <td><a href="/manage/venues/{{ event.venueId._id }}" target="_blank">{{ event.venueId.name | title }}</a></td>
                       <td>
@@ -32,8 +32,8 @@
                         <form class="" action="" method="post">
                           <div class='btn-group'>
                               <a href="" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-                              <a href="" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-                              <a href="" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
+                              <a href="/manage/events/{{ event._id }}/edit" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
+                              <a onclick="deleteData('{{event._id}}')" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
                           </div>
                         </form>
                       </td>
@@ -46,5 +46,35 @@
 </div>
 
 <a class="btn bg-purple fab" href="/manage/events/create"><i class="fa fa-plus"></i></a>
+<script type="text/javascript">
+  function deleteData(_id) {
+    swal({
+         title: "Are you sure you want to delete this data?",
+         text: "All related data from this data will also be deleted",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonText: "Continue",
+         cancelButtonText: "Cancel",
+         closeOnConfirm: false,
+         showLoaderOnConfirm: true,
+         closeOnCancel: true },
+     function (isConfirm) {
+         if (isConfirm) {
+           $.ajax({
+              url: `/manage/events/${_id}`,
+              type: 'DELETE',
+              success: function(res) {
+                if (res.status) {
+                  swal('Successfully Deleted', '', 'success')
+                  $(`#ud${_id}`).toggle('slide')
+                } else {
+                  swal('Can\'t delete this event right now', 'Something went wrong', 'error')
+                }
+              }
+          })
+         }
+    })
 
+  }
+</script>
 {% endblock %}
