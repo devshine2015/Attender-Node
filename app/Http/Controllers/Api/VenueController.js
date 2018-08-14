@@ -1,6 +1,6 @@
 'use strict'
 const Message = use('App/Model/Message')
-const Venue = use('App/Model/Venue')
+const Employer = use('App/Model/Employer')
 const Staff = use('App/Model/Staff')
 const Task = use('App/Model/Task')
 const StaffRating = use('App/Model/StaffRating')
@@ -19,13 +19,13 @@ let notify = new Notify()
 class VenueController {
 
   * getVenue (req) {
-    return yield Venue.findOne({ _id: req.param('id') })
+    return yield Employer.findOne({ _id: req.param('id') })
   }
 
   * index (req, res) {
     let services = req.input('services', false)
     let types = req.input('types', false)
-    let venues = yield Venue.find({})
+    let venues = yield Employer.find({})
     if (services) {
       services = services.split(',')
       venues = venues.filter((venue) => {
