@@ -254,7 +254,7 @@ class EmployerController {
 
   * interest (req, res) {
     let employer = yield Employer.findOne({ _id: req.param('id'), isVenue: true })
-    if (req.user.isStaff) { console.log(req.user._id);
+    if (req.user.isStaff) {
       if(employer.interested[req.user.staffId._id] == undefined){
           employer.interested[req.user.staffId._id] = { staffId: req.user.staffId._id, interestedAt: new Date(), include: true }
           employer.markModified('interested')

@@ -189,9 +189,10 @@ Route.get('api/redirect/:verification/:token', 'Api/AuthController.redirect')
 Route.group('manage', function() {
   Route.get('/', 'Admin/HomeController.index')
   Route.get('logout', 'Admin/AuthController.logout')
+  
   Route.resource('users', 'Admin/UserController')
-
   Route.resource('venues', 'Admin/VenueController')
+  Route.resource('events', 'Admin/EventController')
 
   Route.get('organisers', 'Admin/OrganizerController.index')
 

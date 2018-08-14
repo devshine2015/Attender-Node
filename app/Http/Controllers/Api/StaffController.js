@@ -180,8 +180,6 @@ class StaffController {
         let employer = req.user.employer
 
         let management = yield this.getStaffManagement(req)
-        console.log(staff)
-        console.log(management)
         management.hired = true
         management.trial = false
         management.hiredDate = moment().format()
@@ -274,9 +272,6 @@ class StaffController {
 
             let staff = yield Staff.findOne({_id: management.staff}).populate('user', '_id fullname')
             let employer = req.user.employer
-
-            console.log("staff",staff)
-            console.log("employer",employer)
 
             yield StaffNotification.create({
                 employer: employer._id,
