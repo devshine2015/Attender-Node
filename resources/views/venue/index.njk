@@ -42,7 +42,7 @@
                           <div class='btn-group'>
                               <a href="/manage/venues/{{ venue._id }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
                               <a href="/manage/venues/{{ venue._id }}/edit" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-                              <a href="/manage/venues/{{ venue._id }}/delete" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
+                              <a onclick="deleteData('{{venue._id}}')"  class='btn btn-default btn-xs'><i class="glyphicon glyphicon-trash"></i></a>
                           </div>
                         </form>
                       </td>
@@ -56,4 +56,35 @@
 
 <a class="btn bg-purple fab" href="/manage/venues/create"><i class="fa fa-plus"></i></a>
 
+<script type="text/javascript">
+  function deleteData(_id) {
+    swal({
+         title: "Are you sure you want to delete this data?",
+         text: "All related data from this data will also be deleted",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonText: "Continue",
+         cancelButtonText: "Cancel",
+         closeOnConfirm: false,
+         showLoaderOnConfirm: true,
+         closeOnCancel: true },
+     function (isConfirm) {
+         if (isConfirm) {
+           $.ajax({
+              url: `/manage/venues/${_id}`,
+              type: 'DELETE',
+              success: function(res) {
+                if (res.status) {
+                  swal('Successfully Deleted', '', 'success')
+                  $(`#ud${_id}`).toggle('slide')
+                } else {
+                  swal('Can\'t delete this venue right now', 'Something went wrong', 'error')
+                }
+              }
+          })
+         }
+    })
+
+  }
+</script>
 {% endblock %}

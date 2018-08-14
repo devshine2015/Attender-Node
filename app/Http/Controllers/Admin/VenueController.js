@@ -131,5 +131,13 @@ module.exports = class VenueController {
 
     return res.redirect('/manage/venues')
   }
-
+  * destroy (req, res) {
+    let venue = yield this.getVenue(req, res)
+    if(venue) {
+      venue.remove()
+      res.json({ status: true })
+    } else {
+      res.json({ status: false })
+    }
+  }
 }
