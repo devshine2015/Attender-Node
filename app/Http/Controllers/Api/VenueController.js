@@ -40,8 +40,8 @@ class VenueController {
     if (types) {
       types = types.split(',')
       venues = venues.filter((venue) => {
-          for (let typeof types) {
-            let i = venue.type.indexOf(type)
+          for (let _type of types) {
+            let i = venue.types.indexOf(_type)
             if (i >= 0) {
               return true
             }

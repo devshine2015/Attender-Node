@@ -1,13 +1,13 @@
 'use strict'
 
 const User = use('App/Model/User')
-const Venue = use('App/Model/Venue')
+const Employer = use('App/Model/Employer')
 const moment = require('moment')
 
 module.exports = class VenueController {
 
   * getVenue (req) {
-    let venue = yield Venue.findOne({ _id: req.param('id') }).populate('user')
+    let venue = yield Employer.findOne({ _id: req.param('id') }).populate('user')
     if (venue) {
       venue.weekdayStart = moment(venue.openingHours.Weekdays.startWeekDays).format('LT')
       venue.weekdayEnd = moment(venue.openingHours.Weekdays.endWeekDays).format('LT')
@@ -27,7 +27,8 @@ module.exports = class VenueController {
   }
 
   * index (req, res) {
-    let venues = yield Venue.find({}).populate('user')
+    let venues = yield Employer.find({isVenue : true}).populate('user')
+    console.log(venues)
     yield res.sendView('venue/index', { venues: venues })
   }
 
